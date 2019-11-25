@@ -27,31 +27,29 @@ export default function (el, binding) {
     }
   }
 
-  el.oninput = function (evt) {
-    if (!evt.isTrusted) return // avoid infinite loop
-    /* other properties to try to diferentiate InputEvent of Event (custom)
-    InputEvent (native)
-      cancelable: false
-      isTrusted: true
+  el.oninput = function ({isTrusted, data}) {
+    if (!isTrusted) return // avoid infinite loop
 
-      composed: true
-      isComposing: false
-      which: 0
-
-    Event (custom)
-      cancelable: true
-      isTrusted: false
-    */
     // by default, keep cursor at same position as before the mask
     var position = el.selectionEnd
+    let cursorAtEnd = data && position == el.value.length
     // save the character just inserted
     var digit = el.value[position-1]
     el.value = masker(el.value, config.mask, config.masked, config.tokens)
-    // if the digit was changed, increment position until find the digit again
-    while (position < el.value.length && el.value.charAt(position-1) !== digit) {
-      position++
-    }
+
     if (el === document.activeElement) {
+      if (cursorAtEnd) {
+        position = el.value.length
+      } else if (digit) {
+        let newPosition = position
+        // if the digit was changed, increment position until find the digit again
+        while (newPosition <= el.value.length && el.value.charAt(newPosition-1) !== digit) {
+          newPosition++
+        }
+        // if we didnt find the digit must be a bad digit, leave the cursor where it was
+        position = newPosition <= el.value.length ? newPosition : position - 1
+      }
+
       el.setSelectionRange(position, position)
       setTimeout(function () {
         el.setSelectionRange(position, position)
