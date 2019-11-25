@@ -1,13 +1,16 @@
 {
-  "name": "vue-the-mask2",
-  "version": "0.1.0",
-  "private": true,
+  "name": "vue-the-mask",
+  "version": "1.0.0",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
+    "build": "vue-cli-service build --target=lib src/plugin.js",
+    "build:docs": "vue-cli-service build --dest=docs",
+    "dev": "vue-cli-service serve",
+    "test": "jest --coverage",
+    "test:watch": "jest --coverage --watch",
     "lint": "vue-cli-service lint"
   },
+  "main": "dist/vue-the-mask.umd.js",
   "dependencies": {
     "core-js": "^3.3.2",
     "vue": "^2.6.10"
