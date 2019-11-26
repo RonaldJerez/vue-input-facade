@@ -9,6 +9,6 @@ export default function(value, mask, masked, tokens) {
   }
 
   return Array.isArray(mask)
-    ? dynamicMask(value, mask, masked, tokens)
-    : maskit(value, mask, masked, tokens)
+    ? dynamicMask(value, { masks: mask, masked, tokens })
+    : maskit(value, { mask, masked, tokens })
 }

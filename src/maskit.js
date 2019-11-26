@@ -1,44 +1,41 @@
 import defaultTokens from './tokens'
 
-export default function maskit(value, mask, masked = true, tokens = defaultTokens) {
-  value = value || ''
-  mask = mask || ''
-  var iMask = 0
-  var iValue = 0
-  var output = ''
-  var cMask
-  while (iMask < mask.length && iValue < value.length) {
-    cMask = mask[iMask]
-    var masker = tokens[cMask]
-    var cValue = value[iValue]
-    if (masker && !masker.escape) {
-      if (masker.pattern.test(cValue)) {
-        output += masker.transform ? masker.transform(cValue) : cValue
-        iMask++
+export default function maskit(value = '', { mask = '', masked = true, tokens = defaultTokens, short = false } = {}) {
+  let output = ''
+  let escaped = false
+
+  let valueIndex = 0
+  let maskIndex = 0
+
+  while (maskIndex < mask.length) {
+    const maskChar = mask[maskIndex]
+    const masker = tokens[maskChar]
+    const char = value[valueIndex]
+
+    // no more input charactors and next charactor is a masked char
+    if (!char && (short || masker)) break
+
+    if (masker && !escaped) {
+      // when is escape char, do not mask, just continue
+      if (masker.escape) {
+        escaped = true
+        maskIndex++
+        continue
       }
-      iValue++
+
+      if (masker.pattern.test(char)) {
+        output += masker.transform ? masker.transform(char) : char
+        maskIndex++
+      }
+      valueIndex++
     } else {
-      if (masker && masker.escape) {
-        iMask++ // take the next mask char and treat it as char
-        cMask = mask[iMask]
-      }
-      if (masked) output += cMask
-      if (cValue === cMask) iValue++ // user typed the same char
-      iMask++
+      if (masked) output += maskChar
+      if (char === maskChar) valueIndex++ // user typed the same char
+      
+      escaped = false
+      maskIndex++
     }
   }
 
-  // fix mask that ends with a char: (#)
-  var restOutput = ''
-  while (iMask < mask.length && masked) {
-    cMask = mask[iMask]
-    if (tokens[cMask]) {
-      restOutput = ''
-      break
-    }
-    restOutput += cMask
-    iMask++
-  }
-
-  return output + restOutput
+  return output
 }
