@@ -33,7 +33,7 @@ export default function maskit(value = '', { mask = '', masked = true, tokens = 
     } else {
       if (masked) output += maskChar
       if (char === maskChar) valueIndex++ // user typed the same char
-      
+
       escaped = false
       maskIndex++
     }
