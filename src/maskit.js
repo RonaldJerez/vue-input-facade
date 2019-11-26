@@ -3,6 +3,7 @@ import defaultTokens from './tokens'
 export default function maskit(value = '', { mask = '', masked = true, tokens = defaultTokens, short = false } = {}) {
   let output = ''
   let escaped = false
+  let userInput = false
 
   let valueIndex = 0
   let maskIndex = 0
@@ -24,6 +25,7 @@ export default function maskit(value = '', { mask = '', masked = true, tokens = 
       }
 
       if (masker.pattern.test(char)) {
+        userInput = true
         output += masker.transform ? masker.transform(char) : char
         maskIndex++
       }
@@ -37,5 +39,5 @@ export default function maskit(value = '', { mask = '', masked = true, tokens = 
     }
   }
 
-  return output
+  return userInput ? output : ''
 }
