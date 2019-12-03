@@ -170,9 +170,13 @@ hexTokens: {
       <pre>{{ code }}</pre>
 
       <h2>Directive Usage</h2>
-
-      <div class="field" v-mask="'##/##/####'">
-        <input type="tel" placeholder="dd/mm/yyyy" />
+      <div class="field">
+        <label>The Mask:</label>
+        <input type="text" v-model="directiveMask" />
+      </div>
+      <div class="field" v-mask="directiveMask">
+        <label>The Input:</label>
+        <input type="tel" />
       </div>
       <pre>{{ directive }}</pre>
 
@@ -183,6 +187,18 @@ hexTokens: {
       <div class="ui tertiary inverted orange segment">
         When possible, prefer to use input type="tel" to avoid glitch on android devices
       </div>
+
+      <h2>Using V-Model</h2>
+      <div class="field">
+        <label>V-Model</label>
+        <input type="text" v-model="model1" v-mask="'###.###'" />
+      </div>
+      <pre>&lt;input type="text" v-model="val" v-mask="'###.###'" /&gt;</pre>
+      <div class="field">
+        <label>Manual :value and @input</label>
+        <input type="text" v-mask="'##.##'" :value="model2" @input="updateModel2" />
+      </div>
+      <pre>&lt;input type="text" v-mask="'##.##'" :value="val" @input="handler" /&gt;</pre>
     </div>
   </div>
 </template>
@@ -194,6 +210,7 @@ import mask from '../directive'
 
 export default {
   components: { Field, TheMask },
+  directives: { mask },
   data() {
     return {
       masked: false,
@@ -209,14 +226,23 @@ export default {
       placeholder: 'test your mask here',
       mask: '#XSAa',
       value: '12TgB',
-      directive: `<input type="tel" v-mask="'##/##/####'" />`
+      directiveMask: '##/##/####',
+      model1: '',
+      model2: ''
     }
   },
   computed: {
     code() {
       return `<the-mask mask="${this.mask}" value="${this.value}" type="${this.type}" masked="${this.masked}" placeholder="${this.placeholder}"></the-mask>`
+    },
+    directive() {
+      return `<input type="tel" v-mask="${this.directiveMask}" />`
     }
   },
-  directives: { mask }
+  methods: {
+    updateModel2({ target }) {
+      this.model2 = target.value
+    }
+  }
 }
 </script>

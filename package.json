@@ -11,22 +11,20 @@
     "lint": "vue-cli-service lint"
   },
   "main": "dist/vue-the-mask.umd.js",
-  "dependencies": {
-    "core-js": "^3.3.2",
-    "vue": "^2.6.10"
-  },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.0.0",
     "@vue/cli-plugin-eslint": "^4.0.0",
     "@vue/cli-plugin-unit-jest": "^4.0.0",
     "@vue/cli-service": "^4.0.0",
     "@vue/eslint-config-prettier": "^5.0.0",
-    "@vue/test-utils": "1.0.0-beta.29",
+    "@vue/test-utils": "^1.0.0-beta.29",
     "babel-eslint": "^10.0.3",
+    "core-js": "^3.3.2",
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.0.0",
     "prettier": "^1.18.2",
+    "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10"
   }
 }
