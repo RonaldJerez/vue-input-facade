@@ -1,6 +1,20 @@
 {
   "name": "vue-the-mask",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
+  "description": "A lightweight and dependency free mask input created specific for Vue",
+  "main": "dist/vue-the-mask.umd.js",
+  "contributors": [
+    "Ronald Jerez <dlanor@gmail.com> (https://ronaldjerez.github.io/)",
+    "Marcos Neves <marcos.neves@gmail.com> (https://vuejs-tips.github.io/)"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "mask",
+    "masking",
+    "component",
+    "input"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target=lib src/plugin.js",
@@ -8,9 +22,9 @@
     "dev": "vue-cli-service serve",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
-  "main": "dist/vue-the-mask.umd.js",
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.0.0",
     "@vue/cli-plugin-eslint": "^4.0.0",
@@ -20,11 +34,23 @@
     "@vue/test-utils": "^1.0.0-beta.29",
     "babel-eslint": "^10.0.3",
     "core-js": "^3.3.2",
+    "coveralls": "^3.0.9",
+    "cz-conventional-changelog": "^3.0.2",
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.1.1",
     "eslint-plugin-vue": "^5.0.0",
     "prettier": "^1.18.2",
+    "semantic-release": "^15.13.31",
     "vue": "^2.6.10",
     "vue-template-compiler": "^2.6.10"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RonaldJerez/vue-the-mask.git"
   }
 }

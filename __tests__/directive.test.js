@@ -1,6 +1,8 @@
 import mask from '../src/directive'
 import { createLocalVue, shallowMount } from '@vue/test-utils'
 
+const maskingConfigKey = '__vueTheMask__'
+
 describe('Directive', () => {
   const localVue = createLocalVue()
   localVue.directive('v-mask', mask)
@@ -17,12 +19,12 @@ describe('Directive', () => {
   //   jest.spyOn(console, 'error')
   //   console.error.mockImplementation(() => {})
   // })
-  
+
   afterEach(() => {
     jest.restoreAllMocks()
     // console.error.mockRestore()
   })
-  
+
   test('should format initial value, and emit input', () => {
     const wrapper = shallowMount(baseComponent, { localVue })
     expect(wrapper.element.value).toBe('12.34')
@@ -31,7 +33,7 @@ describe('Directive', () => {
 
   test('add the config object to the element', () => {
     const wrapper = shallowMount(baseComponent, { localVue })
-    expect(wrapper.element.__maskingConfig__).toBeDefined()
+    expect(wrapper.element[maskingConfigKey]).toBeDefined()
   })
 
   test('update the config when mask changes', () => {
@@ -41,13 +43,13 @@ describe('Directive', () => {
     const component = {
       template: '<input v-mask="mask" value="1234" />',
       directives: { mask },
-      data() { return { mask: mask1 }}
+      data() { return { mask: mask1 } }
     }
     const wrapper = shallowMount(component, { localVue })
 
-    expect(wrapper.element.__maskingConfig__.mask).toBe(mask1)
+    expect(wrapper.element[maskingConfigKey].config.mask).toBe(mask1)
     wrapper.setData({ mask: mask2 })
-    expect(wrapper.element.__maskingConfig__.mask).toBe(mask2)
+    expect(wrapper.element[maskingConfigKey].config.mask).toBe(mask2)
   })
 
   // skipping this one as it still shows the error stack in the terminal
@@ -78,7 +80,7 @@ describe('Directive', () => {
   test.skip('should update element value on input', async () => {
     const wrapper = shallowMount(baseComponent, { localVue })
     expect(wrapper.element.value).toBe('12.34')
-    
+
     wrapper.element.value = '1122'
     wrapper.vm.$el.dispatchEvent(new Event('input'))
     // wrapper.vm.$emit('input')

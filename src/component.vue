@@ -1,69 +1,67 @@
 <template>
-  <input type="text" v-mask="config" :value="display" @input="onInput" />
+  <input type="text" v-mask="config" :value="value" v-on="listeners" />
 </template>
 
 <script>
-import mask from './directive'
-import tokens from './tokens'
+import directive from './directive'
 import masker from './masker'
 
 export default {
   name: 'TheMask',
   props: {
-    value: [String, Number],
-    mask: {
-      type: [String, Array],
-      required: true
-    },
+    /**
+     * Weather to emit the value masked or not
+     */
     masked: {
-      // by default emits the value unformatted, change to true to format with the mask
       type: Boolean,
-      default: false // raw
+      default: false
     },
-    tokens: {
-      type: Object,
-      default: () => tokens
-    }
+    mask: [String, Array],
+    tokens: Object,
+    value: [String, Number]
   },
-  directives: { mask },
-  data() {
-    return {
-      lastValue: null, // avoid unecessary emit when has no change
-      display: this.value
-    }
-  },
+  directives: { mask: directive },
+  // data() {
+  //   return {
+  //     // avoid unecessary emit when has no change
+  //     lastValue: this.value
+  //   }
+  // },
   watch: {
-    value(newValue) {
-      if (newValue !== this.lastValue) {
-        this.display = newValue
-      }
-    },
     masked() {
-      this.refresh(this.display)
+      this.refresh()
     }
   },
   computed: {
     config() {
       return {
         mask: this.mask,
-        tokens: this.tokens,
-        masked: true
+        tokens: this.tokens
       }
+    },
+    listeners() {
+      const vm = this
+      return Object.assign({}, this.$listeners, {
+        input: vm.refresh
+      })
     }
   },
   methods: {
-    onInput(e) {
-      if (e.isTrusted) return // ignore native event
-      this.refresh(e.target.value)
-    },
+    refresh(event) {
+      let emittedValue = event ? event.target.value : this.value
 
-    refresh(value) {
-      this.display = value
-      var value2 = masker(value, this.mask, this.masked, this.tokens)
-      if (value2 !== this.lastValue) {
-        this.lastValue = value2
-        this.$emit('input', value2)
+      if (!this.masked) {
+        const maskerConfig = {
+          mask: this.mask,
+          tokens: this.tokens,
+          masked: false
+        }
+        emittedValue = masker(emittedValue, maskerConfig)
       }
+
+      // if (this.lastValue != emittedValue) {
+      this.$emit('input', emittedValue)
+      // }
     }
   }
 }

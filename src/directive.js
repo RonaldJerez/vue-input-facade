@@ -1,6 +1,6 @@
 import masker from './masker'
-import tokens from './tokens'
-/* eslint-disable */
+
+const CONFIG_KEY = '__vueTheMask__'
 
 function trigger(name) {
   return new Event(name, { bubbles: true, cancelable: true })
@@ -8,17 +8,12 @@ function trigger(name) {
 
 /**
  * Transform an array or string config into an object
- * 
+ *
  * @param {*} config The mask config object
  */
 function getConfig(config = {}) {
-  config = Array.isArray(config) ? [...config] : config
   if (Array.isArray(config) || typeof config === 'string') {
-    config = {
-      masked: true,
-      mask: config,
-      tokens: tokens
-    }
+    config = { mask: config }
   }
 
   return config
@@ -27,8 +22,8 @@ function getConfig(config = {}) {
 /**
  * ensure that the element we're attaching to is an input element
  * if not try to find an input element in this elements childrens
- * 
- * @param {HTMLInputElement} el 
+ *
+ * @param {HTMLInputElement} el
  */
 function getInputElement(el) {
   const inputElement = el instanceof HTMLInputElement ? el : el.querySelector('input')
@@ -42,28 +37,33 @@ function getInputElement(el) {
 
 /**
  * Input event handler
- * 
+ *
  * @param {Event} event The event object
  */
 function inputHandler(event) {
   const { target } = event
-  
+
   // we only need to run this method on native events (isTrusted == true for native events)
   // since we will be emitting our own input event we can stop propagation of the native event
   if (!event.isTrusted) return false
   event.stopPropagation()
 
   // gather some information from the input before masking
-  let cursorPosition = target.selectionEnd 
+  let cursorPosition = target.selectionEnd
   const isCursorAtEnd = event.data && cursorPosition == target.value.length
   const digit = target.value[cursorPosition - 1] // last inserted digit
-  
+
   // mask the value based on the config
-  const config = target.__maskingConfig__
-  const display = target.value = masker(target.value, config.mask, config.masked, config.tokens)
+  updateValue(target, { emit: false })
+  updateCursor(target, cursorPosition, isCursorAtEnd, digit)
+  target.dispatchEvent(trigger('input'))
+}
+
+function updateCursor(el, cursorPosition, isCursorAtEnd, digit) {
+  const display = el.value
 
   // set the cursor position to an appropriate location
-  if (target === document.activeElement) {
+  if (el === document.activeElement) {
     if (isCursorAtEnd) {
       cursorPosition = display.length
     } else if (digit) {
@@ -76,25 +76,21 @@ function inputHandler(event) {
       cursorPosition = newPosition <= display.length ? newPosition : cursorPosition - 1
     }
 
-    target.setSelectionRange(cursorPosition, cursorPosition)
+    el.setSelectionRange(cursorPosition, cursorPosition)
     setTimeout(function() {
-      target.setSelectionRange(cursorPosition, cursorPosition)
+      el.setSelectionRange(cursorPosition, cursorPosition)
     }, 0)
   }
-  
-  target.dispatchEvent(trigger('input'))
 }
 
-function updateValue(el) {
-  const config = el.__maskingConfig__
-  const newValue = masker(el.value, config.mask, config.masked, config.tokens)
+function updateValue(el, { emit = true, force = false } = {}) {
+  const { config, oldValue } = el[CONFIG_KEY]
 
-  if (newValue !== el.value) {
-    el.value = newValue
-    el.dispatchEvent(trigger('input'))
+  if (force || oldValue !== el.value) {
+    const newValue = masker(el.value, config)
+    el[CONFIG_KEY].oldValue = el.value = newValue
+    emit && el.dispatchEvent(trigger('input'))
   }
-
-  return newValue
 }
 
 export default {
@@ -102,16 +98,24 @@ export default {
     el = getInputElement(el)
     el.addEventListener('input', inputHandler, true)
 
-    el.__maskingConfig__ = getConfig(binding.value)
+    el[CONFIG_KEY] = {
+      config: getConfig(binding.value)
+      // TODO: if we set this here it won't try to mask on initial value
+      // should this be a default bahaviour?
+      // oldValue: el.value
+    }
 
     // set initial value
     updateValue(el)
   },
 
   update: (el, { value, oldValue }) => {
+    el = getInputElement(el)
+
     if (value != oldValue) {
-      el = getInputElement(el)
-      el.__maskingConfig__ = getConfig(value)
+      el[CONFIG_KEY].config = getConfig(value)
+      updateValue(el, { force: true })
+    } else if (el.value !== el[CONFIG_KEY].oldValue) {
       updateValue(el)
     }
   },

@@ -1,3 +1,5 @@
+const prettier = require('./prettier.config')
+
 module.exports = {
   root: true,
   env: {
@@ -7,15 +9,7 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'prettier/prettier': [
-      'warn',
-      {
-        semi: false,
-        singleQuote: true,
-        printWidth: 120,
-        arrowParens: 'always'
-      }
-    ]
+    'prettier/prettier': ['warn', prettier]
   },
   parserOptions: {
     parser: 'babel-eslint'

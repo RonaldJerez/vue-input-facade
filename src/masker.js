@@ -2,13 +2,13 @@ import maskit from './maskit'
 import dynamicMask from './dynamic-mask'
 
 // Facade to maskit/dynamicMask when mask is String or Array
-export default function(value, mask, masked, tokens) {
+export default function(value, config = {}) {
   // disable on empty mask
-  if (!mask) {
+  if (!config.mask) {
     return value
   }
 
-  return Array.isArray(mask)
-    ? dynamicMask(value, { masks: mask, masked, tokens })
-    : maskit(value, { mask, masked, tokens })
+  return Array.isArray(config.mask)
+    ? dynamicMask(value, Object.assign({}, config, { masks: config.mask }))
+    : maskit(value, config)
 }

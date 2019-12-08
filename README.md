@@ -57,10 +57,8 @@ export default {
 | Property    | Required | Type          | Default           | Description                                |
 | ----------- | -------- | ------------- | ----------------- | ------------------------------------------ |
 | value       | false    | String        |                   | Input value or v-model                     |
-| mask        | **true** | String, Array |                   | Mask pattern                               |
+| mask        | false    | String, Array |                   | Mask pattern                               |
 | masked      | false    | Boolean       | false             | emit value with mask chars, default is raw |
-| placeholder | false    | String        |                   | Same as html input                         |
-| type        | false    | String        | 'text'            | Input type (email, tel, number, ...)       |
 | tokens      | false    | Object        | [tokens](#tokens) | Custom tokens for mask                     |
 
 ## Contribution
