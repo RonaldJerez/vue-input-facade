@@ -199,18 +199,19 @@ hexTokens: {
         <input type="text" v-mask="'##.##'" :value="model2" @input="updateModel2" />
       </div>
       <pre>&lt;input type="text" v-mask="'##.##'" :value="val" @input="handler" /&gt;</pre>
+
+      <h2>Using as filter</h2>
+      <p>You can mask text also: {{ '1234567890' | mask('(###) ### - ####') }}</p>
+      <pre v-pre>{{ '1234567890' | mask('(###) ### - ####') }}</pre>
     </div>
   </div>
 </template>
 
 <script>
 import Field from './field'
-import TheMask from '../component'
-import mask from '../directive'
 
 export default {
-  components: { Field, TheMask },
-  directives: { mask },
+  components: { Field },
   data() {
     return {
       masked: false,

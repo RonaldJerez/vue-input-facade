@@ -6,6 +6,7 @@ import TheMask from './component.vue'
 function install(Vue) {
   Vue.component(TheMask.name, TheMask)
   Vue.directive('mask', mask)
+  Vue.filter('mask', masker)
 }
 
 export default install

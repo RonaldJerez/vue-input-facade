@@ -1,6 +1,11 @@
 import defaultTokens from './tokens'
 
-export default function maskit(value = '', { mask = '', masked = true, tokens = defaultTokens, short = false } = {}) {
+export default function maskit(value = '', config = {}) {
+  const { mask = '', masked = true, tokens = defaultTokens, short = false } = config
+
+  // ensure we have a string
+  value = value.toString()
+
   let output = ''
   let escaped = false
   let userInput = false
