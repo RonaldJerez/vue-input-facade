@@ -1,6 +1,12 @@
 import { normalizeConfig } from './core'
 import defaultTokens from './tokens'
 
+let tokenDefinitions = defaultTokens
+
+export function setTokens(tokens) {
+  tokenDefinitions = tokens
+}
+
 export function dynamic(value, config = {}) {
   const masks = config.masks.slice().sort((a, b) => a.length - b.length)
   const withConfig = (overrides) => Object.assign({}, config, overrides)
@@ -22,7 +28,7 @@ export function dynamic(value, config = {}) {
 }
 
 export function formatter(value = '', config = {}) {
-  const { mask = '', masked = true, tokens = defaultTokens, short = false } = config
+  const { mask = '', masked = true, tokens = tokenDefinitions, short = false } = config
 
   // ensure we have a string
   value = value.toString()

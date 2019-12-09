@@ -1,9 +1,12 @@
 import tokens from './tokens'
-import masker from './masker'
+import masker, { setTokens } from './masker'
 import mask from './directive'
 import TheMask from './component.vue'
 
-function install(Vue) {
+function install(Vue, options) {
+  // override the default tokens
+  if (options) { setTokens(options) }
+
   Vue.component(TheMask.name, TheMask)
   Vue.directive('mask', mask)
   Vue.filter('mask', masker)
