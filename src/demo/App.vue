@@ -174,7 +174,7 @@ hexTokens: {
         <label>The Mask:</label>
         <input type="text" v-model="directiveMask" />
       </div>
-      <div class="field" v-mask="directiveMask">
+      <div class="field" v-facade="directiveMask">
         <label>The Input:</label>
         <input type="tel" />
       </div>
@@ -191,18 +191,18 @@ hexTokens: {
       <h2>Using V-Model</h2>
       <div class="field">
         <label>V-Model</label>
-        <input type="text" v-model="model1" v-mask="'###.###'" />
+        <input type="text" v-model="model1" v-facade="'###.###'" />
       </div>
-      <pre>&lt;input type="text" v-model="val" v-mask="'###.###'" /&gt;</pre>
+      <pre>&lt;input type="text" v-model="val" v-facade="'###.###'" /&gt;</pre>
       <div class="field">
         <label>Manual :value and @input</label>
-        <input type="text" v-mask="'##.##'" :value="model2" @input="updateModel2" />
+        <input type="text" v-facade="'##.##'" :value="model2" @input="updateModel2" />
       </div>
-      <pre>&lt;input type="text" v-mask="'##.##'" :value="val" @input="handler" /&gt;</pre>
+      <pre>&lt;input type="text" v-facade="'##.##'" :value="val" @input="handler" /&gt;</pre>
 
       <h2>Using as filter</h2>
-      <p>You can mask text also: {{ '1234567890' | mask('(###) ### - ####') }}</p>
-      <pre v-pre>{{ '1234567890' | mask('(###) ### - ####') }}</pre>
+      <p>You can mask text also: {{ '1234567890' | facade('(###) ### - ####') }}</p>
+      <pre v-pre>{{ '1234567890' | facade('(###) ### - ####') }}</pre>
     </div>
   </div>
 </template>
@@ -237,7 +237,7 @@ export default {
       return `<input-facade mask="${this.mask}" value="${this.value}" type="${this.type}" masked="${this.masked}" placeholder="${this.placeholder}"></input-facade>`
     },
     directive() {
-      return `<input type="tel" v-mask="${this.directiveMask}" />`
+      return `<input type="tel" v-facade="${this.directiveMask}" />`
     }
   },
   methods: {

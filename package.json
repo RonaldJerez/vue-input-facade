@@ -22,7 +22,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target=lib src/plugin.js",
-    "build:docs": "vue-cli-service build --dest=docs",
+    "build:docs": "vue-cli-service build --dest=demo src/demo/main.js",
     "dev": "vue-cli-service serve",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
