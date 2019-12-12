@@ -1,5 +1,7 @@
 module.exports = {
+  productionSourceMap: false,
+  publicPath: './',
   pages: {
-    index: 'src/demo/main.js'
+    index: 'src/docs/main.js'
   }
 }

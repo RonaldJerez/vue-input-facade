@@ -21,6 +21,6 @@ jobs:
       node_js: lts/*
       script:
         - npm build
-        - npm run build:demo
-        - ./commit-demo-files.sh
+        - npm run build:docs
+        - ./commit-docs-files.sh
         - npx semantic-release --dry-run

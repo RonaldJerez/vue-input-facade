@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang=en-us><head><meta charset=UTF-8><title>Input Facade for Vue.js</title><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css><link rel=stylesheet href=./style.css><link rel=stylesheet href=./ios-switch.css><link href=css/index.09f14efc.css rel=preload as=style><link href=js/chunk-vendors.f44a7610.js rel=preload as=script><link href=js/index.75a13c11.js rel=preload as=script><link href=css/index.09f14efc.css rel=stylesheet></head><body><section class=page-header><h1 class=project-name>vue-input-facade</h1><h2 class=project-tagline>Input Facade input for Vue.js</h2><a href=http://github.com/ronaldjerez/vue-input-facade class=btn>View on GitHub</a></section><section class=main-content><h2>Input Facade input for Vue.js</h2><p>A lightweight and dependency free input facade created specific for Vue.js</p><div id=app>loading...</div><h3>Install</h3><p class="language-shell highlighter-rouge"><pre class=highlight><code>yarn add vue-input-facade
+or
+npm i -S vue-input-facade
+</code></pre></p><h3>Usage</h3><p class="language-javascript highlighter-rouge"><pre class=highlight><code>// Global
+import VueTheMask from 'vue-input-facade'
+Vue.use(VueTheMask)
+
+// Local Component
+import {TheMask} from 'vue-input-facade'
+export default {
+  components: {TheMask}
+}
+
+// Local Directive
+import {mask} from 'vue-input-facade'
+export default {
+  directives: {mask}
+}
+</code></pre></p><h1>Properties</h1><table><thead><tr><th>Property</th><th>Required</th><th>Type</th><th>Default</th><th>Description</th></tr></thead><tbody><tr><td>value</td><td>false</td><td>String</td><td></td><td>Input value or v-model</td></tr><tr><td><b>mask</b></td><td><b>true</b></td><td>String, Array</td><td></td><td>Mask pattern</td></tr><tr><td>masked</td><td>false</td><td>Boolean</td><td>false</td><td>emit value with mask chars, default is raw</td></tr><tr><td>placeholder</td><td>false</td><td>String</td><td></td><td>Same as html input</td></tr><tr><td>type</td><td>false</td><td>String</td><td>'text'</td><td>Input type (email, tel, number, ...)</td></tr><tr><td>tokens</td><td>false</td><td>Object</td><td><a href=#tokens>tokens</a></td><td>Custom tokens for mask</td></tr></tbody></table></section><script src=js/chunk-vendors.f44a7610.js></script><script src=js/index.75a13c11.js></script></body></html>

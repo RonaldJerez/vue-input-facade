@@ -6,8 +6,8 @@ setup_git() {
 }
 
 commit_files() {
-  git add demo
-  git commit --message "chore: build demo page"
+  git add docs
+  git commit --message "chore: build docs page"
 }
 
 setup_git
