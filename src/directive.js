@@ -1,4 +1,5 @@
-import core, { CONFIG_KEY } from './core'
+import * as core from './core'
+const CONFIG_KEY = core.CONFIG_KEY
 
 export default {
   bind: function(el, binding) {

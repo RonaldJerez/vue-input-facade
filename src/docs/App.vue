@@ -59,12 +59,12 @@
       <div class="equal width fields">
         <div class="field">
           <label>IBAN {{ iban }}</label>
-          <the-mask mask="AA## #### #### #### #### #### ###" v-model="iban" :masked="masked"></the-mask>
+          <input-facade mask="AA## #### #### #### #### #### ###" v-model="iban" :masked="masked"></input-facade>
         </div>
 
         <div class="field">
           <label>Vehicle Identification {{ vehicle }}</label>
-          <the-mask mask="XX.XX.XXXXX.X.X.XXXXXX" v-model="vehicle" :masked="masked"></the-mask>
+          <input-facade mask="XX.XX.XXXXX.X.X.XXXXXX" v-model="vehicle" :masked="masked"></input-facade>
         </div>
       </div>
 
@@ -75,14 +75,14 @@
           <p>
             <field label="CPF/CNPJ" :mask="['###.###.###-##', '##.###.###/####-##']" :masked="masked"></field>
           </p>
-          <pre>&lt;the-mask :mask="['###.###.###-##', '##.###.###/####-##']" /&gt;</pre>
+          <pre>&lt;input-facade :mask="['###.###.###-##', '##.###.###/####-##']" /&gt;</pre>
         </div>
 
         <div class="field">
           <p>
             <field label="Brazil 9th digit" :mask="['(##) ####-####', '(##) #####-####']" :masked="masked"></field>
           </p>
-          <pre>&lt;the-mask :mask="['(##) ####-####', '(##) #####-####']" /&gt;</pre>
+          <pre>&lt;input-facade :mask="['(##) ####-####', '(##) #####-####']" /&gt;</pre>
         </div>
       </div>
 
@@ -91,14 +91,14 @@
           <p>
             <field label="Bank Agency" :mask="['###', '###-#', '###-##']" :masked="masked"></field>
           </p>
-          <pre>&lt;the-mask :mask="['###', '###-#', '###-##']" /&gt;</pre>
+          <pre>&lt;input-facade :mask="['###', '###-#', '###-##']" /&gt;</pre>
         </div>
 
         <div class="field">
           <p>
             <field label="Bank Account" :mask="['###-#', '####-#', '#####-#', '######-#']" :masked="masked"></field>
           </p>
-          <pre>&lt;the-mask :mask="['###-#', '####-#', '#####-#', '######-#']" /&gt;</pre>
+          <pre>&lt;input-facade :mask="['###-#', '####-#', '#####-#', '######-#']" /&gt;</pre>
         </div>
       </div>
 
@@ -108,7 +108,7 @@
 
       <div>
         <field label="Hex. Color" mask="FFFFFF" :masked="masked" :tokens="hexTokens"></field>
-        <pre>&lt;the-mask mask="FFFFFF" :tokens="hexTokens" /&gt;</pre>
+        <pre>&lt;input-facade mask="FFFFFF" :tokens="hexTokens" /&gt;</pre>
         <pre>
 hexTokens: {
   F: {
@@ -165,7 +165,7 @@ hexTokens: {
       </div>
       <div class="field">
         <label>Test your input mask below</label>
-        <the-mask :mask="mask" :value="value" :type="type" :masked="masked" :placeholder="placeholder"></the-mask>
+        <input-facade :mask="mask" :value="value" :type="type" :masked="masked" :placeholder="placeholder" />
       </div>
       <pre>{{ code }}</pre>
 
@@ -234,7 +234,7 @@ export default {
   },
   computed: {
     code() {
-      return `<the-mask mask="${this.mask}" value="${this.value}" type="${this.type}" masked="${this.masked}" placeholder="${this.placeholder}"></the-mask>`
+      return `<input-facade mask="${this.mask}" value="${this.value}" type="${this.type}" masked="${this.masked}" placeholder="${this.placeholder}"></input-facade>`
     },
     directive() {
       return `<input type="tel" v-mask="${this.directiveMask}" />`

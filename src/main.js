@@ -4,7 +4,7 @@ import plugin from './plugin'
 
 Vue.config.productionTip = false
 
-Vue.use(plugin)
+Vue.use(plugin, { name: 'mask' })
 
 new Vue({
   render: (h) => h(App)

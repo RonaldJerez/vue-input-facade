@@ -1,7 +1,6 @@
 import mask from '../src/directive'
+import { CONFIG_KEY } from '../src/core'
 import { createLocalVue, shallowMount } from '@vue/test-utils'
-
-const maskingConfigKey = '__vueTheMask__'
 
 describe('Directive', () => {
   const localVue = createLocalVue()
@@ -33,7 +32,7 @@ describe('Directive', () => {
 
   test('add the config object to the element', () => {
     const wrapper = shallowMount(baseComponent, { localVue })
-    expect(wrapper.element[maskingConfigKey]).toBeDefined()
+    expect(wrapper.element[CONFIG_KEY]).toBeDefined()
   })
 
   test('update the config when mask changes', () => {
@@ -47,9 +46,9 @@ describe('Directive', () => {
     }
     const wrapper = shallowMount(component, { localVue })
 
-    expect(wrapper.element[maskingConfigKey].config.mask).toBe(mask1)
+    expect(wrapper.element[CONFIG_KEY].config.mask).toBe(mask1)
     wrapper.setData({ mask: mask2 })
-    expect(wrapper.element[maskingConfigKey].config.mask).toBe(mask2)
+    expect(wrapper.element[CONFIG_KEY].config.mask).toBe(mask2)
   })
 
   // skipping this one as it still shows the error stack in the terminal

@@ -1,19 +1,28 @@
 import tokens from './tokens'
 import masker, { setTokens } from './masker'
-import mask from './directive'
-import TheMask from './component.vue'
+import facade from './directive'
+import InputFacade from './component.vue'
 
-function install(Vue, options) {
+/**
+ * Vue plugin definittion
+ *
+ * @param {Vue} Vue the vue instance
+ * @param {Object} options.tokens the tokens to use as global tokens
+ * @param {Object} options.name the tokens to use as global tokens
+ */
+function install(Vue, options = {}) {
   // override the default tokens
-  if (options) { setTokens(options) }
+  if (options.tokens) {
+    setTokens(options.tokens)
+  }
 
-  Vue.component(TheMask.name, TheMask)
-  Vue.directive('mask', mask)
-  Vue.filter('mask', masker)
+  Vue.component(InputFacade.name, InputFacade)
+  Vue.directive(options.name || 'facade', facade)
+  Vue.filter(options.name || 'facade', masker)
 }
 
 export default install
-export { TheMask, mask, tokens, masker }
+export { InputFacade, facade, tokens, masker }
 
 // Install by default if included from script tag
 if (typeof window !== 'undefined' && window.Vue) {

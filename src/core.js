@@ -1,6 +1,6 @@
 import masker from './masker'
 
-export const CONFIG_KEY = '__vueTheMask__'
+export const CONFIG_KEY = '__input-facade__'
 
 export function trigger(name) {
   return new Event(name, { bubbles: true, cancelable: true })
@@ -29,7 +29,7 @@ export function getInputElement(el) {
   const inputElement = el instanceof HTMLInputElement ? el : el.querySelector('input')
 
   if (!inputElement) {
-    throw new Error('vue-the-mask directive requires at least 1 input element')
+    throw new Error('facade directive requires an input element')
   }
 
   return inputElement
@@ -91,14 +91,4 @@ export function updateValue(el, { emit = true, force = false } = {}) {
     el[CONFIG_KEY].oldValue = el.value = newValue
     emit && el.dispatchEvent(trigger('input'))
   }
-}
-
-export default {
-  CONFIG_KEY,
-  trigger,
-  normalizeConfig,
-  getInputElement,
-  inputHandler,
-  updateCursor,
-  updateValue
 }

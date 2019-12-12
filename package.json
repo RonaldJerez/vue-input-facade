@@ -1,19 +1,23 @@
 {
-  "name": "vue-the-mask",
+  "name": "vue-input-facade",
   "version": "0.0.0-development",
-  "description": "A lightweight and dependency free mask input created specific for Vue",
-  "main": "dist/vue-the-mask.umd.js",
-  "contributors": [
-    "Ronald Jerez <dlanor@gmail.com> (https://ronaldjerez.github.io/)",
-    "Marcos Neves <marcos.neves@gmail.com> (https://vuejs-tips.github.io/)"
-  ],
+  "description": "A lightweight and dependency free input facade created specific for Vue",
+  "main": "dist/vue-input-facade.umd.js",
+  "author": "Ronald Jerez <dlanor@gmail.com> (https://ronaldjerez.github.io/)",
   "license": "MIT",
   "keywords": [
     "vue",
+    "vuejs",
+    "input",
+    "facade",
     "mask",
     "masking",
     "component",
-    "input"
+    "directive",
+    "filter",
+    "front-end",
+    "vue-input-facade",
+    "web"
   ],
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -51,6 +55,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/RonaldJerez/vue-the-mask.git"
+    "url": "https://github.com/RonaldJerez/vue-input-facade.git"
   }
 }

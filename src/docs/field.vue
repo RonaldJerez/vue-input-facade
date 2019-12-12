@@ -1,22 +1,22 @@
 <template>
   <div class="inline field">
     <label>{{ label }}</label>
-    <the-mask
+    <input-facade
       :mask="mask"
       :tokens="tokens"
       v-model="editableValue"
       :placeholder="placeholder"
       :masked="masked"
       :type="type || 'tel'"
-    ></the-mask>
+    ></input-facade>
     <span>{{ editableValue }}</span>
   </div>
 </template>
 
 <script>
-import TheMask from '../component.vue'
+import InputFacade from '../component.vue'
 export default {
-  components: { TheMask },
+  components: { InputFacade },
   props: ['label', 'mask', 'placeholder', 'masked', 'type', 'tokens', 'value'],
   data() {
     return {

@@ -1,17 +1,15 @@
-# The Mask
+# Vue Input Facade
 
-> The original seems to be abandoned, I am trying to fix a few outstanding issues and update this repo a bit. WORK IN PROGRESS.
+A lightweight and dependency free input facade created specific for Vue
 
-A lightweight and dependency free mask input created specific for Vue.js
-
-## [Docs and Demo](https://ronaldjerez.github.io/vue-the-mask)
+## [Docs and Demo](https://ronaldjerez.github.io/vue-input-facade)
 
 ## Install
 
 ```
-yarn add @rj-pkgs/vue-the-mask
+yarn add vue-input-facade
 or
-npm i @rj-pkgs/vue-the-mask
+npm i vue-input-facade
 ```
 
 ## Usage (two flavors)
@@ -19,25 +17,34 @@ npm i @rj-pkgs/vue-the-mask
 ### Global
 
 ```javascript
-import VueTheMask from '@rj-pkgs/vue-the-mask'
-Vue.use(VueTheMask)
+import InputFacade from 'vue-input-facade'
+Vue.use(InputFacade)
 ```
 
 ### Local (inside the component)
 
 ```javascript
-import { TheMask } from '@rj-pkgs/vue-the-mask'
+import { InputFacade } from 'vue-input-facade'
 export default {
-  components: { TheMask }
+  components: { InputFacade }
 }
 ```
 
 ### Local (as directive)
 
 ```javascript
-import { mask } from '@rj-pkgs/vue-the-mask'
+import { facade } from 'vue-input-facade'
 export default {
-  directives: { mask }
+  directives: { facade }
+}
+```
+
+### Local (as filter)
+
+```javascript
+import { masker } from 'vue-input-facade'
+export default {
+  filters: { facade: masker }
 }
 ```
 
@@ -60,6 +67,10 @@ export default {
 | mask        | false    | String, Array |                   | Mask pattern                               |
 | masked      | false    | Boolean       | false             | emit value with mask chars, default is raw |
 | tokens      | false    | Object        | [tokens](#tokens) | Custom tokens for mask                     |
+
+## Thanks
+
+Thanks to [Marcos Neves](https://vuejs-tips.github.io/) for the vue-the-mask component of which this vue-input-facade was originally forked from.
 
 ## Contribution
 

@@ -1,5 +1,5 @@
 <template>
-  <input type="text" v-mask="config" :value="value" v-on="listeners" />
+  <input type="text" v-facade="config" :value="value" v-on="listeners" />
 </template>
 
 <script>
@@ -7,7 +7,7 @@ import directive from './directive'
 import masker from './masker'
 
 export default {
-  name: 'TheMask',
+  name: 'InputFacade',
   props: {
     /**
      * Weather to emit the value masked or not
@@ -20,7 +20,7 @@ export default {
     tokens: Object,
     value: [String, Number]
   },
-  directives: { mask: directive },
+  directives: { facade: directive },
   // data() {
   //   return {
   //     // avoid unecessary emit when has no change
