@@ -1,0 +1,26 @@
+language: node_js
+
+install:
+  - travis_retry npm install
+
+jobs:
+  include:
+    - stage: test
+      node_js:
+        - node
+        - lts/*
+        - 10
+      script:
+        - npm test
+        - npm run coveralls
+
+    - stage: release
+      on:
+        branch: master
+      skip-cleanup: true
+      node_js: lts/*
+      script:
+        - npm build
+        - npm run build:demo
+        - ./commit-demo-files.sh
+        - npx semantic-release --dry-run

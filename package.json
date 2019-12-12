@@ -3,6 +3,7 @@
   "version": "0.0.0-development",
   "description": "A lightweight and dependency free input facade created specific for Vue",
   "main": "dist/vue-input-facade.umd.js",
+  "files": ["dist/*.js"],
   "author": "Ronald Jerez <dlanor@gmail.com> (https://ronaldjerez.github.io/)",
   "license": "MIT",
   "keywords": [
@@ -22,7 +23,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target=lib src/plugin.js",
-    "build:docs": "vue-cli-service build --dest=demo src/demo/main.js",
+    "build:demo": "vue-cli-service build --dest=demo src/demo/main.js",
     "dev": "vue-cli-service serve",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
