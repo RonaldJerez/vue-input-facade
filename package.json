@@ -3,7 +3,9 @@
   "version": "0.0.0-development",
   "description": "A lightweight and dependency free input facade created specific for Vue",
   "main": "dist/vue-input-facade.umd.js",
-  "files": ["dist/*.js"],
+  "files": [
+    "dist/*.js"
+  ],
   "author": "Ronald Jerez <dlanor@gmail.com> (https://ronaldjerez.github.io/)",
   "license": "MIT",
   "keywords": [
@@ -28,9 +30,11 @@
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
     "lint": "vue-cli-service lint",
-    "coveralls": "cat ./coverage/lcov.info | coveralls"
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
+    "@semantic-release/git": "^7.0.18",
     "@vue/cli-plugin-babel": "^4.0.0",
     "@vue/cli-plugin-eslint": "^4.0.0",
     "@vue/cli-plugin-unit-jest": "^4.0.0",

@@ -1,26 +1,28 @@
+os: linux
 language: node_js
+
+node_js:
+  - node
+  - lts/*
+  - 10
 
 install:
   - travis_retry npm install
 
+script:
+  - npm test
+  - npm run coveralls
+
+stages:
+  - test
+  - name: release
+    if: branch = master
+
 jobs:
   include:
-    - stage: test
-      node_js:
-        - node
-        - lts/*
-        - 10
-      script:
-        - npm test
-        - npm run coveralls
-
     - stage: release
-      on:
-        branch: master
-      skip-cleanup: true
       node_js: lts/*
       script:
-        - npm build
+        - npm run build
         - npm run build:docs
-        - ./commit-docs-files.sh
-        - npx semantic-release --dry-run
+        - npx semantic-release
