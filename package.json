@@ -2,7 +2,7 @@
   "name": "vue-input-facade",
   "version": "0.0.0-development",
   "description": "A lightweight and dependency free input facade created specific for Vue",
-  "main": "dist/vue-input-facade.umd.js",
+  "main": "dist/vue-input-facade.umd.min.js",
   "files": [
     "dist/*.js"
   ],
