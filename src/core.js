@@ -64,6 +64,12 @@ export function inputHandler(event) {
 export function updateCursor(el, cursorPosition, isCursorAtEnd, digit) {
   const display = el.value
 
+  // setSelectionRange applies only to inputs of types text, search, URL, tel and password.
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setSelectionRange
+  if (!['text', 'tel', 'search'].includes(el.getAttribute('type'))) {
+    return
+  }
+
   // set the cursor position to an appropriate location
   if (el === document.activeElement) {
     if (isCursorAtEnd) {
