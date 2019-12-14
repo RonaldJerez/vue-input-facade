@@ -6,23 +6,32 @@ node_js:
   - lts/*
   - 10
 
-install:
-  - travis_retry npm install
+branches:
+  only:
+    - master
+    - next
+
+install: travis_retry npm install
 
 script:
   - npm test
   - npm run coveralls
 
-stages:
-  - test
-  - name: release
-    if: branch = master
+before_deploy: npm run build
+
+deploy:
+  provider: pages
+  local_dir: docs
+  token: $GH_TOKEN
+  skip_cleanup: true
+  on:
+    node_js: lts/*
+    branch: master
+    tags: false
 
 jobs:
   include:
     - stage: release
+      if: branch = master
       node_js: lts/*
-      script:
-        - npm run build
-        - npm run build:docs
-        - npx semantic-release
+      script: npx semantic-release

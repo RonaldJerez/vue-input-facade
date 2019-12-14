@@ -23,18 +23,17 @@
     "web"
   ],
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target=lib src/plugin.js",
-    "build:docs": "vue-cli-service build --dest=docs src/docs/main.js",
     "dev": "vue-cli-service serve",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
+    "build": "npm run build:docs; npm run build:plugin",
+    "build:plugin": "vue-cli-service build --target=lib src/plugin.js",
+    "build:docs": "vue-cli-service build --dest=docs src/docs/main.js",
     "lint": "vue-cli-service lint",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "semantic-release": "semantic-release"
   },
   "devDependencies": {
-    "@semantic-release/git": "^7.0.18",
     "@vue/cli-plugin-babel": "^4.0.0",
     "@vue/cli-plugin-eslint": "^4.0.0",
     "@vue/cli-plugin-unit-jest": "^4.0.0",
