@@ -34,10 +34,11 @@ export default {
   },
   computed: {
     config() {
-      return {
+      const config = !!this.mask && {
         mask: this.mask,
         tokens: this.tokens
       }
+      return config
     },
     listeners() {
       const vm = this
@@ -50,7 +51,7 @@ export default {
     refresh(event) {
       let emittedValue = event ? event.target.value : this.value
 
-      if (!this.masked) {
+      if (this.mask && !this.masked) {
         const maskerConfig = {
           mask: this.mask,
           tokens: this.tokens,

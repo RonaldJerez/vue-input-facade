@@ -20,10 +20,10 @@ export default {
   update: (el, { value, oldValue }) => {
     el = core.getInputElement(el)
 
-    if (value != oldValue) {
+    if (value !== oldValue) {
       el[CONFIG_KEY].config = core.normalizeConfig(value)
       core.updateValue(el, { force: true })
-    } else if (el.value !== el[CONFIG_KEY].oldValue) {
+    } else {
       core.updateValue(el)
     }
   },
