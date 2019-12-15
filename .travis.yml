@@ -17,7 +17,7 @@ script:
   - npm test
   - npm run coveralls
 
-before_deploy: npm run build
+before_deploy: npm run build:docs
 
 deploy:
   provider: pages
@@ -34,4 +34,6 @@ jobs:
     - stage: release
       if: branch = master
       node_js: lts/*
-      script: npx semantic-release
+      script:
+        - npm run build:plugin
+        - npx semantic-release
