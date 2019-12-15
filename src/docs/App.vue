@@ -119,17 +119,6 @@ hexTokens: {
         >
       </div>
 
-      <h1 id="tokens">Tokens</h1>
-      <pre>
-    '#': {pattern: /\d/},
-    'X': {pattern: /[0-9a-zA-Z]/},
-    'S': {pattern: /[a-zA-Z]/},
-    'A': {pattern: /[a-zA-Z]/, transform: v => v.toLocaleUpperCase()},
-    'a': {pattern: /[a-zA-Z]/, transform: v => v.toLocaleLowerCase()},
-    '!': {escape: true}
-    </pre
-      >
-
       <h1>Try it now</h1>
       <div class="equal width fields">
         <div class="field">
