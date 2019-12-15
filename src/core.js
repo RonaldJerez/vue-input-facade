@@ -51,7 +51,7 @@ export function inputHandler(event) {
   event.stopPropagation()
 
   // gather some information from the input before masking
-  let cursorPosition = target.selectionEnd
+  const cursorPosition = target.selectionEnd
   const isCursorAtEnd = event.data && cursorPosition == target.value.length
   const digit = target.value[cursorPosition - 1] // last inserted digit
 
