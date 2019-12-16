@@ -32,7 +32,6 @@ deploy:
 jobs:
   include:
     - stage: release
-      if: branch = master
       node_js: lts/*
       script:
         - npm run build:plugin
