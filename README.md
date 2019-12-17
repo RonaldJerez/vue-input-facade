@@ -26,11 +26,10 @@ Vue.use(InputFacade)
 ### Locally
 
 ```javascript
-import { InputFacade, facade, masker } from 'vue-input-facade'
+import { InputFacade, facade } from 'vue-input-facade'
 export default {
   components: { InputFacade },
-  directives: { facade },
-  filters: { facade: masker }
+  directives: { facade }
 }
 ```
 

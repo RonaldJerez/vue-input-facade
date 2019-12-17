@@ -1,14 +1,7 @@
 <template>
   <div class="inline field">
     <label>{{ label }}</label>
-    <input-facade
-      :mask="mask"
-      :tokens="tokens"
-      v-model="editableValue"
-      :placeholder="placeholder"
-      :masked="masked"
-      :type="type || 'tel'"
-    ></input-facade>
+    <input-facade v-bind="$attrs" v-model="editableValue" v-on="$listeners" />
     <span>{{ editableValue }}</span>
   </div>
 </template>
@@ -16,8 +9,9 @@
 <script>
 import InputFacade from '../component.vue'
 export default {
+  inheritAttrs: false,
   components: { InputFacade },
-  props: ['label', 'mask', 'placeholder', 'masked', 'type', 'tokens', 'value'],
+  props: ['value', 'label'],
   data() {
     return {
       editableValue: this.value
