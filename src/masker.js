@@ -84,7 +84,7 @@ export function formatter(value = '', config = {}) {
 
       if (masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
-        output.raw += char
+        output.unmasked += char
         output.masked += accumulator + char
 
         accumulator = ''
@@ -100,9 +100,9 @@ export function formatter(value = '', config = {}) {
     }
   }
 
-  // if there is no raw value, set masked to empty to avoid
+  // if there is no unmasked value, set masked to empty to avoid
   // showing masking characters in an otherwise empty input
-  if (output.raw && !short) {
+  if (output.unmasked && !short) {
     output.masked += accumulator
   }
 

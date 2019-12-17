@@ -61,4 +61,34 @@ describe('Component', () => {
     input.trigger('change')
     expect(wrapper.emitted().input).toBeTruthy()
   })
+
+  test('Adding a pipe function should call that function on input', async () => {
+    const piper = jest.fn()
+    const wrapper = createWrapper({ pipe: piper})
+
+    wrapper.element.value = '5555'
+    wrapper.find('input').trigger('input')
+
+    expect(piper).toHaveBeenCalled()
+  })
+
+  test('When pipe function returns false, do not change input value', async () => {
+    const piper = jest.fn().mockReturnValue(false)
+    const wrapper = createWrapper({ value: '1234', pipe: piper })
+
+    wrapper.element.value = '5555'
+    wrapper.find('input').trigger('input')
+
+    expect(wrapper.vm.maskedValue).toBe('1234')
+  })
+
+  test('When pipe function returns string, set value to masked string', async () => {
+    const piper = jest.fn().mockReturnValue('3344')
+    const wrapper = createWrapper({ mask: '##-##', pipe: piper })
+
+    wrapper.element.value = '5555'
+    wrapper.find('input').trigger('input')
+
+    expect(wrapper.vm.maskedValue).toBe('33-44')
+  })
 })

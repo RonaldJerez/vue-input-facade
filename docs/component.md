@@ -51,3 +51,27 @@ let hexTokens = {
 <checkbox v-model="masked" />
 <display :value="value" />
 ```
+
+### Pipe through another function
+
+```js
+const piper = (value, event) => {
+  // do not format on deletion, this could leave the input in bad state
+  // but allows user to delete the leading 0 if needed for some reason
+  if (event.inputType !== 'deleteContentBackward') {
+    const [ month ] = value.masked.split('/')
+
+    if (month > 12) {
+      return '0' + value.unmasked
+    }
+  }
+}
+
+let value = ''
+
+<example label="Date as MM/YY">
+  <input-facade v-model="value" mask="##/##" :pipe="piper" />
+</example>
+
+<display :value="value" />
+```

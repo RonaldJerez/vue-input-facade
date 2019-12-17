@@ -2,7 +2,7 @@ import masker from './masker'
 export const CONFIG_KEY = '__input-facade__'
 
 export function FacadeValue(val = '') {
-  this.masked = this.raw = val
+  this.masked = this.unmasked = val
 }
 
 /**
@@ -39,8 +39,8 @@ export function normalizeConfig(config = {}) {
 export function getInputElement(el) {
   const inputElement = el instanceof HTMLInputElement ? el : el.querySelector('input')
 
+  /* istanbul ignore next */
   if (!inputElement) {
-    /* istanbul ignore next */
     throw new Error('facade directive requires an input element')
   }
 
@@ -68,7 +68,7 @@ export function inputHandler(event) {
   const originalPosition = target.selectionEnd
   const { oldValue } = target[CONFIG_KEY]
 
-  updateValue(target, { emit: false })
+  updateValue(target, { emit: false }, event)
   updateCursor(event, originalValue, originalPosition)
 
   if (oldValue !== target.value) {
@@ -128,19 +128,31 @@ export function updateCursor(event, originalValue, originalPosition) {
  * Updates the element's value and unmasked value based on the masking config rules
  *
  * @param {HTMLInputElement} el The input element to update
- * @param {object} options
+ * @param {object} [options]
  * @param {Boolean} options.emit Wether to dispatch a new InputEvent or not
  * @param {Boolean} options.force Forces the update even if the old value and the new value are the same
+ * @param {Event} [event] The event that triggered this this update, null if not triggered by an input event
  */
-export function updateValue(el, { emit = true, force = false } = {}) {
+export function updateValue(el, { emit = true, force = false } = {}, event) {
   const { config, oldValue } = el[CONFIG_KEY]
 
   if (force || oldValue !== el.value) {
-    const newValue = masker(el.value, config)
+    let newValue = masker(el.value, config)
+
+    if (event && typeof config.pipe === 'function') {
+      const pipeValue = config.pipe(newValue, event)
+
+      if (typeof pipeValue === 'string') {
+        newValue = masker(pipeValue, config)
+      } else if (pipeValue === false) {
+        el.value = oldValue
+        return
+      }
+    }
 
     el[CONFIG_KEY].oldValue = newValue.masked
     el.value = newValue.masked
-    el.unmaskedValue = newValue.raw
+    el.unmaskedValue = newValue.unmasked
     emit && el.dispatchEvent(FacadeInputEvent())
   }
 }
