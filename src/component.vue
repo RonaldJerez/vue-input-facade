@@ -21,12 +21,11 @@ export default {
     value: [String, Number]
   },
   directives: { facade: directive },
-  // data() {
-  //   return {
-  //     // avoid unecessary emit when has no change
-  //     lastValue: this.value
-  //   }
-  // },
+  data() {
+    return {
+      lastValue: this.value
+    }
+  },
   watch: {
     masked() {
       this.refresh()
@@ -60,9 +59,11 @@ export default {
         emittedValue = masker(emittedValue, maskerConfig)
       }
 
-      // if (this.lastValue != emittedValue) {
-      this.$emit('input', emittedValue)
-      // }
+      // avoid unecessary emit when has no change
+      if (this.lastValue !== emittedValue) {
+        this.lastValue = emittedValue
+        this.$emit('input', emittedValue)
+      }
     }
   }
 }
