@@ -139,12 +139,12 @@ export function updateValue(el, { emit = true, force = false } = {}, event) {
   if (force || oldValue !== el.value) {
     let newValue = masker(el.value, config)
 
-    if (event && typeof config.pipe === 'function') {
-      const pipeValue = config.pipe(newValue, event)
+    if (event && typeof config.formatter === 'function') {
+      const formattedValue = config.formatter(newValue, event)
 
-      if (typeof pipeValue === 'string') {
-        newValue = masker(pipeValue, config)
-      } else if (pipeValue === false) {
+      if (typeof formattedValue === 'string') {
+        newValue = masker(formattedValue, config)
+      } else if (formattedValue === false) {
         el.value = oldValue
         return
       }

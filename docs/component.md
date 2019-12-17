@@ -52,10 +52,12 @@ let hexTokens = {
 <display :value="value" />
 ```
 
-### Pipe through another function
+### Post masking input formatter
+
+Returning a string in the format function will re-run that value through the masker routine, Ensuring that the end result still confirms to the mask.
 
 ```js
-const piper = (value, event) => {
+const date = (value, event) => {
   // do not format on deletion, this could leave the input in bad state
   // but allows user to delete the leading 0 if needed for some reason
   if (event.inputType !== 'deleteContentBackward') {
@@ -70,7 +72,30 @@ const piper = (value, event) => {
 let value = ''
 
 <example label="Date as MM/YY">
-  <input-facade v-model="value" mask="##/##" :pipe="piper" />
+  <input-facade v-model="value" mask="##/##" :formatter="date" />
+</example>
+
+<display :value="value" />
+```
+
+Returning a boolean `true` will leave the masked or unmasked value as is, the value is passed by reference so if you modify them here, that will be their final value.  However if a `false` is returned, the user's input will be ignored and the value will remain as it was prior.
+
+```js
+const evenMoney = (value, event) => {
+  if (event.data && event.data % 2 !== 0) {
+    // odd number, ignore it
+    return false
+  } else if (value.unmasked) {
+    const formatted = value.unmasked.match(/\d{1,3}/g).join(',')
+    value.masked = `\$${formatted}`
+    return true
+  }
+}
+
+let value = ''
+
+<example label="Enter an even num">
+  <input-facade v-model="value" mask="#########" :formatter="evenMoney" masked />
 </example>
 
 <display :value="value" />

@@ -46,16 +46,16 @@ export default {
       default: false
     },
     /**
-     * A function to pipe the value through before commiting the value to the input element. The function
-     * will receipt an object with the masked and unmasked value after passing through the masker function.
-     * The result of this pipe function will determine what happens with the value.
+     * A function to format the value after applying the mask. The function will receive an 
+     * object with the masked and unmasked value after passing through the masker function.
+     * The result of this function will determine what happens with the value.
      * <br />
      * If a string is returned, then that string will pass through the masker function once more and its value
      * will be set to the input.  If false (boolean) is returned, the input will be rejected and the
      * previous value will be restored.  Otherwise the facade logic will continue as usual.
      * @since v1.2
      */
-    pipe: Function,
+    formatter: Function,
     /**
      * Token object to override the defaults with
      */
@@ -97,7 +97,7 @@ export default {
       return {
         mask: this.mask,
         tokens: this.tokens,
-        pipe: this.pipe
+        formatter: this.formatter
       }
     },
     emittedValue() {
