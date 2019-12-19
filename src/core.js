@@ -46,8 +46,6 @@ export function getInputElement(el) {
 export function inputHandler(event) {
   const { target } = event
 
-  // do not run this function is there is no mask config
-  if (!target[CONFIG_KEY].config) return false
   // we only need to run this method on native events (isTrusted == true for native events)
   if (!event.isTrusted) return false
   // since we will be emitting our own input event we can stop propagation of the native event

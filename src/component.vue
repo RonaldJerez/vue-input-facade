@@ -1,5 +1,5 @@
 <template>
-  <input type="text" v-facade="config" :value="maskedValue" v-on="listeners" />
+  <input type="text" v-facade="config" :value="display" v-on="listeners" />
 </template>
 
 <script>
@@ -22,15 +22,16 @@ export default {
   directives: { facade: directive },
   data() {
     return {
-      maskedValue: this.value,
+      display: this.value,
       lastValue: this.value,
-      unmaskedValue: ''
+      maskedValue: null,
+      unmaskedValue: null
     }
   },
   watch: {
     value(newValue) {
-      if (newValue !== this.lastValue) {
-        this.maskedValue = newValue
+      if (newValue !== this.display) {
+        this.display = newValue
       }
     },
     masked() {
@@ -39,11 +40,10 @@ export default {
   },
   computed: {
     config() {
-      const config = !!this.mask && {
+      return {
         mask: this.mask,
         tokens: this.tokens
       }
-      return config
     },
     listeners() {
       const vm = this
@@ -55,12 +55,8 @@ export default {
   methods: {
     refresh(event) {
       this.maskedValue = event ? event.target.value : this.maskedValue
-      let emittedValue = this.maskedValue
-      this.unmaskedValue = event ? event.target.unmaskedValue : this.unmaskedValue || emittedValue
-
-      if (this.mask && !this.masked) {
-        emittedValue = this.unmaskedValue
-      }
+      this.unmaskedValue = event ? event.target.unmaskedValue : this.unmaskedValue
+      let emittedValue = this.mask && this.masked ? this.maskedValue : this.unmaskedValue
 
       // avoid unecessary emit when has no change
       if (this.lastValue !== emittedValue) {
