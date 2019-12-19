@@ -1,4 +1,4 @@
-import { normalizeConfig } from './core'
+import { normalizeConfig, FacadeValue } from './core'
 import defaultTokens from './tokens'
 
 let tokenDefinitions = defaultTokens
@@ -11,31 +11,31 @@ export function dynamic(value, config = {}) {
   const masks = config.masks.slice().sort((a, b) => a.length - b.length)
   const withConfig = (overrides) => Object.assign({}, config, overrides)
 
-  const nextMaskIsLarger = (currentMask, nextMask) => {
-    return formatter(value, withConfig({ mask: nextMask, short: true })).length > currentMask.length
+  const nextFacadeIsLarger = (currentMask, nextMask) => {
+    const nextMaskedVal = formatter(value, withConfig({ mask: nextMask, short: true }))
+    return nextMaskedVal.masked.length > currentMask.length
   }
 
   for (let i = 0; i < masks.length; i++) {
     const currentMask = masks[i]
     const nextMask = masks[i + 1]
 
-    if (!nextMask || !nextMaskIsLarger(currentMask, nextMask)) {
+    if (!nextMask || !nextFacadeIsLarger(currentMask, nextMask)) {
       return formatter(value, withConfig({ mask: currentMask }))
     }
   }
 
-  return '' // empty masks
+  return new FacadeValue() // empty masks
 }
 
 export function formatter(value = '', config = {}) {
-  const { mask = '', masked = true, tokens = tokenDefinitions, short = false } = config
+  const { mask = '', tokens = tokenDefinitions, short = false } = config
 
   // ensure we have a string
   value = value.toString()
 
-  let output = ''
+  let output = new FacadeValue()
   let escaped = false
-  let userInput = false
 
   let valueIndex = 0
   let maskIndex = 0
@@ -43,7 +43,7 @@ export function formatter(value = '', config = {}) {
   while (maskIndex < mask.length) {
     const maskChar = mask[maskIndex]
     const masker = tokens[maskChar]
-    const char = value[valueIndex]
+    let char = value[valueIndex]
 
     // no more input charactors and next charactor is a masked char
     if (!char && (short || masker)) break
@@ -57,13 +57,14 @@ export function formatter(value = '', config = {}) {
       }
 
       if (masker.pattern.test(char)) {
-        userInput = true
-        output += masker.transform ? masker.transform(char) : char
+        char = masker.transform ? masker.transform(char) : char
+        output.raw += char
+        output.masked += char
         maskIndex++
       }
       valueIndex++
     } else {
-      if (masked) output += maskChar
+      output.masked += maskChar
       if (char === maskChar) valueIndex++ // user typed the same char
 
       escaped = false
@@ -71,7 +72,11 @@ export function formatter(value = '', config = {}) {
     }
   }
 
-  return userInput ? output : ''
+  // if there is no raw value, set masked to empty to avoid
+  // showing masking characters in an otherwise empty input
+  if (!output.raw) output.masked = ''
+
+  return output
 }
 
 // Facade to formatter/dynamic when mask is String or Array
@@ -80,7 +85,7 @@ export default function masker(value, config) {
 
   // disable on empty mask
   if (!config.mask) {
-    return value
+    return new FacadeValue(value)
   }
 
   return Array.isArray(config.mask)

@@ -163,9 +163,10 @@ hexTokens: {
         <label>The Mask:</label>
         <input type="text" v-model="directiveMask" />
       </div>
-      <div class="field" v-facade="directiveMask">
+      <div class="field" v-facade="directiveMask" @input="getDirectiveRaw">
         <label>The Input:</label>
         <input type="tel" />
+        Unmasked Value from Directive: {{ directiveRaw }}
       </div>
       <pre>{{ directive }}</pre>
 
@@ -218,7 +219,8 @@ export default {
       value: '12TgB',
       directiveMask: '##/##/####',
       model1: '',
-      model2: ''
+      model2: '',
+      directiveRaw: ''
     }
   },
   computed: {
@@ -230,8 +232,11 @@ export default {
     }
   },
   methods: {
-    updateModel2({ target }) {
-      this.model2 = target.value
+    getDirectiveRaw({ target }) {
+      this.directiveRaw = target.unmaskedValue
+    },
+    updateModel2(event) {
+      this.model2 = event.target.value
     }
   }
 }

@@ -1,6 +1,9 @@
 import masker from './masker'
-
 export const CONFIG_KEY = '__input-facade__'
+
+export function FacadeValue(val = '') {
+  this.masked = this.raw = val
+}
 
 export function trigger(name) {
   return new Event(name, { bubbles: true, cancelable: true })
@@ -96,7 +99,10 @@ export function updateValue(el, { emit = true, force = false } = {}) {
 
   if (force || oldValue !== el.value) {
     const newValue = masker(el.value, config)
-    el[CONFIG_KEY].oldValue = el.value = newValue
+
+    el[CONFIG_KEY].oldValue = newValue.masked
+    el.value = newValue.masked
+    el.unmaskedValue = newValue.raw
     emit && el.dispatchEvent(trigger('input'))
   }
 }

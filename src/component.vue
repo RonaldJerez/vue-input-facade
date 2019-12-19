@@ -4,7 +4,6 @@
 
 <script>
 import directive from './directive'
-import masker from './masker'
 
 export default {
   name: 'InputFacade',
@@ -24,7 +23,8 @@ export default {
   data() {
     return {
       maskedValue: this.value,
-      lastValue: this.value
+      lastValue: this.value,
+      unmaskedValue: ''
     }
   },
   watch: {
@@ -56,14 +56,10 @@ export default {
     refresh(event) {
       this.maskedValue = event ? event.target.value : this.maskedValue
       let emittedValue = this.maskedValue
+      this.unmaskedValue = event ? event.target.unmaskedValue : this.unmaskedValue || emittedValue
 
       if (this.mask && !this.masked) {
-        const maskerConfig = {
-          mask: this.mask,
-          tokens: this.tokens,
-          masked: false
-        }
-        emittedValue = masker(this.maskedValue, maskerConfig)
+        emittedValue = this.unmaskedValue
       }
 
       // avoid unecessary emit when has no change
