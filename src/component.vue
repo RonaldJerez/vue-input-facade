@@ -1,5 +1,5 @@
 <template>
-  <input type="text" v-facade="config" :value="display" v-on="listeners" />
+  <input v-facade="config" type="text" :value="value" @input="input" @blur="$emit('blur')" @focus="$emit('focus')" />
 </template>
 
 <script>
@@ -22,18 +22,12 @@ export default {
   directives: { facade: directive },
   data() {
     return {
-      display: this.value,
       lastValue: this.value,
       maskedValue: null,
       unmaskedValue: null
     }
   },
   watch: {
-    value(newValue) {
-      if (newValue !== this.display) {
-        this.display = newValue
-      }
-    },
     masked() {
       this.refresh()
     }
@@ -44,18 +38,15 @@ export default {
         mask: this.mask,
         tokens: this.tokens
       }
-    },
-    listeners() {
-      const vm = this
-      return Object.assign({}, this.$listeners, {
-        input: vm.refresh
-      })
     }
   },
   methods: {
-    refresh(event) {
-      this.maskedValue = event ? event.target.value : this.maskedValue
-      this.unmaskedValue = event ? event.target.unmaskedValue : this.unmaskedValue
+    input({ target }) {
+      this.maskedValue = target.value
+      this.unmaskedValue = target.unmaskedValue
+      this.refresh()
+    },
+    refresh() {
       let emittedValue = this.mask && this.masked ? this.maskedValue : this.unmaskedValue
 
       // avoid unecessary emit when has no change
