@@ -5,8 +5,12 @@ export function FacadeValue(val = '') {
   this.masked = this.raw = val
 }
 
-export function trigger(name) {
-  return new Event(name, { bubbles: true, cancelable: true })
+export function FacadeInputEvent() {
+  return new CustomEvent('input', {
+    bubbles: true,
+    cancelable: true,
+    detail: { facade: true }
+  })
 }
 
 /**
@@ -44,52 +48,59 @@ export function getInputElement(el) {
  * @param {Event} event The event object
  */
 export function inputHandler(event) {
-  const { target } = event
+  const { target, detail } = event
 
-  // we only need to run this method on native events (isTrusted == true for native events)
-  if (!event.isTrusted) return false
-  // since we will be emitting our own input event we can stop propagation of the native event
+  // We dont need to run this method on the event we emit (prevent event loop)
+  if (detail && detail.facade) {
+    return false
+  }
+
+  // since we will be emitting our own custom input event
+  // we can stop propagation of this native event
   event.stopPropagation()
 
-  // gather some information from the input before masking
-  const cursorPosition = target.selectionEnd
-  const isCursorAtEnd = event.data && cursorPosition == target.value.length
-  const digit = target.value[cursorPosition - 1] // last inserted digit
+  const originalValue = target.value
+  const originalPosition = target.selectionEnd
 
-  // mask the value based on the config
   updateValue(target, { emit: false })
-  updateCursor(target, cursorPosition, isCursorAtEnd, digit)
-  target.dispatchEvent(trigger('input'))
+  updateCursor(event, originalValue, originalPosition)
+  target.dispatchEvent(FacadeInputEvent())
 }
 
-export function updateCursor(el, cursorPosition, isCursorAtEnd, digit) {
-  const display = el.value
+export function updateCursor(event, originalValue, originalPosition) {
+  const { target } = event
 
   // setSelectionRange applies only to inputs of types text, search, URL, tel and password.
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setSelectionRange
-  if (!['text', 'tel', 'search'].includes(el.getAttribute('type'))) {
+  if (target !== document.activeElement || !['text', 'tel', 'search', null].includes(target.getAttribute('type'))) {
     return
   }
 
-  // set the cursor position to an appropriate location
-  if (el === document.activeElement) {
-    if (isCursorAtEnd) {
-      cursorPosition = display.length
-    } else if (digit) {
-      let newPosition = cursorPosition
-      // if the digit was changed, increment position until find the digit again
-      while (newPosition <= display.length && display.charAt(newPosition - 1) !== digit) {
-        newPosition++
-      }
-      // if we didnt find the digit must be a bad digit, leave the cursor where it was
-      cursorPosition = newPosition <= display.length ? newPosition : cursorPosition - 1
-    }
+  // get some information about the cursor based on the original value
+  const pasting = event.inputType === 'insertFromPaste'
+  const isCursorAtEnd = (event.data || pasting) && originalPosition == originalValue.length
+  const digit = originalValue[originalPosition - 1] // last inserted digit
 
-    el.setSelectionRange(cursorPosition, cursorPosition)
-    setTimeout(function() {
-      el.setSelectionRange(cursorPosition, cursorPosition)
-    }, 0)
+  const newValue = target.value
+
+  // set the cursor position to an appropriate location
+  let cursorPosition = originalPosition
+  if (isCursorAtEnd) {
+    cursorPosition = newValue.length
+  } else if (digit) {
+    let newPosition = cursorPosition
+    // if the digit was changed, increment position until find the digit again
+    while (newPosition <= newValue.length && newValue.charAt(newPosition - 1) !== digit) {
+      newPosition++
+    }
+    // if we didnt find the digit must be a bad digit, leave the cursor where it was
+    cursorPosition = newPosition <= newValue.length ? newPosition : cursorPosition - 1
   }
+
+  target.setSelectionRange(cursorPosition, cursorPosition)
+  setTimeout(function() {
+    target.setSelectionRange(cursorPosition, cursorPosition)
+  }, 0)
 }
 
 export function updateValue(el, { emit = true, force = false } = {}) {
@@ -101,6 +112,6 @@ export function updateValue(el, { emit = true, force = false } = {}) {
     el[CONFIG_KEY].oldValue = newValue.masked
     el.value = newValue.masked
     el.unmaskedValue = newValue.raw
-    emit && el.dispatchEvent(trigger('input'))
+    emit && el.dispatchEvent(FacadeInputEvent())
   }
 }
