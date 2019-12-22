@@ -34,6 +34,7 @@ test ('cpf/cnpj', () => {
 test ('bank agency', () => {
   var masks = ['####', '####-#', '####-##']
   expect(dynamic('1234', { masks })).toMatchObject({ masked: '1234', raw: '1234'})
+  expect(dynamic('1234a', { masks })).toMatchObject({ masked: '1234', raw: '1234'})
   expect(dynamic('12345', { masks })).toMatchObject({ masked: '1234-5', raw: '12345'})
   expect(dynamic('123456', { masks })).toMatchObject({ masked: '1234-56', raw: '123456'})
 })

@@ -39,6 +39,7 @@ export function formatter(value = '', config = {}) {
 
   let valueIndex = 0
   let maskIndex = 0
+  let accumulator = ''
 
   while (maskIndex < mask.length) {
     const maskChar = mask[maskIndex]
@@ -59,12 +60,14 @@ export function formatter(value = '', config = {}) {
       if (masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
         output.raw += char
-        output.masked += char
+        output.masked += accumulator + char
+
+        accumulator = ''
         maskIndex++
       }
       valueIndex++
     } else {
-      output.masked += maskChar
+      accumulator += maskChar
       if (char === maskChar) valueIndex++ // user typed the same char
 
       escaped = false
@@ -74,7 +77,9 @@ export function formatter(value = '', config = {}) {
 
   // if there is no raw value, set masked to empty to avoid
   // showing masking characters in an otherwise empty input
-  if (!output.raw) output.masked = ''
+  if (output.raw && !short) {
+    output.masked += accumulator
+  }
 
   return output
 }
