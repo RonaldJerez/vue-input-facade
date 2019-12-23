@@ -21,7 +21,7 @@ before_deploy: npm run build:docs
 
 deploy:
   provider: pages
-  local_dir: docs
+  local_dir: build
   token: $GH_TOKEN
   skip_cleanup: true
   on:

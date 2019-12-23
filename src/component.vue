@@ -12,6 +12,14 @@
 <script>
 import directive from './directive'
 
+/**
+ * The component is basically a wrapper around a native input element, as such it inherits all
+ * properties available to [HTMLInputElement](https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement).
+ *
+ * However it provides a cleaner and more straight forward interface to the directive's features.
+ *
+ * @example ../docs/component.md
+ */
 export default {
   name: 'InputFacade',
   props: {
@@ -32,6 +40,7 @@ export default {
     tokens: Object,
     /**
      * The input's value
+     * @model
      */
     value: [String, Number]
   },
@@ -64,12 +73,6 @@ export default {
     }
   },
   methods: {
-    /**
-     * Input event when the value changes
-     *
-     * @event input
-     * @type {string}
-     */
     input({ target }) {
       this.maskedValue = target.value
       this.unmaskedValue = target.unmaskedValue
@@ -81,6 +84,10 @@ export default {
       // avoid unecessary emit when has no change
       if (this.emittedValue !== newEmittedValue) {
         this.emittedValue = newEmittedValue
+        /**
+         * Input event when the value changes
+         * @param {value}
+         */
         this.$emit('input', newEmittedValue)
       }
     }
