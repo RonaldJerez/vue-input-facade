@@ -29,7 +29,10 @@ export function dynamic(value, config = {}) {
 }
 
 export function formatter(value = '', config = {}) {
-  const { mask = '', tokens = tokenDefinitions, short = false } = config
+  let { mask = '', tokens, short = false } = config
+
+  // append/override global tokens instead of complete override
+  tokens = tokens ? Object.assign({}, tokenDefinitions, tokens) : tokenDefinitions
 
   // ensure we have a string
   value = value.toString()
