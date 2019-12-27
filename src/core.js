@@ -79,21 +79,23 @@ export function updateCursor(event, originalValue, originalPosition) {
   // get some information about the cursor based on the original value
   const pasting = event.inputType === 'insertFromPaste'
   const isCursorAtEnd = (event.data || pasting) && originalPosition == originalValue.length
-  const digit = originalValue[originalPosition - 1] // last inserted digit
+  let insertedChar = originalValue[originalPosition - 1]
 
-  const newValue = target.value
+  const newValue = target.value.toLocaleLowerCase()
 
   // set the cursor position to an appropriate location
   let cursorPosition = originalPosition
   if (isCursorAtEnd) {
     cursorPosition = newValue.length
-  } else if (digit) {
+  } else if (insertedChar) {
+    insertedChar = insertedChar.toLocaleLowerCase()
+
     let newPosition = cursorPosition
-    // if the digit was changed, increment position until find the digit again
-    while (newPosition <= newValue.length && newValue.charAt(newPosition - 1) !== digit) {
+    // if the last inserted char was changed, increment position until find it again
+    while (newPosition <= newValue.length && newValue.charAt(newPosition - 1) !== insertedChar) {
       newPosition++
     }
-    // if we didnt find the digit must be a bad digit, leave the cursor where it was
+    // if we didnt find the digit must be an unacceptable char, leave the cursor where it was
     cursorPosition = newPosition <= newValue.length ? newPosition : cursorPosition - 1
   }
 
