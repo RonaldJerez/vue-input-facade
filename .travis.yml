@@ -1,6 +1,11 @@
 os: linux
 language: node_js
 
+node_js:
+  - node
+  - lts/*
+  - 10
+
 branches:
   only:
     - master
@@ -8,23 +13,21 @@ branches:
 
 install: travis_retry npm install
 
+script:
+  - npm test
+  - npm run coveralls
+
 jobs:
   include:
-    - stage: test
-      node_js:
-        - node
-        - lts/*
-        - 10
-      script:
-        - npm test
-        - npm run coveralls
     - stage: release
+      name: "Plugin"
       if: type = push AND fork = false
       node_js: lts/*
       script:
         - npm run build:plugin
         - npx semantic-release
-    - stage: deploy
+    - stage: release
+      name: "Documentation"
       if: branch = master AND type = push AND fork = false
       node_js: lts/*
       script: npm run build:docs

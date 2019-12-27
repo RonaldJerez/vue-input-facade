@@ -1,4 +1,5 @@
 const path = require('path')
+const pkg = require('../package.json')
 const { execSync } = require('child_process');
 
 const root = path.resolve(__dirname, '../')
@@ -11,11 +12,15 @@ module.exports = {
   version: version,
   require: [`${root}/styleguide/imports.js`, `${root}/styleguide/style.css`],
   previewDelay: 2000,
-  styleguideDir: 'build',
+  styleguideDir: '../build',
   usageMode: 'expand',
   exampleMode: 'expand',
   getComponentPathLine: () => '',
   progressBar: process.env.NODE_ENV === 'development',
+  ribbon: {
+    url: pkg.repository.url,
+    text: 'View on GitHub'
+  },
   sections: [
     {
       name: 'Installing',
