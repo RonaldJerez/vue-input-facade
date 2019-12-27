@@ -9,30 +9,31 @@ node_js:
 branches:
   only:
     - master
-    - next
+    # - next
 
 install: travis_retry npm install
 
-script:
-  - npm test
-  - npm run coveralls
-
-before_deploy: npm run build:docs
-
-deploy:
-  provider: pages
-  local_dir: build
-  token: $GH_TOKEN
-  skip_cleanup: true
-  on:
-    node_js: lts/*
-    branch: master
-    tags: false
-
 jobs:
   include:
+    - stage: test
+      name: Unit Tests,
+      script:
+        - npm test
+        - npm run coveralls
     - stage: release
+      if: type = push AND fork = false
       node_js: lts/*
       script:
         - npm run build:plugin
         - npx semantic-release
+    - stage: deploy
+      if: branch = master AND type = push AND fork = false
+      node_js: lts/*
+      script: npm run build:docs
+      deploy:
+        provider: pages
+        local_dir: build
+        token: $GH_TOKEN
+        skip_cleanup: true
+        on:
+          tags: false
