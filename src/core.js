@@ -72,7 +72,9 @@ export function updateCursor(event, originalValue, originalPosition) {
 
   // setSelectionRange applies only to inputs of types text, search, URL, tel and password.
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setSelectionRange
-  if (target !== document.activeElement || !['text', 'tel', 'search', null].includes(target.getAttribute('type'))) {
+  const supportedInputType = ['text', 'tel', 'search', null].includes(target.getAttribute('type'))
+  const config = target[CONFIG_KEY] && target[CONFIG_KEY].config
+  if (target !== document.activeElement || !supportedInputType || !config.mask) {
     return
   }
 
