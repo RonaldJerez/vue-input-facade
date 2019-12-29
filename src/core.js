@@ -66,10 +66,14 @@ export function inputHandler(event) {
 
   const originalValue = target.value
   const originalPosition = target.selectionEnd
+  const { oldValue } = target[CONFIG_KEY]
 
   updateValue(target, { emit: false })
   updateCursor(event, originalValue, originalPosition)
-  target.dispatchEvent(FacadeInputEvent())
+
+  if (oldValue !== target.value) {
+    target.dispatchEvent(FacadeInputEvent())
+  }
 }
 
 /**

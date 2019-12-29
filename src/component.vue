@@ -86,17 +86,12 @@ export default {
       this.refresh()
     },
     refresh() {
-      let newEmittedValue = this.mask && this.masked ? this.maskedValue : this.unmaskedValue
-
-      // avoid unecessary emit when has no change
-      if (this.emittedValue !== newEmittedValue) {
-        this.emittedValue = newEmittedValue
-        /**
-         * Input event when the value changes
-         * @param {value}
-         */
-        this.$emit('input', newEmittedValue)
-      }
+      this.emittedValue = this.mask && this.masked ? this.maskedValue : this.unmaskedValue
+      /**
+       * Input event when the value changes
+       * @param {String} value
+       */
+      this.$emit('input', this.emittedValue)
     }
   }
 }
