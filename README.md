@@ -5,7 +5,7 @@
 A lightweight and dependency free input masking library created specific for Vue
 
 [![Build Status](https://travis-ci.org/RonaldJerez/vue-input-facade.svg?branch=master)](https://travis-ci.org/RonaldJerez/vue-input-facade)
-[![Coverage Status](https://coveralls.io/repos/github/RonaldJerez/vue-input-facade/badge.svg?branch=master)](https://coveralls.io/github/RonaldJerez/vue-input-facade?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/RonaldJerez/vue-input-facade/badge.svg?branch=master&service=github)](https://coveralls.io/github/RonaldJerez/vue-input-facade?branch=master&service=github)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
