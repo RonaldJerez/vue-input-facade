@@ -23,8 +23,8 @@ module.exports = {
   },
   sections: [
     {
-      name: 'Installing',
-      content: `${root}/docs/installing.md`
+      name: 'Introduction',
+      content: `${root}/README.md`
     },
     {
       name: 'Component',

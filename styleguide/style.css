@@ -5,10 +5,14 @@ html, body {
   font-size: 16px;
 }
 
-.rsg--controls-62, .rsg--toolbar-11 {
+#introduction, .hide {
+  display: none;
+}
+
+[class^=rsg--controls], [class^=rsg--toolbar] {
   display: none !important;
 }
 
-.rsg--preview-61 {
+[class^=rsg--preview] {
   margin-bottom: 16px !important;
 }

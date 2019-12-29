@@ -1,14 +1,31 @@
+<div align="center" markdown="1" style="text-align:center">
+
 # Vue Input Facade
 
-A lightweight and dependency free input facade created specific for Vue
+A lightweight and dependency free input masking library created specific for Vue
+
+[![Build Status](https://travis-ci.org/RonaldJerez/vue-input-facade.svg?branch=master)](https://travis-ci.org/RonaldJerez/vue-input-facade)
+[![Coverage Status](https://coveralls.io/repos/github/RonaldJerez/vue-input-facade/badge.svg?branch=master)](https://coveralls.io/github/RonaldJerez/vue-input-facade?branch=master)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+
+<div class="hide" markdown="1">
 
 ## [Docs and Demo](https://ronaldjerez.github.io/vue-input-facade)
 
+</div>
+
+---
+
+</div>
+
 ## Installing
 
-```
+```bash
 npm i vue-input-facade
-or
+```
+
+```bash
 yarn add vue-input-facade
 ```
 
@@ -16,23 +33,40 @@ yarn add vue-input-facade
 
 ### Globally
 
-installs the component, directive and filter for your entire application.
+Installs the component, directive and filter for your entire application.
 
-```js
+```javascript
 import InputFacade from 'vue-input-facade'
 Vue.use(InputFacade)
 ```
 
 ### Locally
 
-```js
+Install per component as needed
+
+```javascript
 import { InputFacade, facade, filter } from 'vue-input-facade'
+
 export default {
   components: { InputFacade },
   directives: { facade },
-  filters: { facade: filter }
+  filters: { facade: filter },
+  // ... rest of component config
 }
 ```
+
+### Default Mask Tokens
+
++ `S` = alpha characters
++ `#` = numerical characters
++ `X` = alpha numerical characters
++ `A` = alpha characters, transformed to uppercase
++ `a` = alpha characters, transformed to lowercase
++ `\` = escape any of the above characters
+
+See the [token source file](https://github.com/RonaldJerez/vue-input-facade/blob/master/src/tokens.js) for definition signature
+
+<div class="hide" markdown="1">
 
 ## Usage
 
@@ -40,7 +74,7 @@ export default {
 
 ```html
 <label>Phone Number</label>
-<input-facade mask="(###) ###-####" name="phoneNumber" type="tel" masked />
+<input-facade mask="(###) ###-####" name="phoneNumber" type="tel" />
 ```
 
 ### Directive
@@ -50,7 +84,7 @@ export default {
 <input type="text" v-facade="'##/##/##'" />
 ```
 
-See [demo page](https://ronaldjerez.github.io/vue-input-facade) for more usage example
+See [demo page](https://ronaldjerez.github.io/vue-input-facade) for more usage examples
 
 ## Thanks
 
@@ -58,8 +92,10 @@ Thanks to [Marcos Neves](https://vuejs-tips.github.io/) for the vue-the-mask com
 
 ## Contribution
 
-You're free to contribute to this project by submitting Issues and/or pull requests. This project is test-driven, so keep in mind that every change and new feature should be covered by tests. Your name will be added to the hall of fame ;)
+You're free to contribute to this project by submitting Issues and/or pull requests. This project is test-driven, so keep in mind that every change and new feature should be covered by tests.
 
 ## License
 
 This project is licensed under [MIT License](http://en.wikipedia.org/wiki/MIT_License)
+
+</div>
