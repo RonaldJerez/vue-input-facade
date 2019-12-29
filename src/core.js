@@ -40,6 +40,7 @@ export function getInputElement(el) {
   const inputElement = el instanceof HTMLInputElement ? el : el.querySelector('input')
 
   if (!inputElement) {
+    /* istanbul ignore next */
     throw new Error('facade directive requires an input element')
   }
 
@@ -73,10 +74,10 @@ export function inputHandler(event) {
 
 /**
  * Updates the cursor position to the right place after the masking rule was applied
- * 
+ *
  * @param {InputEvent} event the event that trigger this update
  * @param {String} originalValue the original input value, prior to masking
- * @param {Number} originalPosition the original cursor position 
+ * @param {Number} originalPosition the original cursor position
  */
 export function updateCursor(event, originalValue, originalPosition) {
   const { target } = event
@@ -114,17 +115,18 @@ export function updateCursor(event, originalValue, originalPosition) {
 
   target.setSelectionRange(cursorPosition, cursorPosition)
   setTimeout(function() {
+    /* istanbul ignore next */
     target.setSelectionRange(cursorPosition, cursorPosition)
   }, 0)
 }
 
 /**
  * Updates the element's value and unmasked value based on the masking config rules
- * 
+ *
  * @param {HTMLInputElement} el The input element to update
- * @param {object} options 
+ * @param {object} options
  * @param {Boolean} options.emit Wether to dispatch a new InputEvent or not
- * @param {Boolean} options.force Forces the update even if the old value and the new value are the same 
+ * @param {Boolean} options.force Forces the update even if the old value and the new value are the same
  */
 export function updateValue(el, { emit = true, force = false } = {}) {
   const { config, oldValue } = el[CONFIG_KEY]

@@ -12,7 +12,7 @@
     "dev": "vue-cli-service styleguidist --config styleguide/config.js --mode development",
     "build:docs": "vue-cli-service styleguidist:build --config styleguide/config.js",
     "test": "jest --coverage",
-    "test:watch": "jest --coverage --watch"
+    "test:watch": "jest --coverage --watchAll"
   },
   "main": "dist/vue-input-facade.umd.min.js",
   "files": [
@@ -24,7 +24,7 @@
     "@vue/cli-plugin-unit-jest": "^4.0.0",
     "@vue/cli-service": "^4.0.0",
     "@vue/eslint-config-prettier": "^5.0.0",
-    "@vue/test-utils": "^1.0.0-beta.29",
+    "@vue/test-utils": "^1.0.0-beta.30",
     "babel-eslint": "^10.0.3",
     "core-js": "^3.3.2",
     "coveralls": "^3.0.9",

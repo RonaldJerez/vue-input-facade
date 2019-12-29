@@ -1,15 +1,15 @@
 import masker, { setTokens } from '../src/masker'
 
 const tokens = {
-  'F': { pattern: /[a-f0-9]/i },
+  F: { pattern: /[a-f0-9]/i }
 }
 
 test('no mask given', () => {
-  expect(masker('123')).toMatchObject({masked: '123', raw: '123'})
+  expect(masker('123')).toMatchObject({ masked: '123', raw: '123' })
 })
 
 test('single mask given', () => {
-  expect(masker('12', { mask: '#.#' })).toMatchObject({masked: '1.2', raw: '12' })
+  expect(masker('12', { mask: '#.#' })).toMatchObject({ masked: '1.2', raw: '12' })
 })
 
 test('multiple mask given', () => {
@@ -24,6 +24,5 @@ test('should just append to the tokens when passing them in locally', () => {
 
 test('should override default tokens globally', () => {
   setTokens(tokens)
-  expect(masker('456DDS', { mask: '###-FFFF'})).toMatchObject({ masked: '###-456D', raw: '456D' })
+  expect(masker('456DDS', { mask: '###-FFFF' })).toMatchObject({ masked: '###-456D', raw: '456D' })
 })
-

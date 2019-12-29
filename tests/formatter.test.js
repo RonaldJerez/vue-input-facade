@@ -1,19 +1,21 @@
-import {formatter} from '../src/masker'
+import { formatter } from '../src/masker'
 
 test('default vals', () => {
   expect(formatter('123')).toMatchObject({ masked: '', raw: '' })
 })
 
 test('12 -> #.#', () => {
-  expect(formatter('12', { mask: '#.#' })).toMatchObject({ masked:'1.2', raw: '12' })
+  expect(formatter('12', { mask: '#.#' })).toMatchObject({ masked: '1.2', raw: '12' })
 })
 
-test('1 -> (#)', () => { // placeholder at the end
-  expect(formatter('1', { mask: '(#)' })).toMatchObject({masked: '(1)', raw: '1'})
+test('1 -> (#)', () => {
+  // placeholder at the end
+  expect(formatter('1', { mask: '(#)' })).toMatchObject({ masked: '(1)', raw: '1' })
 })
 
-test('1 -> [(#)]', () => { // two placeholder at the end
-  expect(formatter('1', { mask: '[(#)]' })).toMatchObject({masked: '[(1)]', raw: '1'})
+test('1 -> [(#)]', () => {
+  // two placeholder at the end
+  expect(formatter('1', { mask: '[(#)]' })).toMatchObject({ masked: '[(1)]', raw: '1' })
 })
 
 test('1 -> #..#', () => {
@@ -44,7 +46,7 @@ test('123 -> ##(#)', () => {
   expect(formatter('123', { mask: '##(#)' })).toMatchObject({ masked: '12(3)', raw: '123' })
 })
 
-test('123 -> #\#(#)', () => {
+test('123 -> ##(#)', () => {
   expect(formatter('12', { mask: '#\\#(#)' })).toMatchObject({ masked: '1#(2)', raw: '12' })
 })
 

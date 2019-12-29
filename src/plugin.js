@@ -23,7 +23,7 @@ function install(Vue, options = {}) {
 
 /**
  * Utility function to be used as a vue filter
- * 
+ *
  * @param {String} value the value to apply the filter to
  * @param {*} config the masking config
  * @returns {string} the masked value as returned by the masker function

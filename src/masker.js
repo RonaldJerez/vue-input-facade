@@ -5,7 +5,7 @@ let tokenDefinitions = defaultTokens
 
 /**
  * Overrides the default global token definitions
- * 
+ *
  * @param {object} tokens the new token object
  */
 export function setTokens(tokens) {
@@ -43,8 +43,8 @@ export function dynamic(value, config = {}) {
 
 /**
  * Formats the value based on the given masking rule
- * 
- * @param {string} value the value to mask 
+ *
+ * @param {string} value the value to mask
  * @param {{mask: String, tokens: Object, short: Boolean}} config
  * @param {string} config.mask the masking string
  * @param {object} config.tokens the tokens to add/override to the global
@@ -111,7 +111,7 @@ export function formatter(value = '', config = {}) {
 
 /**
  * Facade to formatter/dynamic when mask is String or Array
- * 
+ *
  * @param {String} value the value to mask
  * @param {*} config the masking config
  * @returns {FacadeValue} facade value object
