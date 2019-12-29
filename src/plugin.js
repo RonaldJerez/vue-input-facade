@@ -21,6 +21,13 @@ function install(Vue, options = {}) {
   Vue.filter(options.name || 'facade', filter)
 }
 
+/**
+ * Utility function to be used as a vue filter
+ * 
+ * @param {String} value the value to apply the filter to
+ * @param {*} config the masking config
+ * @returns {string} the masked value as returned by the masker function
+ */
 function filter(value, config) {
   return masker(value, config).masked
 }
