@@ -63,7 +63,8 @@ export default {
   color: #80868b;
   left: 8px;
   padding: 0 8px;
-  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1), opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: left top;
   z-index: 1;
 }
 
@@ -73,6 +74,6 @@ export default {
 
 .field-wrapper input:focus ~ label,
 .field-wrapper.hasValue input ~ label {
-  transform: scale(0.75) translateX(-15px) translateY(-34px);
+  transform: scale(0.75) translateX(8px) translateY(-30px);
 }
 </style>

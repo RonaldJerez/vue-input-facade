@@ -11,7 +11,7 @@ A lightweight and dependency free input masking library created specific for Vue
 
 <div class="hide" markdown="1">
 
-## [Docs and Demo](https://ronaldjerez.github.io/vue-input-facade)
+### [Docs and Demo](https://ronaldjerez.github.io/vue-input-facade)
 
 </div>
 
@@ -70,14 +70,14 @@ See the [token source file](https://github.com/RonaldJerez/vue-input-facade/blob
 
 ## Usage
 
-### Component
+### As Component
 
 ```html
 <label>Phone Number</label>
 <input-facade mask="(###) ###-####" name="phoneNumber" type="tel" />
 ```
 
-### Directive
+### As Directive
 
 ```html
 <label>Date</label>

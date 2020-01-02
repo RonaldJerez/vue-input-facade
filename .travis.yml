@@ -4,12 +4,12 @@ language: node_js
 node_js:
   - node
   - lts/*
-  - 10
 
 branches:
   only:
     - master
     - next
+    - beta
 
 install: travis_retry npm install
 
@@ -20,14 +20,12 @@ script:
 jobs:
   include:
     - stage: release
-      name: "Plugin"
       if: type = push AND fork = false
       node_js: lts/*
       script:
         - npm run build:plugin
         - npx semantic-release
-    - stage: release
-      name: "Documentation"
+    - stage: documentation
       if: branch = master AND type = push AND fork = false
       node_js: lts/*
       script: npm run build:docs

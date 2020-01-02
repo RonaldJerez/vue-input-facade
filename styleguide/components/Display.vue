@@ -30,7 +30,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .display {
   margin: 0;
   margin-left: -16px;
