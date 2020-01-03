@@ -31,6 +31,7 @@ let masked = true
 ### Custom Tokens
 
 You can override the tokens on a per field basis. Just pass in your own token definition to the field.
+This can also be used to add internatilization support.
 
 ```js
 let value = ''

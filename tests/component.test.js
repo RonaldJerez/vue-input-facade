@@ -49,4 +49,16 @@ describe('Component', () => {
     await wrapper.setProps({ mask })
     expect(wrapper.vm.maskedValue).toBe('(444)555')
   })
+
+  test('When lazy is set to true, should only input onChange', async () => {
+    // default settings
+    const wrapper = createWrapper({ lazy: true })
+    const input = wrapper.find('input')
+
+    input.trigger('input')
+    expect(wrapper.emitted().input).toBeFalsy()
+
+    input.trigger('change')
+    expect(wrapper.emitted().input).toBeTruthy()
+  })
 })

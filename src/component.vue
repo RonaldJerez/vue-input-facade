@@ -3,7 +3,8 @@
     v-facade="config"
     type="text"
     :value="maskedValue"
-    @input="input"
+    @input="onInput"
+    @change="onChange"
     @blur="$emit('blur')"
     @focus="$emit('focus')"
   />
@@ -24,11 +25,21 @@ export default {
   name: 'InputFacade',
   props: {
     /**
-     * The mask pattern for this input
+     * Vue's v-model .lazy modifier does not currently work with custom components. If you wish to have your v-model
+     * updated only during the change event instead of on input, enable this property. <b>Note: This works by supressing
+     * input events and only emitting a single input event at the same time as the change event.</b>
+     * @since v1.2
+     */
+    lazy: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * The mask pattern for this input, it could be a single pattern or multiple patterns when its an array.
      */
     mask: [String, Array],
     /**
-     * Weather to emit the value masked or unmasked
+     * Whether to emit the value masked or unmasked
      */
     masked: {
       type: Boolean,
@@ -47,7 +58,6 @@ export default {
   directives: { facade: directive },
   data() {
     return {
-      emittedValue: this.value,
       maskedValue: this.value,
       unmaskedValue: null
     }
@@ -68,7 +78,7 @@ export default {
       }
     },
     masked() {
-      this.refresh()
+      this.emitInput()
     }
   },
   computed: {
@@ -77,19 +87,35 @@ export default {
         mask: this.mask,
         tokens: this.tokens
       }
+    },
+    emittedValue() {
+      return this.mask && this.masked ? this.maskedValue : this.unmaskedValue
     }
   },
   methods: {
-    input({ target }) {
+    onInput({ target }) {
       this.maskedValue = target.value
       this.unmaskedValue = target.unmaskedValue
-      this.refresh()
+
+      if (!this.lazy) {
+        this.emitInput()
+      }
     },
-    refresh() {
-      this.emittedValue = this.mask && this.masked ? this.maskedValue : this.unmaskedValue
+    onChange() {
       /**
-       * Input event when the value changes
-       * @param {String} value
+       * Fires when the value has been commited on the input. Usually on blur.
+       * @param {String} value The input's current value, masked or unmasked.
+       */
+      this.$emit('change', this.emittedValue)
+
+      if (this.lazy) {
+        this.emitInput()
+      }
+    },
+    emitInput() {
+      /**
+       * Fires when the value of the input has been changed.
+       * @param {String} value The input's current value, masked or unmasked.
        */
       this.$emit('input', this.emittedValue)
     }

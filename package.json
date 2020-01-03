@@ -1,7 +1,7 @@
 {
   "name": "vue-input-facade",
   "version": "0.0.0-development",
-  "description": "A lightweight and dependency free input facade created specific for Vue",
+  "description": "A lightweight and dependency free input masking library created specific for Vue",
   "author": "Ronald Jerez <dlanor@gmail.com> (https://github.com/RonaldJerez/)",
   "scripts": {
     "build": "npm run build:docs; npm run build:plugin",
