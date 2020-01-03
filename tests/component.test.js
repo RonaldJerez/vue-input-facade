@@ -35,4 +35,18 @@ describe('Component', () => {
     await wrapper.setProps({ masked: true })
     expect(wrapper.vm.emittedValue).toBe('123-4')
   })
+
+  test('Removing the mask rule should set the value to the unmasked value', async () => {
+    const value = '444555'
+    const mask = '(###)###'
+
+    const wrapper = createWrapper({ value, mask })
+    expect(wrapper.vm.maskedValue).toBe('(444)555')
+
+    await wrapper.setProps({ mask: null })
+    expect(wrapper.vm.maskedValue).toBe('444555')
+
+    await wrapper.setProps({ mask })
+    expect(wrapper.vm.maskedValue).toBe('(444)555')
+  })
 })

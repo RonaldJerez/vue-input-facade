@@ -60,6 +60,13 @@ export default {
         this.maskedValue = newValue
       }
     },
+    mask(newMask) {
+      if (!newMask) {
+        // when removing the masking rule, set the displayed value to the unmasked
+        // to remove any unwanted masking characters from the input
+        this.maskedValue = this.unmaskedValue
+      }
+    },
     masked() {
       this.refresh()
     }
