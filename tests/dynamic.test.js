@@ -48,3 +48,12 @@ test('bank account', () => {
   expect(dynamic('123456789', { masks })).toMatchObject({ masked: '12345678-9', raw: '123456789' })
   expect(dynamic('1234567890', { masks })).toMatchObject({ masked: '123456789-0', raw: '1234567890' })
 })
+
+test('US Currency', () => {
+  var masks = ['$###', '$#,###', '$##,###', '$###,###']
+  expect(dynamic('12', { masks })).toMatchObject({ masked: '$12', raw: '12' })
+  expect(dynamic('123', { masks })).toMatchObject({ masked: '$123', raw: '123' })
+  expect(dynamic('1234', { masks })).toMatchObject({ masked: '$1,234', raw: '1234' })
+  expect(dynamic('12345', { masks })).toMatchObject({ masked: '$12,345', raw: '12345' })
+  expect(dynamic('123456', { masks })).toMatchObject({ masked: '$123,456', raw: '123456' })
+})

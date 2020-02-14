@@ -23,17 +23,18 @@ export function setTokens(tokens) {
 export function dynamic(value, config = {}) {
   const masks = config.masks.slice().sort((a, b) => a.length - b.length)
   const withConfig = (overrides) => Object.assign({}, config, overrides)
-
-  const nextFacadeIsLarger = (currentMask, nextMask) => {
-    const nextMaskedVal = formatter(value, withConfig({ mask: nextMask, short: true }))
-    return nextMaskedVal.masked.length > currentMask.length
+  const fullRawValue = formatter(value, withConfig({ mask: masks[masks.length - 1], short: true }))
+  
+  const compareWithFullRawValue = (currentMask) => {
+    const maskedVal = formatter(value, withConfig({ mask: currentMask, short: true }))
+    return maskedVal.raw === fullRawValue.raw
   }
 
   for (let i = 0; i < masks.length; i++) {
     const currentMask = masks[i]
     const nextMask = masks[i + 1]
 
-    if (!nextMask || !nextFacadeIsLarger(currentMask, nextMask)) {
+    if (!nextMask || compareWithFullRawValue(currentMask)) {
       return formatter(value, withConfig({ mask: currentMask }))
     }
   }
