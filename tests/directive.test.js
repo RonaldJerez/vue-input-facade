@@ -119,5 +119,17 @@ describe('Directive', () => {
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
+
+    test('should not reset cursor if no mask is given', async () => {
+      buildWrapper({ mask: '', attachToDocument: true })
+      element = wrapper.element
+      jest.spyOn(element, 'setSelectionRange')
+      element.focus()
+      element.value = 'ABC-1J|2'
+      const cursorPos = element.value.indexOf('|')
+      element.selectionEnd = cursorPos
+      wrapper.find('input').trigger('input', { data: 'J' })
+      expect(wrapper.element.setSelectionRange).not.toBeCalled()
+    })
   })
 })
