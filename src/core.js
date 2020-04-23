@@ -135,7 +135,10 @@ export function updateValue(el, { emit = true, force = false } = {}) {
     const newValue = masker(el.value, config)
 
     el[CONFIG_KEY].oldValue = newValue.masked
-    el.value = newValue.masked
+    // fixes safari issue where setting the value also resets cursor to end of input
+    if (el.value !== newValue.masked) {
+      el.value = newValue.masked
+    }
     el.unmaskedValue = newValue.raw
     emit && el.dispatchEvent(FacadeInputEvent())
   }
