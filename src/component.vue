@@ -46,9 +46,9 @@ export default {
       default: false
     },
     /**
-     * A function to format the value after applying the mask. The function will receive an 
-     * object with the masked and unmasked value after passing through the masker function.
-     * The result of this function will determine what happens with the value.
+     * A function to format the value after applying the mask. The function will receive an
+     * object with the masked and unmasked value. The result of this function will determine
+     * what happens with the value.
      * <br />
      * If a string is returned, then that string will pass through the masker function once more and its value
      * will be set to the input.  If false (boolean) is returned, the input will be rejected and the
@@ -56,6 +56,13 @@ export default {
      * @since v1.2
      */
     formatter: Function,
+    /**
+     * If the mask starts with static characters, show them in the field initially before typing anything.
+     */
+    prepend: {
+      type: Boolean,
+      default: false
+    },
     /**
      * Token object to override the defaults with
      */
@@ -97,7 +104,8 @@ export default {
       return {
         mask: this.mask,
         tokens: this.tokens,
-        formatter: this.formatter
+        formatter: this.formatter,
+        prepend: this.prepend
       }
     },
     emittedValue() {

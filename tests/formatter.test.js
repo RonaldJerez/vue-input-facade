@@ -64,3 +64,7 @@ test('2 -> +1 #', () => {
 test('2 -> +1 # 5', () => {
   expect(formatter('2', { mask: '+1 # 5' })).toMatchObject({ masked: '+1 2 5', unmasked: '2' })
 })
+
+test('empty -> +1 # 5', () => {
+  expect(formatter('', { mask: '+1 # 5', prepend: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
+})
