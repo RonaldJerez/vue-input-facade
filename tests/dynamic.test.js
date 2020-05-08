@@ -48,3 +48,20 @@ test('bank account', () => {
   expect(dynamic('123456789', { masks })).toMatchObject({ masked: '12345678-9', unmasked: '123456789' })
   expect(dynamic('1234567890', { masks })).toMatchObject({ masked: '123456789-0', unmasked: '1234567890' })
 })
+
+test('US Currency', () => {
+  var masks = ['$###', '$#,###', '$##,###', '$###,###']
+  expect(dynamic('12', { masks })).toMatchObject({ masked: '$12', unmasked: '12' })
+  expect(dynamic('123', { masks })).toMatchObject({ masked: '$123', unmasked: '123' })
+  expect(dynamic('1234', { masks })).toMatchObject({ masked: '$1,234', unmasked: '1234' })
+  expect(dynamic('12345', { masks })).toMatchObject({ masked: '$12,345', unmasked: '12345' })
+  expect(dynamic('123456', { masks })).toMatchObject({ masked: '$123,456', unmasked: '123456' })
+})
+
+test('UK Postal code', () => {
+  var masks = ['A# #AA', 'AXX #AA', 'AA#X #AA']
+  expect(dynamic('B11', { masks })).toMatchObject({ masked: 'B1 1', unmasked: 'B11' })
+  expect(dynamic('B112', { masks })).toMatchObject({ masked: 'B11 2', unmasked: 'B112' })
+  expect(dynamic('BB99', { masks })).toMatchObject({ masked: 'BB9 9', unmasked: 'BB99' })
+  expect(dynamic('BB990', { masks })).toMatchObject({ masked: 'BB99 0', unmasked: 'BB990' })
+})
