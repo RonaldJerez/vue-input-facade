@@ -8,9 +8,6 @@ export default {
 
     el[CONFIG_KEY] = {
       config: core.normalizeConfig(binding.value)
-      // TODO: if we set this here it won't try to mask on initial value
-      // should this be a default bahaviour?
-      // oldValue: el.value
     }
 
     // set initial value

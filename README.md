@@ -92,7 +92,7 @@ Thanks to [Marcos Neves](https://vuejs-tips.github.io/) for the vue-the-mask com
 
 ## Contribution
 
-You're free to contribute to this project by submitting Issues and/or pull requests. This project is test-driven, so keep in mind that every change and new feature should be covered by tests.
+You're free to contribute to this project by submitting issues and/or pull requests. This project is test-driven, so keep in mind that every change and new feature should be covered by tests.  The project uses [semantic-release](https://github.com/semantic-release/semantic-release) to release new versions, therefore all commit messages should follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary), we are using [commitizen](https://github.com/commitizen/cz-cli) to facilitate writting the commit messages.
 
 ## License
 
