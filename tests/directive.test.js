@@ -93,7 +93,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos + 1 // one new char inserted before
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input')
+      wrapper.find('input').trigger('input', { inputType: 'insertText' })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -104,7 +104,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos + 2 // two new characters after masking
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { data: '3' })
+      wrapper.find('input').trigger('input', { inputType: 'insertText' })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -115,7 +115,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos - 1 // needs to move back as 'j' is not an allowed char
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { data: 'J' })
+      wrapper.find('input').trigger('input', { inputType: 'insertText' })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -128,7 +128,7 @@ describe('Directive', () => {
       element.value = 'ABC-1J|2'
       const cursorPos = element.value.indexOf('|')
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { data: 'J' })
+      wrapper.find('input').trigger('input', { inputType: 'insertText' })
       expect(wrapper.element.setSelectionRange).not.toBeCalled()
     })
   })

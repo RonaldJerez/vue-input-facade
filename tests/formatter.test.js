@@ -18,10 +18,6 @@ test('1 -> [(#)]', () => {
   expect(formatter('1', { mask: '[(#)]' })).toMatchObject({ masked: '[(1)]', unmasked: '1' })
 })
 
-test('1 -> #..#', () => {
-  expect(formatter('1', { mask: '#..#', short: true })).toMatchObject({ masked: '1', unmasked: '1' })
-})
-
 test('1 -> #.#', () => {
   expect(formatter('1', { mask: '#.#' })).toMatchObject({ masked: '1.', unmasked: '1' })
 })
