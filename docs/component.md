@@ -17,15 +17,21 @@ let masked = false
 Accepts an array of masking pattern and dynamically chooses the appropriate one based on the number of characters in the field.
 
 ```js
-let value = ''
-let masked = true
+let USPostal = ''
+let UKPostal = ''
 
+let masked = true
 <example label="US Zip Code">
-  <input-facade v-model="value" :mask="['#####', '#####-####']" :masked="masked" />
+  <input-facade v-model="USPostal" :mask="['#####', '#####-####']" :masked="masked" />
+</example>
+
+<example label="UK Postal Code">
+  <input-facade v-model="UKPostal" :mask="['A# #AA', 'AXX #AA', 'AA#X #AA']" :masked="masked" />
 </example>
 
 <checkbox v-model="masked" />
-<display :value="value" />
+<display label="Zip Code" :value="USPostal" />
+<display label="Postal Code" :value="UKPostal" />
 ```
 
 ### Custom Tokens

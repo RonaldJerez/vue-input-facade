@@ -58,6 +58,7 @@ export default {
     formatter: Function,
     /**
      * If the mask starts with static characters, show them in the field initially before typing anything.
+     * @since v1.2
      */
     prepend: {
       type: Boolean,

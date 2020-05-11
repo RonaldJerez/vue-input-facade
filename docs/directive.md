@@ -20,7 +20,7 @@ You have access to the unmasked value via the input event.  The `unmaskedValue` 
 let event = ''
 
 <example label="Enter your phone number">
-  <input type="tel" v-facade="'(###) ### - ####'" @input="event = $event">
+  <input type="tel" v-facade="'(###) ### - ####'" v-on:input="event = $event">
 </example>
 
 <display :value="event" />
