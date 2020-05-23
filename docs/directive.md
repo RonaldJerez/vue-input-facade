@@ -3,7 +3,7 @@ For times when you cannot use the component, you may use the directive instead. 
 ### Basic usage
 
 ```js
-let value = ''
+let value = '12A789MM'
 
 <example label="Order number">
   <input type="text" v-model="value" v-facade="'XXX-###-AA'">
