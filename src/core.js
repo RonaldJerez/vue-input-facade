@@ -68,7 +68,7 @@ export function inputHandler(event) {
   const originalPosition = target.selectionEnd
   const { oldValue } = target[CONFIG_KEY]
 
-  updateValue(target, { emit: false }, event)
+  updateValue(target, null, { emit: false }, event)
   updateCursor(event, originalValue, originalPosition)
 
   if (oldValue !== target.value) {
@@ -133,11 +133,12 @@ export function updateCursor(event, originalValue, originalPosition) {
  * @param {Boolean} options.force Forces the update even if the old value and the new value are the same
  * @param {Event} [event] The event that triggered this this update, null if not triggered by an input event
  */
-export function updateValue(el, { emit = true, force = false } = {}, event) {
+export function updateValue(el, vnode, { emit = true, force = false } = {}, event) {
   const { config, oldValue } = el[CONFIG_KEY]
+  const currentValue = vnode && vnode.data.model ? vnode.data.model.value : el.value
 
-  if (force || oldValue !== el.value) {
-    let newValue = masker(el.value, config)
+  if (force || oldValue !== currentValue) {
+    let newValue = masker(currentValue, config)
 
     if (event && typeof config.formatter === 'function') {
       const formattedValue = config.formatter(newValue, event)
@@ -151,11 +152,13 @@ export function updateValue(el, { emit = true, force = false } = {}, event) {
     }
 
     el[CONFIG_KEY].oldValue = newValue.masked
-    // fixes safari issue where setting the value also resets cursor to end of input
+    el.unmaskedValue = newValue.unmasked
+
+    // safari makes the cursor jump to the end if el.value gets assign even if to the same value
+    // additionally, vuetify is trigering directive.update twice at init, this check ensures we only emit once
     if (el.value !== newValue.masked) {
       el.value = newValue.masked
+      emit && el.dispatchEvent(FacadeInputEvent())
     }
-    el.unmaskedValue = newValue.unmasked
-    emit && el.dispatchEvent(FacadeInputEvent())
   }
 }

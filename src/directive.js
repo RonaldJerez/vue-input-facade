@@ -2,7 +2,7 @@ import * as core from './core'
 const CONFIG_KEY = core.CONFIG_KEY
 
 export default {
-  bind: function(el, binding) {
+  bind: (el, binding, vnode) => {
     el = core.getInputElement(el)
     el.addEventListener('input', core.inputHandler, true)
 
@@ -11,17 +11,17 @@ export default {
     }
 
     // set initial value
-    core.updateValue(el)
+    core.updateValue(el, vnode)
   },
 
-  update: (el, { value, oldValue }) => {
+  update: (el, { value, oldValue }, vnode) => {
     el = core.getInputElement(el)
 
     if (value !== oldValue) {
       el[CONFIG_KEY].config = core.normalizeConfig(value)
-      core.updateValue(el, { force: true })
+      core.updateValue(el, vnode, { force: true })
     } else {
-      core.updateValue(el)
+      core.updateValue(el, vnode)
     }
   },
 
