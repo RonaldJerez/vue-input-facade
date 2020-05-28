@@ -1,9 +1,5 @@
 import { formatter } from '../src/masker'
 
-test('default vals', () => {
-  expect(formatter('123')).toMatchObject({ masked: '', unmasked: '' })
-})
-
 test('12 -> #.#', () => {
   expect(formatter('12', { mask: '#.#' })).toMatchObject({ masked: '1.2', unmasked: '12' })
 })

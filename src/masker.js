@@ -9,6 +9,7 @@ let tokenDefinitions = defaultTokens
  * @param {object} tokens the new token object
  */
 export function setTokens(tokens) {
+  if (!tokens) return
   tokenDefinitions = tokens
 }
 
@@ -16,11 +17,11 @@ export function setTokens(tokens) {
  * Given an array of masks, determines which one is the appropriate one based on the value
  *
  * @param {String} inputValue the inputValue value to mask
- * @param {{masks: [String]}} config
+ * @param {object} config
  * @param {Array} config.masks the list of masks to choose from
  * @returns {FacadeValue} facade value object
  */
-export function dynamic(inputValue, config = {}) {
+export function dynamic(inputValue, config) {
   const masks = config.masks.slice().sort((a, b) => a.length - b.length)
   const withConfig = (overrides) => Object.assign({}, config, overrides)
 
@@ -53,18 +54,16 @@ export function dynamic(inputValue, config = {}) {
  *
  * @param {string} value the value to mask
  * @param {{mask: String, tokens: Object, prepend: Boolean}} config
+ * @param {object} config
  * @param {string} config.mask the masking string
  * @param {object} config.tokens the tokens to add/override to the global
  * @param {boolean} config.prepend whether or not to add masking characters to the input before the user types.
  */
-export function formatter(value = '', config = {}) {
+export function formatter(value, config) {
   let { mask = '', tokens, prepend = false } = config
 
   // append/override global tokens instead of complete override
   tokens = tokens ? Object.assign({}, tokenDefinitions, tokens) : tokenDefinitions
-
-  // ensure we have a string
-  value = value.toString()
 
   let output = new FacadeValue()
   let escaped = false
@@ -124,6 +123,8 @@ export function formatter(value = '', config = {}) {
  * @returns {FacadeValue} facade value object
  */
 export default function masker(value, config) {
+  // ensure we have proper input
+  value = (value || '').toString()
   config = normalizeConfig(config)
 
   // disable on empty mask

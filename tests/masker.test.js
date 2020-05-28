@@ -4,8 +4,17 @@ const tokens = {
   F: { pattern: /[a-f0-9]/i }
 }
 
-test('no mask given', () => {
+test('no errors with invalid input to public interface', () => {
+  expect(masker()).toMatchObject({ masked: '', unmasked: '' })
+  expect(masker(null)).toMatchObject({ masked: '', unmasked: '' })
+  expect(masker(null, null)).toMatchObject({ masked: '', unmasked: '' })
+  expect(masker(null, { mask: null })).toMatchObject({ masked: '', unmasked: '' })
+})
+
+test('no mask given, value should be returned as is', () => {
   expect(masker('123')).toMatchObject({ masked: '123', unmasked: '123' })
+  expect(masker('123', null)).toMatchObject({ masked: '123', unmasked: '123' })
+  expect(masker('123', { mask : null })).toMatchObject({ masked: '123', unmasked: '123' })
 })
 
 test('single mask given', () => {

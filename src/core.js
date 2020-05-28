@@ -1,8 +1,8 @@
 import masker from './masker'
 export const CONFIG_KEY = '__input-facade__'
 
-export function FacadeValue(val = '') {
-  this.masked = this.unmasked = val
+export function FacadeValue(val) {
+  this.masked = this.unmasked = val || ''
 }
 
 /**
@@ -22,12 +22,12 @@ export function FacadeInputEvent() {
  *
  * @param {object} config The mask config object
  */
-export function normalizeConfig(config = {}) {
+export function normalizeConfig(config) {
   if (Array.isArray(config) || typeof config === 'string') {
     config = { mask: config }
   }
 
-  return config
+  return config || {}
 }
 
 /**
