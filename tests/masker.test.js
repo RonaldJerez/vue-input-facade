@@ -14,7 +14,7 @@ test('no errors with invalid input to public interface', () => {
 test('no mask given, value should be returned as is', () => {
   expect(masker('123')).toMatchObject({ masked: '123', unmasked: '123' })
   expect(masker('123', null)).toMatchObject({ masked: '123', unmasked: '123' })
-  expect(masker('123', { mask : null })).toMatchObject({ masked: '123', unmasked: '123' })
+  expect(masker('123', { mask: null })).toMatchObject({ masked: '123', unmasked: '123' })
 })
 
 test('single mask given', () => {

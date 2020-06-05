@@ -21,13 +21,14 @@ export function FacadeInputEvent() {
  * Transform an array or string config into an object
  *
  * @param {object} config The mask config object
+ * @param {object} modifiers An object of modifier flags that can influence the masking process
  */
-export function normalizeConfig(config) {
+export function normalizeConfig(config, modifiers) {
   if (Array.isArray(config) || typeof config === 'string') {
     config = { mask: config }
   }
 
-  return config || {}
+  return Object.assign(config || {}, modifiers)
 }
 
 /**
