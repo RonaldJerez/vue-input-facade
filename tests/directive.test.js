@@ -67,6 +67,19 @@ describe('Directive', () => {
     expect(wrapper.element.unmaskedValue).toBe('1122')
   })
 
+  test('Should honor short modifier', async () => {
+    buildWrapper({
+      template: `<input v-facade.short="mask" value="12" @input="inputListener" />`
+    })
+    expect(wrapper.element.value).toBe('12')
+
+    wrapper.element.value = '1234'
+    wrapper.find('input').trigger('input')
+
+    expect(wrapper.element.value).toBe('12.34')
+    expect(wrapper.element.unmaskedValue).toBe('1234')
+  })
+
   test('Should not update the cursor position if not the active element', () => {
     buildWrapper({ value: 'ABCDE' })
 

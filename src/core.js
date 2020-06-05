@@ -21,11 +21,15 @@ export function FacadeInputEvent() {
  * Transform an array or string config into an object
  *
  * @param {object} config The mask config object
+ * @param {object} modifiers An object of modifier flags that can influence the masking process
+ * @param {boolean} modifiers.short to keep the string as short as possible (not append extra chars at the end)
  */
-export function normalizeConfig(config = {}) {
+export function normalizeConfig(config = {}, modifiers = {}) {
   if (Array.isArray(config) || typeof config === 'string') {
     config = { mask: config }
   }
+
+  if (modifiers.short) config.short = true
 
   return config
 }
