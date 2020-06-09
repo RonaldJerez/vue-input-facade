@@ -20,14 +20,12 @@ script:
 jobs:
   include:
     - stage: release
-      name: "Publish"
       if: type = push AND fork = false
       node_js: lts/*
       script:
         - npm run build:plugin
         - npx semantic-release
-    - stage: release
-      name: "Documentation"
+    - stage: documentation
       if: branch = master AND fork = false
       node_js: lts/*
       script: npm run build:docs

@@ -35,7 +35,7 @@
     "prettier": "^1.18.2",
     "semantic-release": "^17.0.7",
     "vue": "^2.6.11",
-    "vue-cli-plugin-styleguidist": "^4.20.0",
+    "vue-cli-plugin-styleguidist": "^4.24.1",
     "vue-template-compiler": "^2.6.11"
   },
   "config": {
