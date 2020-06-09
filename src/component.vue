@@ -57,10 +57,10 @@ export default {
       default: false
     },
     /**
-     * If the mask starts with static characters, show them in the field initially before typing anything.
-     * @since v1.3
+     * If the mask value starts with static charaters, prefill it with the static charecters at load. 
+\     * @since v1.3
      */
-    prepend: {
+    prefill: {
       type: Boolean,
       default: false
     },
@@ -106,7 +106,7 @@ export default {
         mask: this.mask,
         tokens: this.tokens,
         formatter: this.formatter,
-        prepend: this.prepend
+        prefill: this.prefill
       }
     },
     emittedValue() {

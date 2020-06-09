@@ -87,8 +87,8 @@ describe('Directive', () => {
       expect(wrapper.element.unmaskedValue).toBe('1234')
     })
 
-    test('Should honor prepend modifier', async () => {
-      buildWrapper({ modifiers: 'prepend', mask: '+1 ###', value: '' })
+    test('Should honor prefill modifier', async () => {
+      buildWrapper({ modifiers: 'prefill', mask: '+1 ###', value: '' })
       expect(wrapper.element.value).toBe('+1 ')
 
       wrapper.element.value = '777'

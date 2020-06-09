@@ -58,5 +58,5 @@ test('2 -> +1 # 5', () => {
 })
 
 test('empty -> +1 # 5', () => {
-  expect(formatter('', { mask: '+1 # 5', prepend: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
+  expect(formatter('', { mask: '+1 # 5', prefill: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
 })

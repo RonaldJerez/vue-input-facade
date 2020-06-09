@@ -53,15 +53,14 @@ export function dynamic(inputValue, config) {
  * Formats the value based on the given masking rule
  *
  * @param {string} value the value to mask
- * @param {{mask: String, tokens: Object, prepend: Boolean}} config
  * @param {object} config
  * @param {string} config.mask the masking string
  * @param {object} config.tokens the tokens to add/override to the global
- * @param {boolean} config.prepend whether or not to add masking characters to the input before the user types.
+ * @param {boolean} config.prefill whether or not to add masking characters to the input before the user types
  * @param {boolean} config.short to keep the string as short as possible (not append extra chars at the end)
  */
 export function formatter(value, config) {
-  let { mask = '', tokens, prepend = false, short = false } = config
+  let { mask = '', tokens, prefill = false, short = false } = config
 
   // append/override global tokens instead of complete override
   tokens = tokens ? Object.assign({}, tokenDefinitions, tokens) : tokenDefinitions
@@ -108,8 +107,8 @@ export function formatter(value, config) {
   }
 
   // if there is no unmasked value, set masked to empty to avoid showing masking
-  // characters in an otherwise empty input, unless prepend is set ot true
-  if ((prepend && !output.unmasked) || (!short && output.unmasked)) {
+  // characters in an otherwise empty input, unless prefill is set ot true
+  if ((prefill && !output.unmasked) || (!short && output.unmasked)) {
     output.masked += accumulator
   }
 
