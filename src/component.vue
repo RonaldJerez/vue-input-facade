@@ -57,10 +57,18 @@ export default {
       default: false
     },
     /**
-     * If the mask value starts with static charaters, prefill it with the static charecters at load. 
-\     * @since v1.3
+     * If the mask starts with static charaters, prefill the field with said characters
+     * @since v1.3
      */
     prefill: {
+      type: Boolean,
+      default: false
+    },
+    /**
+     * Keep the value short by not showing static characters until after typing
+     * @since v1.3
+     */
+    short: {
       type: Boolean,
       default: false
     },
@@ -106,7 +114,8 @@ export default {
         mask: this.mask,
         tokens: this.tokens,
         formatter: this.formatter,
-        prefill: this.prefill
+        prefill: this.prefill,
+        short: this.short
       }
     },
     emittedValue() {

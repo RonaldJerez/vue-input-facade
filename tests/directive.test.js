@@ -79,10 +79,10 @@ describe('Directive', () => {
     test('Should honor short modifier', async () => {
       buildWrapper({ modifiers: 'short', value: '12' })
       expect(wrapper.element.value).toBe('12')
-  
+
       wrapper.element.value = '1234'
       wrapper.find('input').trigger('input')
-  
+
       expect(wrapper.element.value).toBe('12.34')
       expect(wrapper.element.unmaskedValue).toBe('1234')
     })
