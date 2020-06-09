@@ -6,10 +6,11 @@ If you are migrating an existing project to vue-input-facade from another plugin
 import InputFacade from 'vue-input-facade'
 
 // migrating from v-mask
-// the directive will now be v-mask instead of v-facade
-// and all the tokens will be replaced globally by the following
 const options = {
+  // rename the directive from: v-facade to: v-mask
   name: 'mask',
+
+  // use these tokens instead of the default
   tokens: {
     '#': { pattern: /\d/ },
     'A': { pattern: /[a-z]/i },
