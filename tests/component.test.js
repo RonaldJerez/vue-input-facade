@@ -49,4 +49,56 @@ describe('Component', () => {
     await wrapper.setProps({ mask })
     expect(wrapper.vm.maskedValue).toBe('(444)555')
   })
+
+  test('When lazy is set to true, should only emit input onChange', async () => {
+    // default settings
+    const wrapper = createWrapper({ lazy: true })
+    const input = wrapper.find('input')
+
+    input.trigger('input')
+    expect(wrapper.emitted().input).toBeFalsy()
+
+    input.trigger('change')
+    expect(wrapper.emitted().input).toBeTruthy()
+    expect(wrapper.emitted().change).toBeTruthy()
+  })
+
+  test('When lazy is set to false, should not emit input on change', async () => {
+    // default settings
+    const wrapper = createWrapper({ lazy: false })
+    const input = wrapper.find('input')
+
+    input.trigger('change')
+    expect(wrapper.emitted().input).toBeFalsy()
+  })
+
+  test('Adding a format function should call that function on input', async () => {
+    const formatter = jest.fn()
+    const wrapper = createWrapper({ formatter })
+
+    wrapper.element.value = '5555'
+    wrapper.find('input').trigger('input')
+
+    expect(formatter).toHaveBeenCalled()
+  })
+
+  test('When a formatter function returns false, do not change input value', async () => {
+    const formatter = jest.fn().mockReturnValue(false)
+    const wrapper = createWrapper({ value: '1234', formatter })
+
+    wrapper.element.value = '5555'
+    wrapper.find('input').trigger('input')
+
+    expect(wrapper.vm.maskedValue).toBe('1234')
+  })
+
+  test('When a formatter function returns string, set value to masked string', async () => {
+    const formatter = jest.fn().mockReturnValue('3344')
+    const wrapper = createWrapper({ mask: '##-##', formatter })
+
+    wrapper.element.value = '5555'
+    wrapper.find('input').trigger('input')
+
+    expect(wrapper.vm.maskedValue).toBe('33-44')
+  })
 })

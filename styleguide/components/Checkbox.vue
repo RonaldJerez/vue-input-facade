@@ -76,7 +76,8 @@ export default {
 }
 
 .checkbox__input:checked + .checkbox__label::before {
-  color: #1a73e8;
+  color: #ffffff;
   border: 1px solid #1a73e8;
+  background-color: #1a73e8;
 }
 </style>

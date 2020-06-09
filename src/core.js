@@ -1,8 +1,8 @@
 import masker from './masker'
 export const CONFIG_KEY = '__input-facade__'
 
-export function FacadeValue(val = '') {
-  this.masked = this.raw = val
+export function FacadeValue(val) {
+  this.masked = this.unmasked = val || ''
 }
 
 /**
@@ -22,16 +22,13 @@ export function FacadeInputEvent() {
  *
  * @param {object} config The mask config object
  * @param {object} modifiers An object of modifier flags that can influence the masking process
- * @param {boolean} modifiers.short to keep the string as short as possible (not append extra chars at the end)
  */
-export function normalizeConfig(config = {}, modifiers = {}) {
+export function normalizeConfig(config, modifiers) {
   if (Array.isArray(config) || typeof config === 'string') {
     config = { mask: config }
   }
 
-  if (modifiers.short) config.short = true
-
-  return config
+  return Object.assign(config || {}, modifiers)
 }
 
 /**
@@ -43,8 +40,8 @@ export function normalizeConfig(config = {}, modifiers = {}) {
 export function getInputElement(el) {
   const inputElement = el instanceof HTMLInputElement ? el : el.querySelector('input')
 
+  /* istanbul ignore next */
   if (!inputElement) {
-    /* istanbul ignore next */
     throw new Error('facade directive requires an input element')
   }
 
@@ -70,10 +67,14 @@ export function inputHandler(event) {
 
   const originalValue = target.value
   const originalPosition = target.selectionEnd
+  const { oldValue } = target[CONFIG_KEY]
 
-  updateValue(target, { emit: false })
+  updateValue(target, null, { emit: false }, event)
   updateCursor(event, originalValue, originalPosition)
-  target.dispatchEvent(FacadeInputEvent())
+
+  if (oldValue !== target.value) {
+    target.dispatchEvent(FacadeInputEvent())
+  }
 }
 
 /**
@@ -95,22 +96,22 @@ export function updateCursor(event, originalValue, originalPosition) {
   }
 
   // get some information about the cursor based on the original value
-  const pasting = event.inputType === 'insertFromPaste'
-  const isCursorAtEnd = (event.data || pasting) && originalPosition == originalValue.length
-  let insertedChar = originalValue[originalPosition - 1]
+  const isInsertEvent = ['insertText', 'insertFromPaste'].includes(event.inputType)
+  const wasCursorAtEnd = isInsertEvent && originalPosition == originalValue.length
+  let lastInsertedChar = isInsertEvent && originalValue[originalPosition - 1]
 
   const newValue = target.value.toLocaleLowerCase()
 
   // set the cursor position to an appropriate location
   let cursorPosition = originalPosition
-  if (isCursorAtEnd) {
+  if (wasCursorAtEnd) {
     cursorPosition = newValue.length
-  } else if (insertedChar) {
-    insertedChar = insertedChar.toLocaleLowerCase()
+  } else if (lastInsertedChar) {
+    lastInsertedChar = lastInsertedChar.toLocaleLowerCase()
 
     let newPosition = cursorPosition
     // if the last inserted char was changed, increment position until find it again
-    while (newPosition <= newValue.length && newValue.charAt(newPosition - 1) !== insertedChar) {
+    while (newPosition <= newValue.length && newValue.charAt(newPosition - 1) !== lastInsertedChar) {
       newPosition++
     }
     // if we didnt find the digit must be an unacceptable char, leave the cursor where it was
@@ -128,22 +129,37 @@ export function updateCursor(event, originalValue, originalPosition) {
  * Updates the element's value and unmasked value based on the masking config rules
  *
  * @param {HTMLInputElement} el The input element to update
- * @param {object} options
+ * @param {object} [options]
  * @param {Boolean} options.emit Wether to dispatch a new InputEvent or not
  * @param {Boolean} options.force Forces the update even if the old value and the new value are the same
+ * @param {Event} [event] The event that triggered this this update, null if not triggered by an input event
  */
-export function updateValue(el, { emit = true, force = false } = {}) {
+export function updateValue(el, vnode, { emit = true, force = false } = {}, event) {
   const { config, oldValue } = el[CONFIG_KEY]
+  const currentValue = vnode && vnode.data.model ? vnode.data.model.value : el.value
 
-  if (force || oldValue !== el.value) {
-    const newValue = masker(el.value, config)
+  if (force || oldValue !== currentValue) {
+    let newValue = masker(currentValue, config)
+
+    if (event && typeof config.formatter === 'function') {
+      const formattedValue = config.formatter(newValue, event)
+
+      if (typeof formattedValue === 'string') {
+        newValue = masker(formattedValue, config)
+      } else if (formattedValue === false) {
+        el.value = oldValue
+        return
+      }
+    }
 
     el[CONFIG_KEY].oldValue = newValue.masked
-    // fixes safari issue where setting the value also resets cursor to end of input
+    el.unmaskedValue = newValue.unmasked
+
+    // safari makes the cursor jump to the end if el.value gets assign even if to the same value
+    // additionally, vuetify is trigering directive.update twice at init, this check ensures we only emit once
     if (el.value !== newValue.masked) {
       el.value = newValue.masked
+      emit && el.dispatchEvent(FacadeInputEvent())
     }
-    el.unmaskedValue = newValue.raw
-    emit && el.dispatchEvent(FacadeInputEvent())
   }
 }

@@ -7,7 +7,7 @@
 <script>
 export default {
   name: 'Display',
-  props: ['value'],
+  props: ['value', 'label'],
   computed: {
     display() {
       let output = ''
@@ -21,7 +21,7 @@ export default {
   unmaskedValue: '${unmasked}'
 }`
       } else if (typeof this.value === 'string') {
-        output = `value: '${this.value}'`
+        output = `${this.label || 'value'}: '${this.value}'`
       }
 
       return output
@@ -33,7 +33,12 @@ export default {
 <style>
 .display {
   margin: 0;
+  margin-bottom: 4px;
   margin-left: -16px;
+}
+
+.display:last-child {
+  margin-bottom: 0;
 }
 
 .display__value {

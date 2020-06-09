@@ -6,8 +6,9 @@ describe('Directive', () => {
   let wrapper
   const inputListener = jest.fn()
 
-  const buildWrapper = ({ template, mask = '##.##', value = '', ...rest } = {}) => {
-    if (!template) template = `<input v-facade="mask" value="${value}" @input="inputListener" />`
+  const buildWrapper = ({ template, mask = '##.##', modifiers, value = '', ...rest } = {}) => {
+    const directive = modifiers ? `v-facade.${modifiers}` : 'v-facade'
+    if (!template) template = `<input ${directive}="mask" value="${value}" @input="inputListener" />`
 
     const component = {
       template,
@@ -87,6 +88,30 @@ describe('Directive', () => {
     expect(wrapper.element.setSelectionRange).not.toBeCalled()
   })
 
+  describe('Directive Modifiers', () => {
+    test('Should honor short modifier', async () => {
+      buildWrapper({ modifiers: 'short', value: '12' })
+      expect(wrapper.element.value).toBe('12')
+
+      wrapper.element.value = '1234'
+      wrapper.find('input').trigger('input')
+
+      expect(wrapper.element.value).toBe('12.34')
+      expect(wrapper.element.unmaskedValue).toBe('1234')
+    })
+
+    test('Should honor prefill modifier', async () => {
+      buildWrapper({ modifiers: 'prefill', mask: '+1 ###', value: '' })
+      expect(wrapper.element.value).toBe('+1 ')
+
+      wrapper.element.value = '777'
+      wrapper.find('input').trigger('input')
+
+      expect(wrapper.element.value).toBe('+1 777')
+      expect(wrapper.element.unmaskedValue).toBe('777')
+    })
+  })
+
   describe('Cursor updates', () => {
     let element
 
@@ -106,7 +131,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos + 1 // one new char inserted before
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input')
+      wrapper.find('input').trigger('input', { inputType: 'insertText' })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -117,7 +142,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos + 2 // two new characters after masking
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { data: '3' })
+      wrapper.find('input').trigger('input', { inputType: 'insertText' })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -128,7 +153,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos - 1 // needs to move back as 'j' is not an allowed char
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { data: 'J' })
+      wrapper.find('input').trigger('input', { inputType: 'insertText' })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -141,7 +166,7 @@ describe('Directive', () => {
       element.value = 'ABC-1J|2'
       const cursorPos = element.value.indexOf('|')
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { data: 'J' })
+      wrapper.find('input').trigger('input', { inputType: 'insertText' })
       expect(wrapper.element.setSelectionRange).not.toBeCalled()
     })
   })

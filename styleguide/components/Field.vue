@@ -1,5 +1,5 @@
 <template>
-  <div :class="['field-wrapper', { hasValue }]" @input="input">
+  <div :class="['field-wrapper', { hasValue: value }]" @input="input">
     <slot />
     <label>{{ label }}</label>
   </div>
@@ -10,18 +10,17 @@ export default {
   name: 'Field',
   props: ['label'],
   mounted() {
-    if (this.$children[0]) {
+    // detect the initial value
+    const slot = this.$slots.default[0]
+    if (slot && slot.tag === 'input') {
+      this.value = slot.elm.value
+    } else if (this.$children[0]) {
       this.value = this.$children[0].value
     }
   },
   data() {
     return {
       value: null
-    }
-  },
-  computed: {
-    hasValue() {
-      return !!this.value
     }
   },
   methods: {

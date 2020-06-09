@@ -84,15 +84,35 @@ See the [token source file](https://github.com/RonaldJerez/vue-input-facade/blob
 <input type="text" v-facade="'##/##/##'" />
 ```
 
+### Migrating existing projects
+
+If you are migrating an existing project to vue-input-facade from another plugin and dont want to touch the whole codebase.  You may pass options during plugin installation to override the default tokens or directive name.
+
+```javascript
+import InputFacade from 'vue-input-facade'
+
+// migrating from v-mask
+const options = {
+  // rename the directive from: v-facade to: v-mask
+  name: 'mask',
+
+  // use these tokens instead of the default
+  tokens: {
+    '#': { pattern: /\d/ },
+    'A': { pattern: /[a-z]/i },
+    'N': { pattern: /[0-9a-z]/i },
+    'X': { pattern: /./ }
+  }
+}
+
+Vue.use(InputFacade, options)
+```
+
 See [demo page](https://ronaldjerez.github.io/vue-input-facade) for more usage examples
-
-## Thanks
-
-Thanks to [Marcos Neves](https://vuejs-tips.github.io/) for the vue-the-mask component of which this vue-input-facade was originally forked from.
 
 ## Contribution
 
-You're free to contribute to this project by submitting Issues and/or pull requests. This project is test-driven, so keep in mind that every change and new feature should be covered by tests.
+You're free to contribute to this project by submitting issues and/or pull requests. This project is test-driven, so keep in mind that every change and new feature should be covered by tests.  The project uses [semantic-release](https://github.com/semantic-release/semantic-release) to release new versions, therefore all commit messages should follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary), we are using [commitizen](https://github.com/commitizen/cz-cli) to facilitate writting the commit messages.
 
 ## License
 

@@ -1,9 +1,9 @@
-For times when you cannot use the component, you may use the directive instead. The directive has all the same features as the component, however the interface may not be as straight forward as using a component.
+For times when you cannot use the component, you may use the directive instead. The directive has all the same features as the component, however the interface may not be as straight forward as using a component.  The `prefill` and `short` features may passed in to the directive as modifiers.
 
 ### Basic usage
 
 ```js
-let value = ''
+let value = '12A789MM'
 
 <example label="Order number">
   <input type="text" v-model="value" v-facade="'XXX-###-AA'">
@@ -16,11 +16,13 @@ let value = ''
 
 You have access to the unmasked value via the input event.  The `unmaskedValue` property can be found as part of the `target` property of the input event.
 
+> Note: Some 3rd party components may not pass the `event` parameter when emitting input, such is the case with vuetify's v-text-input.  In this case you can listen to the native event so you can still access the unmasked value.  ex: `v-on:input.native="handler"`.
+
 ```js
 let event = ''
 
 <example label="Enter your phone number">
-  <input type="tel" v-facade="'(###) ### - ####'" @input="event = $event">
+  <input type="tel" v-facade="'(###) ### - ####'" v-on:input="event = $event">
 </example>
 
 <display :value="event" />

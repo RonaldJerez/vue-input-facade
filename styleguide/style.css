@@ -9,10 +9,6 @@ html, body {
   display: none;
 }
 
-[class^=rsg--controls], [class^=rsg--toolbar] {
-  display: none !important;
-}
-
 [class^=rsg--preview] {
   margin-bottom: 16px !important;
 }

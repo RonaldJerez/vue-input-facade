@@ -9,55 +9,61 @@ let tokenDefinitions = defaultTokens
  * @param {object} tokens the new token object
  */
 export function setTokens(tokens) {
+  if (!tokens) return
   tokenDefinitions = tokens
 }
 
 /**
  * Given an array of masks, determines which one is the appropriate one based on the value
  *
- * @param {String} value the value to mask
- * @param {{masks: [String]}} config
+ * @param {String} inputValue the inputValue value to mask
+ * @param {object} config
  * @param {Array} config.masks the list of masks to choose from
  * @returns {FacadeValue} facade value object
  */
-export function dynamic(value, config = {}) {
+export function dynamic(inputValue, config) {
   const masks = config.masks.slice().sort((a, b) => a.length - b.length)
   const withConfig = (overrides) => Object.assign({}, config, overrides)
 
-  const nextFacadeIsLarger = (currentMask, nextMask) => {
-    const nextMaskedVal = formatter(value, withConfig({ mask: nextMask, short: true }))
-    return nextMaskedVal.masked.length > currentMask.length
+  // this method will choose a facade based on which one exposes more data from the input
+  const chooseBestFacade = (currentValue, nextMask) => {
+    const nextValue = formatter(inputValue, withConfig({ mask: nextMask }))
+    const currentLength = currentValue.unmasked.length
+    const nextLength = nextValue.unmasked.length
+    return nextLength > currentLength ? nextValue : currentValue
   }
 
-  for (let i = 0; i < masks.length; i++) {
-    const currentMask = masks[i]
-    const nextMask = masks[i + 1]
-
-    if (!nextMask || !nextFacadeIsLarger(currentMask, nextMask)) {
-      return formatter(value, withConfig({ mask: currentMask }))
-    }
+  // empty masks array
+  if (!masks.length) {
+    return new FacadeValue()
   }
 
-  return new FacadeValue() // empty masks
+  const firstMask = masks.shift()
+  let output = formatter(inputValue, withConfig({ mask: firstMask }))
+
+  while (masks.length) {
+    const nextMask = masks.shift()
+    output = chooseBestFacade(output, nextMask)
+  }
+
+  return output
 }
 
 /**
  * Formats the value based on the given masking rule
  *
  * @param {string} value the value to mask
- * @param {{mask: String, tokens: Object, short: Boolean}} config
+ * @param {object} config
  * @param {string} config.mask the masking string
  * @param {object} config.tokens the tokens to add/override to the global
+ * @param {boolean} config.prefill whether or not to add masking characters to the input before the user types
  * @param {boolean} config.short to keep the string as short as possible (not append extra chars at the end)
  */
-export function formatter(value = '', config = {}) {
-  let { mask = '', tokens, short = false } = config
+export function formatter(value, config) {
+  let { mask = '', tokens, prefill = false, short = false } = config
 
   // append/override global tokens instead of complete override
   tokens = tokens ? Object.assign({}, tokenDefinitions, tokens) : tokenDefinitions
-
-  // ensure we have a string
-  value = value.toString()
 
   let output = new FacadeValue()
   let escaped = false
@@ -71,8 +77,8 @@ export function formatter(value = '', config = {}) {
     const masker = tokens[maskChar]
     let char = value[valueIndex]
 
-    // no more input charactors and next charactor is a masked char
-    if (!char && (short || masker)) break
+    // no more input characters and next character is a masked one
+    if (!char && masker) break
 
     if (masker && !escaped) {
       // when is escape char, do not mask, just continue
@@ -84,7 +90,7 @@ export function formatter(value = '', config = {}) {
 
       if (masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
-        output.raw += char
+        output.unmasked += char
         output.masked += accumulator + char
 
         accumulator = ''
@@ -100,9 +106,9 @@ export function formatter(value = '', config = {}) {
     }
   }
 
-  // if there is no raw value, set masked to empty to avoid
-  // showing masking characters in an otherwise empty input
-  if (output.raw && !short) {
+  // if there is no unmasked value, set masked to empty to avoid showing masking
+  // characters in an otherwise empty input, unless prefill is set ot true
+  if ((prefill && !output.unmasked) || (!short && output.unmasked)) {
     output.masked += accumulator
   }
 
@@ -117,6 +123,8 @@ export function formatter(value = '', config = {}) {
  * @returns {FacadeValue} facade value object
  */
 export default function masker(value, config) {
+  // ensure we have proper input
+  value = (value || '').toString()
   config = normalizeConfig(config)
 
   // disable on empty mask
