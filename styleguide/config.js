@@ -12,7 +12,7 @@ module.exports = {
   version: version,
   require: [`${root}/styleguide/imports.js`, `${root}/styleguide/style.css`],
   previewDelay: 2000,
-  styleguideDir: '../build',
+  styleguideDir: 'build',
   usageMode: 'expand',
   exampleMode: 'expand',
   getComponentPathLine: () => '',
