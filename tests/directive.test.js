@@ -6,8 +6,9 @@ describe('Directive', () => {
   let wrapper
   const inputListener = jest.fn()
 
-  const buildWrapper = ({ template, mask = '##.##', value = '', ...rest } = {}) => {
-    if (!template) template = `<input v-facade="mask" value="${value}" @input="inputListener" />`
+  const buildWrapper = ({ template, mask = '##.##', modifiers, value = '', ...rest } = {}) => {
+    const directive = modifiers ? `v-facade.${modifiers}` : 'v-facade'
+    if (!template) template = `<input ${directive}="mask" value="${value}" @input="inputListener" />`
 
     const component = {
       template,
@@ -67,24 +68,35 @@ describe('Directive', () => {
     expect(wrapper.element.unmaskedValue).toBe('1122')
   })
 
-  test('Should honor short modifier', async () => {
-    buildWrapper({
-      template: `<input v-facade.short="mask" value="12" @input="inputListener" />`
-    })
-    expect(wrapper.element.value).toBe('12')
-
-    wrapper.element.value = '1234'
-    wrapper.find('input').trigger('input')
-
-    expect(wrapper.element.value).toBe('12.34')
-    expect(wrapper.element.unmaskedValue).toBe('1234')
-  })
-
   test('Should not update the cursor position if not the active element', () => {
     buildWrapper({ value: 'ABCDE' })
 
     jest.spyOn(wrapper.element, 'setSelectionRange')
     expect(wrapper.element.setSelectionRange).not.toBeCalled()
+  })
+
+  describe('Directive Modifiers', () => {
+    test('Should honor short modifier', async () => {
+      buildWrapper({ modifiers: 'short', value: '12' })
+      expect(wrapper.element.value).toBe('12')
+  
+      wrapper.element.value = '1234'
+      wrapper.find('input').trigger('input')
+  
+      expect(wrapper.element.value).toBe('12.34')
+      expect(wrapper.element.unmaskedValue).toBe('1234')
+    })
+
+    test('Should honor prepend modifier', async () => {
+      buildWrapper({ modifiers: 'prepend', mask: '+1 ###', value: '' })
+      expect(wrapper.element.value).toBe('+1 ')
+
+      wrapper.element.value = '777'
+      wrapper.find('input').trigger('input')
+
+      expect(wrapper.element.value).toBe('+1 777')
+      expect(wrapper.element.unmaskedValue).toBe('777')
+    })
   })
 
   describe('Cursor updates', () => {

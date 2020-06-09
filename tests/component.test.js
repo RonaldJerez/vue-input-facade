@@ -50,7 +50,7 @@ describe('Component', () => {
     expect(wrapper.vm.maskedValue).toBe('(444)555')
   })
 
-  test('When lazy is set to true, should only input onChange', async () => {
+  test('When lazy is set to true, should only emit input onChange', async () => {
     // default settings
     const wrapper = createWrapper({ lazy: true })
     const input = wrapper.find('input')
@@ -60,6 +60,16 @@ describe('Component', () => {
 
     input.trigger('change')
     expect(wrapper.emitted().input).toBeTruthy()
+    expect(wrapper.emitted().change).toBeTruthy()
+  })
+
+  test('When lazy is set to false, should not emit input on change', async () => {
+    // default settings
+    const wrapper = createWrapper({ lazy: false })
+    const input = wrapper.find('input')
+
+    input.trigger('change')
+    expect(wrapper.emitted().input).toBeFalsy()
   })
 
   test('Adding a format function should call that function on input', async () => {

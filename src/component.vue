@@ -25,10 +25,21 @@ export default {
   name: 'InputFacade',
   props: {
     /**
+     * A function to format the value after applying the mask. The function will receive an
+     * object with the masked and unmasked value. The result of this function will determine
+     * what happens with the value.
+     * <br />
+     * If a string is returned, then that string will pass through the masker function once more and its value
+     * will be set to the input.  If false (boolean) is returned, the input will be rejected and the
+     * previous value will be restored.  Otherwise the facade logic will continue as usual.
+     * @since v1.3
+     */
+    formatter: Function,
+    /**
      * Vue's v-model .lazy modifier does not currently work with custom components. If you wish to have your v-model
      * updated only during the change event instead of on input, enable this property. <b>Note: This works by supressing
      * input events and only emitting a single input event at the same time as the change event.</b>
-     * @since v1.2
+     * @since v1.3
      */
     lazy: {
       type: Boolean,
@@ -46,19 +57,8 @@ export default {
       default: false
     },
     /**
-     * A function to format the value after applying the mask. The function will receive an
-     * object with the masked and unmasked value. The result of this function will determine
-     * what happens with the value.
-     * <br />
-     * If a string is returned, then that string will pass through the masker function once more and its value
-     * will be set to the input.  If false (boolean) is returned, the input will be rejected and the
-     * previous value will be restored.  Otherwise the facade logic will continue as usual.
-     * @since v1.2
-     */
-    formatter: Function,
-    /**
      * If the mask starts with static characters, show them in the field initially before typing anything.
-     * @since v1.2
+     * @since v1.3
      */
     prepend: {
       type: Boolean,
