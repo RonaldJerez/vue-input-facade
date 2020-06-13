@@ -156,10 +156,12 @@ export function updateValue(el, vnode, { emit = true, force = false } = {}, even
     el.unmaskedValue = newValue.unmasked
 
     // safari makes the cursor jump to the end if el.value gets assign even if to the same value
-    // additionally, vuetify is trigering directive.update twice at init, this check ensures we only emit once
     if (el.value !== newValue.masked) {
       el.value = newValue.masked
-      emit && el.dispatchEvent(FacadeInputEvent())
     }
+
+    // this part needs to be outside the above IF statement for vuetify in firefox
+    // draweback is that we endup with two's input events in firefox
+    emit && el.dispatchEvent(FacadeInputEvent())
   }
 }

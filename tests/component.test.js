@@ -69,7 +69,8 @@ describe('Component', () => {
     const input = wrapper.find('input')
 
     input.trigger('change')
-    expect(wrapper.emitted().input).toBeFalsy()
+    // only the initial input should be present
+    expect(wrapper.emitted().input.length).toEqual(1)
   })
 
   test('Adding a format function should call that function on input', async () => {
