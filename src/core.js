@@ -135,8 +135,11 @@ export function updateCursor(event, originalValue, originalPosition) {
  * @param {Event} [event] The event that triggered this this update, null if not triggered by an input event
  */
 export function updateValue(el, vnode, { emit = true, force = false } = {}, event) {
-  const { config, oldValue } = el[CONFIG_KEY]
-  const currentValue = vnode && vnode.data.model ? vnode.data.model.value : el.value
+  let { config, oldValue } = el[CONFIG_KEY]
+  let currentValue = vnode && vnode.data.model ? vnode.data.model.value : el.value
+
+  oldValue = oldValue || ''
+  currentValue = currentValue || ''
 
   if (force || oldValue !== currentValue) {
     let newValue = masker(currentValue, config)
@@ -161,7 +164,7 @@ export function updateValue(el, vnode, { emit = true, force = false } = {}, even
     }
 
     // this part needs to be outside the above IF statement for vuetify in firefox
-    // draweback is that we endup with two's input events in firefox
+    // drawback is that we endup with two's input events in firefox
     emit && el.dispatchEvent(FacadeInputEvent())
   }
 }

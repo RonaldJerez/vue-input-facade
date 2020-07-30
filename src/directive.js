@@ -6,12 +6,11 @@ export default {
     el = core.getInputElement(el)
     el.addEventListener('input', core.inputHandler, true)
 
-    el[CONFIG_KEY] = {
-      config: core.normalizeConfig(value, modifiers)
-    }
+    const config = core.normalizeConfig(value, modifiers)
+    el[CONFIG_KEY] = { config }
 
     // set initial value
-    core.updateValue(el, vnode)
+    core.updateValue(el, vnode, { force: config.prefill })
   },
 
   update: (el, { value, oldValue, modifiers }, vnode) => {

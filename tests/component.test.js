@@ -16,6 +16,14 @@ describe('Component', () => {
     expect(wrapper.vm.maskedValue).toBe('123-4')
   })
 
+  test('Should not emit input if initial value is null', () => {
+    const value = null
+    const mask = '####'
+
+    const wrapper = createWrapper({ value, mask })
+    expect(wrapper.emitted().input).toBeFalsy()
+  })
+
   test('Updating the value should update the values', async () => {
     const value = '1234'
     const mask = '###-#'
@@ -69,8 +77,7 @@ describe('Component', () => {
     const input = wrapper.find('input')
 
     input.trigger('change')
-    // only the initial input should be present
-    expect(wrapper.emitted().input.length).toEqual(1)
+    expect(wrapper.emitted().input).toBeFalsy()
   })
 
   test('Adding a format function should call that function on input', async () => {
