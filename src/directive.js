@@ -24,5 +24,8 @@ export default {
     }
   },
 
-  unbind: (el) => el.removeEventListener('input', core.inputHandler, true)
+  unbind: (el) => {
+    el.removeEventListener('input', core.inputHandler, true)
+    el[CONFIG_KEY] = undefined
+  }
 }
