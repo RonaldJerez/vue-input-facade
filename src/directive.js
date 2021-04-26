@@ -23,8 +23,7 @@ export default {
 
     handlerOwner.addEventListener('input', handler, true)
 
-    config.handler = handler
-    config.cleanup = () => handlerOwner.removeEventListener('input', config.handler, true)
+    config.cleanup = () => handlerOwner.removeEventListener('input', handler, true)
   },
 
   update: (el, { value, oldValue, modifiers }, vnode) => {
