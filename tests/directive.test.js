@@ -15,7 +15,7 @@ describe('Directive', () => {
       directives: { facade },
       methods: { inputListener },
       data() {
-        return { mask }
+        return { mask, flag: true }
       }
     }
 
@@ -55,6 +55,29 @@ describe('Directive', () => {
     buildWrapper({ template, mask: '##.##' })
     expect(wrapper.find('#first').element.value).toBe('33.44')
     expect(wrapper.find('#second').element.value).toBe('3344')
+  })
+
+  test('Removing a masked input from the DOM should not impact other masked inputs in the same container', async () => {
+    const template = `<div id='owner'>
+        <input v-facade="mask" id="first" />
+        <input v-if="flag" v-facade="mask" id="second" />
+      </div>`
+
+    buildWrapper({ template, mask: '##.##' })
+
+    wrapper.find('#first').setValue('1111')
+    wrapper.find('#second').setValue('1111')
+
+    expect(wrapper.find('#first').element.value).toBe('11.11')
+    expect(wrapper.find('#second').element.value).toBe('11.11')
+
+    // remove #second input from DOM, triggering directive unbind
+    await wrapper.setData({ flag: false })
+    expect(wrapper.find('#second').exists()).toBeFalsy()
+
+    // ensure #first input is still being masked
+    wrapper.find('#first').setValue('1122')
+    expect(wrapper.find('#first').element.value).toBe('11.22')
   })
 
   test('Should update element value on input', async () => {
