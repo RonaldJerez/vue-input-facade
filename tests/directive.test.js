@@ -135,7 +135,7 @@ describe('Directive', () => {
     })
   })
 
-  describe('Cursor updates', () => {
+  describe.each([['insertText'], [undefined]])('Cursor updates (inputType = %s)', (inputType) => {
     let element
 
     beforeEach(() => {
@@ -154,7 +154,18 @@ describe('Directive', () => {
       const newCursorPos = cursorPos + 1 // one new char inserted before
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { inputType: 'insertText' })
+      wrapper.find('input').trigger('input', { inputType })
+
+      expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
+    })
+
+    test('Should stay next to the char just inserted', () => {
+      element.value = 'ABC1|23'
+      const cursorPos = element.value.indexOf('|')
+      const newCursorPos = cursorPos + 1 // one new char inserted before
+
+      element.selectionEnd = cursorPos
+      wrapper.find('input').trigger('input', { inputType })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -165,7 +176,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos + 2 // two new characters after masking
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { inputType: 'insertText' })
+      wrapper.find('input').trigger('input', { inputType })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -176,7 +187,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos - 1 // needs to move back as 'j' is not an allowed char
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { inputType: 'insertText' })
+      wrapper.find('input').trigger('input', { inputType })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -189,7 +200,7 @@ describe('Directive', () => {
       element.value = 'ABC-1J|2'
       const cursorPos = element.value.indexOf('|')
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { inputType: 'insertText' })
+      wrapper.find('input').trigger('input', { inputType })
       expect(wrapper.element.setSelectionRange).not.toBeCalled()
     })
   })
