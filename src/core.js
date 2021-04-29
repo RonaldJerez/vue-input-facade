@@ -95,8 +95,11 @@ export function updateCursor(event, originalValue, originalPosition) {
     return
   }
 
+  // if event.inputType is not supported, assume 'insertText'
+  const inputType = event.inputType || 'insertText'
+
   // get some information about the cursor based on the original value
-  const isInsertEvent = ['insertText', 'insertFromPaste'].includes(event.inputType)
+  const isInsertEvent = ['insertText', 'insertFromPaste'].includes(inputType)
   const wasCursorAtEnd = isInsertEvent && originalPosition == originalValue.length
   let lastInsertedChar = isInsertEvent && originalValue[originalPosition - 1]
 
