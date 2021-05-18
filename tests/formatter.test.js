@@ -9,6 +9,11 @@ test('1 -> (#)', () => {
   expect(formatter('1', { mask: '(#)' })).toMatchObject({ masked: '(1)', unmasked: '1' })
 })
 
+test('(1) -> (#)', () => {
+  // static mask chars in source
+  expect(formatter('(1)', { mask: '(#)' })).toMatchObject({ masked: '(1)', unmasked: '1' })
+})
+
 test('1 -> [(#)]', () => {
   // two placeholder at the end
   expect(formatter('1', { mask: '[(#)]' })).toMatchObject({ masked: '[(1)]', unmasked: '1' })
