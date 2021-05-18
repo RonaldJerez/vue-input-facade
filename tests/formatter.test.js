@@ -67,10 +67,12 @@ test('empty -> +1 # 5', () => {
 })
 
 test('France IBAN', () => {
-  expect(formatter('FR7630006000011234567890189', {
-    mask: 'FR## #### #### #### #### #### ###',
-    prefill: true
-  })).toMatchObject({
+  expect(
+    formatter('FR7630006000011234567890189', {
+      mask: 'FR## #### #### #### #### #### ###',
+      prefill: true
+    })
+  ).toMatchObject({
     masked: 'FR76 3000 6000 0112 3456 7890 189',
     unmasked: '7630006000011234567890189'
   })
