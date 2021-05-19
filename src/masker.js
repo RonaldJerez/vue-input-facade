@@ -99,7 +99,7 @@ export function formatter(value, config) {
       valueIndex++
     } else {
       accumulator += maskChar
-      if (char === maskChar) {
+      if (char.toLocaleLowerCase() === maskChar.toLocaleLowerCase()) {
         // user typed the same char as static mask char
         valueIndex++
         if (!masker) {
