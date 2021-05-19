@@ -21,7 +21,9 @@
     "test:watch": "jest --coverage --watchAll"
   },
   "main": "dist/vue-input-facade.umd.min.js",
-  "files": [ "dist/*.js" ],
+  "files": [
+    "dist/*.js"
+  ],
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.1",
     "@vue/cli-plugin-eslint": "^4.3.1",
