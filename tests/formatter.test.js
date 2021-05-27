@@ -46,7 +46,7 @@ test('123 -> ##(#)', () => {
   expect(formatter('123', { mask: '##(#)' })).toMatchObject({ masked: '12(3)', unmasked: '123' })
 })
 
-test('123 -> ##(#)', () => {
+test('12 -> ##(#)', () => {
   expect(formatter('12', { mask: '#\\#(#)' })).toMatchObject({ masked: '1#(2)', unmasked: '12' })
 })
 
