@@ -22,6 +22,8 @@ jobs:
         run: npm ci
       - name: Test
         run: npm test
+      - name: Build
+        run: npm run build:plugin
       - name: Publish
         run: npx semantic-release 
         env:
