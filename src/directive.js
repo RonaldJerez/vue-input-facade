@@ -19,7 +19,12 @@ export default {
     const handlerOwner = el.parentElement || el
 
     // use anonymous event handler to avoid inadvertently removing masking for all inputs within a container
-    const handler = (e) => core.inputHandler(e)
+    const handler = (e) => {
+      if (e.target !== el) {
+        return
+      }
+      core.inputHandler(e, el)
+    }
 
     handlerOwner.addEventListener('input', handler, true)
 
