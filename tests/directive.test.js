@@ -24,6 +24,7 @@ describe('Directive', () => {
 
   afterEach(() => {
     jest.restoreAllMocks()
+    inputListener.mockReset()
     wrapper && wrapper.destroy()
   })
 
@@ -202,6 +203,43 @@ describe('Directive', () => {
       element.selectionEnd = cursorPos
       wrapper.find('input').trigger('input', { inputType })
       expect(wrapper.element.setSelectionRange).not.toBeCalled()
+    })
+  })
+
+  describe('multiple inputs, one facade', () => {
+    let otherInput
+    let facadeInput
+
+    beforeEach(() => {
+      const template = `<div id="wrapper">
+      <input id="first" v-facade="mask" value="" @input="inputListener" />
+      <input id="second" />
+      </div>`
+      buildWrapper({ template })
+      otherInput = wrapper.find('#second')
+      facadeInput = wrapper.find('#first')
+    })
+
+    test('should not emit for other inputs', async () => {
+      otherInput.setValue('1122')
+
+      expect(otherInput.element.value).toBe('1122')
+      expect(facadeInput.element.value).toBe('')
+      expect(inputListener).toBeCalledTimes(0)
+    })
+
+    test('should still handle inputs for the main element', async () => {
+      facadeInput.setValue('1122')
+
+      expect(otherInput.element.value).toBe('')
+      expect(facadeInput.element.value).toBe('11.22')
+
+      otherInput.setValue('2233')
+
+      expect(otherInput.element.value).toBe('2233')
+      expect(facadeInput.element.value).toBe('11.22')
+
+      expect(inputListener).toBeCalledTimes(1)
     })
   })
 })
