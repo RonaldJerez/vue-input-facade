@@ -57,7 +57,7 @@ export function inputHandler(event) {
   const { target, detail } = event
 
   // We dont need to run this method on the event we emit (prevent event loop)
-  if (detail && detail.facade) {
+  if ((detail && detail.facade) || event.inputType === 'insertCompositionText') {
     return false
   }
 
