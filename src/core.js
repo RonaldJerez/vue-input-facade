@@ -97,7 +97,7 @@ export function updateCursor(event, originalValue, originalPosition) {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setSelectionRange
   const supportedInputType = ['text', 'tel', 'search', null].includes(target.getAttribute('type'))
   const config = target[CONFIG_KEY] && target[CONFIG_KEY].config
-  if (target !== document.activeElement || !supportedInputType || !config.mask) {
+  if (target !== document.activeElement || !supportedInputType || (!config.mask && !config.masked)) {
     return
   }
 

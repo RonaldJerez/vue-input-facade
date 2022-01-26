@@ -98,7 +98,7 @@ export default {
       }
     },
     mask(newMask) {
-      if (!newMask) {
+      if (!newMask && !this.masked) {
         // when removing the masking rule, set the displayed value to the unmasked
         // to remove any unwanted masking characters from the input
         this.maskedValue = this.unmaskedValue
@@ -112,6 +112,7 @@ export default {
     config() {
       return {
         mask: this.mask,
+        masked: this.masked,
         tokens: this.tokens,
         formatter: this.formatter,
         prefill: this.prefill,
