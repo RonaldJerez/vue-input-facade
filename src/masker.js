@@ -88,6 +88,25 @@ export function formatter(value, config) {
         continue
       }
 
+      if (masker.optional) {
+        let findIndex = maskIndex
+        let find = false
+
+        while (findIndex < mask.length) {
+          const findMaskChar = mask[findIndex]
+
+          if ((char && char.toLocaleLowerCase()) === (findMaskChar && findMaskChar.toLocaleLowerCase())) {
+            find = true
+            break
+          }
+
+          findIndex++
+        }
+
+        maskIndex = find ? findIndex : ++maskIndex
+        continue
+      }
+
       if (masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
         output.unmasked += char
@@ -96,6 +115,7 @@ export function formatter(value, config) {
         accumulator = ''
         maskIndex++
       }
+
       valueIndex++
     } else {
       accumulator += maskChar

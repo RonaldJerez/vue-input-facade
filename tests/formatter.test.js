@@ -66,6 +66,30 @@ test('empty -> +1 # 5', () => {
   expect(formatter('', { mask: '+1 # 5', prefill: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
 })
 
+test('12.345 -> #?#?#.###', () => {
+  expect(formatter('12.345', { mask: '#?#?#.###' })).toMatchObject({ masked: '12.345', unmasked: '12345' })
+})
+
+test('12.3 -> #?#?#.#?#?#', () => {
+  expect(formatter('12.3', { mask: '#?#?#.#?#?#' })).toMatchObject({ masked: '12.3', unmasked: '123' })
+})
+
+test('123.456 -> #?#?#.#?#?#', () => {
+  expect(formatter('123.456', { mask: '#?#?#.#?#?#' })).toMatchObject({ masked: '123.456', unmasked: '123456' })
+})
+
+test('21986892332 -> (0#?#) #####-####', () => {
+  expect(formatter('21986892332', { mask: '(0#?#) #####-####' })).toMatchObject({ masked: '(021) 98689-2332', unmasked: '21986892332' })
+})
+
+test('2)986892332 -> (0#?#) #####-####', () => {
+  expect(formatter('2)986892332', { mask: '(0#?#) #####-####' })).toMatchObject({ masked: '(02) 98689-2332', unmasked: '2986892332' })
+})
+
+test('12.3456abc -> #?#?#.###.#?A?aS', () => {
+  expect(formatter('12.3456abc', { mask: '#?#?#.###.#?A?aS' })).toMatchObject({ masked: '12.345.6Abc', unmasked: '123456Abc' })
+})
+
 test('France IBAN', () => {
   expect(
     formatter('FR7630006000011234567890189', {

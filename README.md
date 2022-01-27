@@ -58,6 +58,7 @@ export default {
 ### Default Mask Tokens
 
 + `S` = alpha characters
++ '?' = optional next mask
 + `#` = numerical characters
 + `X` = alpha numerical characters
 + `A` = alpha characters, transformed to uppercase
