@@ -67,6 +67,7 @@ export function formatter(value, config) {
 
   let output = new FacadeValue()
   let escaped = false
+  let optional = false
 
   let valueIndex = 0
   let maskIndex = 0
@@ -89,21 +90,8 @@ export function formatter(value, config) {
       }
 
       if (masker.optional) {
-        let findIndex = maskIndex
-        let find = false
-
-        while (findIndex < mask.length) {
-          const findMaskChar = mask[findIndex]
-
-          if ((char && char.toLocaleLowerCase()) === (findMaskChar && findMaskChar.toLocaleLowerCase())) {
-            find = true
-            break
-          }
-
-          findIndex++
-        }
-
-        maskIndex = find ? findIndex : ++maskIndex
+        optional = true
+        maskIndex++
         continue
       }
 
@@ -114,6 +102,11 @@ export function formatter(value, config) {
 
         accumulator = ''
         maskIndex++
+        optional = false
+      } else if (optional) {
+        optional = false
+        maskIndex++
+        continue
       }
 
       valueIndex++
@@ -129,6 +122,7 @@ export function formatter(value, config) {
         }
       }
 
+      optional = false
       escaped = false
       maskIndex++
     }
