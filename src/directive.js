@@ -26,9 +26,30 @@ export default {
       core.inputHandler(e, el)
     }
 
-    handlerOwner.addEventListener('input', handler, true)
+    const compositionHandler = (e) => {
+      if (e.target !== el) {
+        return
+      }
 
-    config.cleanup = () => handlerOwner.removeEventListener('input', handler, true)
+      if (['compositionstart', 'compositionupdate'].includes(e.type)) {
+        el[CONFIG_KEY].isComposing = true
+      } else if (e.type === 'compositionend') {
+        el[CONFIG_KEY].isComposing = false
+        core.inputHandler(e, el)
+      }
+    }
+
+    handlerOwner.addEventListener('input', handler, true)
+    handlerOwner.addEventListener('compositionstart', compositionHandler, true)
+    handlerOwner.addEventListener('compositionupdate', compositionHandler, true)
+    handlerOwner.addEventListener('compositionend', compositionHandler, true)
+
+    config.cleanup = () => {
+      handlerOwner.removeEventListener('input', handler, true)
+      handlerOwner.removeEventListener('compositionstart', compositionHandler, true)
+      handlerOwner.removeEventListener('compositionend', compositionHandler, true)
+      handlerOwner.removeEventListener('compositionupdate', compositionHandler, true)
+    }
   },
 
   update: (el, { value, oldValue, modifiers }, vnode) => {

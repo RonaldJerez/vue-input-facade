@@ -92,6 +92,71 @@ describe('Directive', () => {
     expect(wrapper.element.unmaskedValue).toBe('1122')
   })
 
+  describe('Composition events', () => {
+    test('Should not update value when composing the input', () => {
+      buildWrapper({ value: 1234 })
+      expect(wrapper.element.value).toBe('12.34')
+
+      wrapper.element.value = '1122'
+      wrapper.find('input').trigger('compositionstart')
+      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+
+      expect(wrapper.element.value).toBe('1122')
+      expect(wrapper.element.unmaskedValue).toBe('1234')
+    })
+
+    test('Should not update value when updating the composed input', () => {
+      buildWrapper({ value: 1234 })
+      expect(wrapper.element.value).toBe('12.34')
+
+      wrapper.element.value = '1122'
+      wrapper.find('input').trigger('compositionupdate')
+      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+
+      expect(wrapper.element.value).toBe('1122')
+      expect(wrapper.element.unmaskedValue).toBe('1234')
+    })
+
+    test('Should update value when composition ends', () => {
+      buildWrapper({ value: 1234 })
+      expect(wrapper.element.value).toBe('12.34')
+
+      wrapper.element.value = '1122'
+      wrapper.find('input').trigger('compositionstart')
+      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+
+      expect(wrapper.element.value).toBe('1122')
+      expect(wrapper.element.unmaskedValue).toBe('1234')
+
+      wrapper.find('input').trigger('compositionend')
+
+      expect(wrapper.element.value).toBe('11.22')
+      expect(wrapper.element.unmaskedValue).toBe('1122')
+    })
+
+    test('Should prevent all value updates while composing text', () => {
+      buildWrapper({ value: 1234 })
+      expect(wrapper.element.value).toBe('12.34')
+
+      wrapper.element.value = '1122'
+      wrapper.find('input').trigger('compositionstart')
+      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+      wrapper.setValue('4321')
+
+      expect(wrapper.element.value).toBe('4321')
+      expect(wrapper.element.unmaskedValue).toBe('1234')
+    })
+
+    test('Should prevent composition input events from propagating', () => {
+      buildWrapper()
+
+      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+      wrapper.find('input').trigger('input', { inputType: 'insertFromComposition' })
+
+      expect(inputListener).toHaveBeenCalledTimes(0)
+    })
+  })
+
   test('Should honor short modifier', async () => {
     buildWrapper({
       template: `<input v-facade.short="mask" value="12" @input="inputListener" />`
@@ -240,6 +305,28 @@ describe('Directive', () => {
       expect(facadeInput.element.value).toBe('11.22')
 
       expect(inputListener).toBeCalledTimes(1)
+    })
+
+    test('should not prevent updates when other inputs are composing text', async () => {
+      otherInput.setValue('1122')
+
+      otherInput.trigger('compositionstart')
+
+      facadeInput.element.value = '1234'
+      facadeInput.trigger('input')
+
+      expect(otherInput.element.value).toBe('1122')
+      expect(facadeInput.element.value).toBe('12.34')
+      expect(inputListener).toBeCalledTimes(1)
+    })
+
+    test('should handle composition events on the main element', async () => {
+      facadeInput.setValue('1122')
+      facadeInput.element.value = '1234'
+      facadeInput.trigger('compositionstart')
+      facadeInput.trigger('input', { inputType: 'insertCompositionText' })
+
+      expect(facadeInput.element.unmaskedValue).toBe('1122')
     })
   })
 })

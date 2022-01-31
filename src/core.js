@@ -54,16 +54,22 @@ export function getInputElement(el) {
  * @param {Event} event The event object
  */
 export function inputHandler(event) {
-  const { target, detail } = event
+  const { target, detail, inputType } = event
 
   // We dont need to run this method on the event we emit (prevent event loop)
-  if ((detail && detail.facade) || event.inputType === 'insertCompositionText') {
+  if (detail && detail.facade) {
     return false
   }
 
   // since we will be emitting our own custom input event
   // we can stop propagation of this native event
   event.stopPropagation()
+
+  // Ignore input events related to composition, specific composition
+  // events will handle updating the input after text is composed
+  if (['insertCompositionText', 'insertFromComposition'].includes(inputType)) {
+    return false
+  }
 
   const originalValue = target.value
   const originalPosition = target.selectionEnd
@@ -138,8 +144,13 @@ export function updateCursor(event, originalValue, originalPosition) {
  * @param {Event} [event] The event that triggered this this update, null if not triggered by an input event
  */
 export function updateValue(el, vnode, { emit = true, force = false } = {}, event) {
-  let { config, oldValue } = el[CONFIG_KEY]
+  let { config, oldValue, isComposing } = el[CONFIG_KEY]
   let currentValue = vnode && vnode.data.model ? vnode.data.model.value : el.value
+
+  // manipulating input value while text is being composed can lead to inputs being duplicated
+  if (isComposing) {
+    return
+  }
 
   oldValue = oldValue || ''
   currentValue = currentValue || ''
