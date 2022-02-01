@@ -76,6 +76,8 @@ export function formatter(value, config) {
   while (maskIndex < mask.length) {
     const maskChar = mask[maskIndex]
     const masker = tokens[maskChar]
+    const nextMaskChar = mask[maskIndex + 1]
+    const nextMasker = tokens[nextMaskChar]
     let char = value[valueIndex]
 
     // no more input characters and next character is a masked one
@@ -89,13 +91,11 @@ export function formatter(value, config) {
         continue
       }
 
-      if (masker.optional) {
+      if (masker.optional || (nextMasker && nextMasker.optional)) {
         optional = true
-        maskIndex++
-        continue
       }
 
-      if (masker.pattern.test(char)) {
+      if (masker.pattern && masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
         output.unmasked += char
         output.masked += accumulator + char
@@ -103,7 +103,9 @@ export function formatter(value, config) {
         accumulator = ''
         maskIndex++
         optional = false
-      } else if (optional) {
+      }
+
+      if (optional) {
         optional = false
         maskIndex++
         continue

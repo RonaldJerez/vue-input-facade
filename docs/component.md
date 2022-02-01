@@ -31,7 +31,7 @@ let value = '192.168.10.1'
 let masked = false
 
 <example label="IP address">
-  <input-facade mask="#?#?#.#?#?#.#?#?#.#?#?#" v-model="value" :masked="masked" />
+  <input-facade mask="##?#?.##?#?.##?#?.##?#?" v-model="value" :masked="masked" />
 </example>
 
 <checkbox v-model="masked" />
