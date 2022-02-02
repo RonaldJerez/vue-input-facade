@@ -67,6 +67,7 @@ export function formatter(value, config) {
 
   let output = new FacadeValue()
   let escaped = false
+  let optional = false
 
   let valueIndex = 0
   let maskIndex = 0
@@ -75,6 +76,8 @@ export function formatter(value, config) {
   while (maskIndex < mask.length) {
     const maskChar = mask[maskIndex]
     const masker = tokens[maskChar]
+    const nextMaskChar = mask[maskIndex + 1]
+    const nextMasker = tokens[nextMaskChar]
     let char = value[valueIndex]
 
     // no more input characters and next character is a masked one
@@ -88,14 +91,26 @@ export function formatter(value, config) {
         continue
       }
 
-      if (masker.pattern.test(char)) {
+      if (masker.optional || (nextMasker && nextMasker.optional)) {
+        optional = true
+      }
+
+      if (masker.pattern && masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
         output.unmasked += char
         output.masked += accumulator + char
 
         accumulator = ''
         maskIndex++
+        optional = false
       }
+
+      if (optional) {
+        optional = false
+        maskIndex++
+        continue
+      }
+
       valueIndex++
     } else {
       accumulator += maskChar
@@ -109,6 +124,7 @@ export function formatter(value, config) {
         }
       }
 
+      optional = false
       escaped = false
       maskIndex++
     }

@@ -4,5 +4,6 @@ export default {
   S: { pattern: /[a-z]/i },
   A: { pattern: /[a-z]/i, transform: (v) => v.toLocaleUpperCase() },
   a: { pattern: /[a-z]/i, transform: (v) => v.toLocaleLowerCase() },
-  '\\': { escape: true }
+  '\\': { escape: true },
+  '?': { optional: true }
 }
