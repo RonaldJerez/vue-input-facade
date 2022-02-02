@@ -58,12 +58,12 @@ export default {
 ### Default Mask Tokens
 
 + `S` = alpha characters
-+ '?' = optional next mask
 + `#` = numerical characters
 + `X` = alpha numerical characters
 + `A` = alpha characters, transformed to uppercase
 + `a` = alpha characters, transformed to lowercase
 + `\` = escape any of the above characters
++ `?` = mark the preceding character as optional
 
 See the [token source file](https://github.com/RonaldJerez/vue-input-facade/blob/master/src/tokens.js) for definition signature
 
