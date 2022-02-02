@@ -77,16 +77,17 @@ export function formatter(value, config) {
     const masker = tokens[maskChar]
     let char = value[valueIndex]
 
+    // when is escape char, do not mask, just continue
+    if (masker && masker.escape) {
+      escaped = true
+      maskIndex++
+      continue
+    }
+
     // no more input characters and next character is a masked one
-    if (!char && masker) break
+    if (!char && masker && !escaped) break
 
     if (masker && !escaped) {
-      // when is escape char, do not mask, just continue
-      if (masker.escape) {
-        escaped = true
-        maskIndex++
-        continue
-      }
 
       if (masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
