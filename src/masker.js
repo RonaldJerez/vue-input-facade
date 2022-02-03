@@ -94,7 +94,7 @@ export function formatter(value, config) {
 
       // no more input characters and next character is a masked one
       if (!char) break
-      
+
       if (masker.pattern && masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
         output.unmasked += char

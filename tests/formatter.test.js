@@ -79,19 +79,31 @@ test('123.456 -> ##?#?.##?#?', () => {
 })
 
 test('21986892332 -> (0##?) #####-####', () => {
-  expect(formatter('21986892332', { mask: '(0##?) #####-####' })).toMatchObject({ masked: '(021) 98689-2332', unmasked: '21986892332' })
+  expect(formatter('21986892332', { mask: '(0##?) #####-####' })).toMatchObject({
+    masked: '(021) 98689-2332',
+    unmasked: '21986892332'
+  })
 })
 
 test('2)986892332 -> (0##?) #####-####', () => {
-  expect(formatter('2)986892332', { mask: '(0##?) #####-####' })).toMatchObject({ masked: '(02) 98689-2332', unmasked: '2986892332' })
+  expect(formatter('2)986892332', { mask: '(0##?) #####-####' })).toMatchObject({
+    masked: '(02) 98689-2332',
+    unmasked: '2986892332'
+  })
 })
 
 test('12.3456abc -> ##?#?.###.#A?a?S', () => {
-  expect(formatter('12.3456abc', { mask: '##?#?.###.#A?a?S' })).toMatchObject({ masked: '12.345.6Abc', unmasked: '123456Abc' })
+  expect(formatter('12.3456abc', { mask: '##?#?.###.#A?a?S' })).toMatchObject({
+    masked: '12.345.6Abc',
+    unmasked: '123456Abc'
+  })
 })
 
 test('12.3456ac -> ##?#?.###.##?a?S', () => {
-  expect(formatter('12.3456ac', { mask: '##?#?.###.##?a?S' })).toMatchObject({ masked: '12.345.6ac', unmasked: '123456ac' })
+  expect(formatter('12.3456ac', { mask: '##?#?.###.##?a?S' })).toMatchObject({
+    masked: '12.345.6ac',
+    unmasked: '123456ac'
+  })
 })
 
 test('escaped -> \\+1 # 5', () => {
