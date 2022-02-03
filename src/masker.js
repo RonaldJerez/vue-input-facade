@@ -80,9 +80,6 @@ export function formatter(value, config) {
     const nextMasker = tokens[nextMaskChar]
     let char = value[valueIndex]
 
-    // no more input characters and next character is a masked one
-    if (!char && masker) break
-
     if (masker && !escaped) {
       // when is escape char, do not mask, just continue
       if (masker.escape) {
@@ -95,6 +92,9 @@ export function formatter(value, config) {
         optional = true
       }
 
+      // no more input characters and next character is a masked one
+      if (!char) break
+      
       if (masker.pattern && masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
         output.unmasked += char
