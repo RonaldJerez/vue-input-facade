@@ -66,6 +66,14 @@ test('empty -> +1 # 5', () => {
   expect(formatter('', { mask: '+1 # 5', prefill: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
 })
 
+test('escaped -> \\+1 # 5', () => {
+  expect(formatter('', { mask: '\\+1 # 5', prefill: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
+})
+
+test('2 -> \\A # 5 \\A\\A', () => {
+  expect(formatter('2', { mask: '\\A # 5 \\A\\A', prefill: true })).toMatchObject({ masked: 'A 2 5 AA', unmasked: '2' })
+})
+
 test('France IBAN', () => {
   expect(
     formatter('FR7630006000011234567890189', {
