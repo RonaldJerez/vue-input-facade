@@ -106,6 +106,27 @@ test('12.3456ac -> ##?#?.###.##?a?S', () => {
   })
 })
 
+test('123456 -> #*', () => {
+  expect(formatter('123456', { mask: '#*' })).toMatchObject({
+    masked: '123456',
+    unmasked: '123456'
+  })
+})
+
+test('1234HH -> #* AA', () => {
+  expect(formatter('1234HH', { mask: '#* AA' })).toMatchObject({
+    masked: '1234 HH',
+    unmasked: '1234HH'
+  })
+})
+
+test('abc1234xyz -> ##* AAA', () => {
+  expect(formatter('abc1234xyz', { mask: '##* AAA' })).toMatchObject({
+    masked: '1234 XYZ',
+    unmasked: '1234XYZ'
+  })
+})
+
 test('escaped -> \\+1 # 5', () => {
   expect(formatter('', { mask: '\\+1 # 5', prefill: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
 })
