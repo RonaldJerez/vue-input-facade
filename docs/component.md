@@ -12,6 +12,32 @@ let masked = false
 <display :value="value" />
 ```
 
+```js
+let franceIBAN = 'FR7630006000011234567890189'
+let masked = true
+
+<example label="France IBAN">
+  <input-facade mask="FR## #### #### #### #### #### ###" v-model="franceIBAN" :masked="masked" />
+</example>
+
+<checkbox v-model="masked" />
+<display :value="franceIBAN" />
+```
+
+### Optional next mask
+
+```js
+let value = '192.168.10.1'
+let masked = false
+
+<example label="IP address">
+  <input-facade mask="##?#?.##?#?.##?#?.##?#?" v-model="value" :masked="masked" />
+</example>
+
+<checkbox v-model="masked" />
+<display :value="value" />
+```
+
 ### Dynamic Masks
 
 Accepts an array of masking pattern and dynamically chooses the appropriate one based on the number of characters in the field.

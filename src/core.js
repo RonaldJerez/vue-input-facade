@@ -54,7 +54,7 @@ export function getInputElement(el) {
  * @param {Event} event The event object
  */
 export function inputHandler(event) {
-  const { target, detail } = event
+  const { target, detail, inputType } = event
 
   // We dont need to run this method on the event we emit (prevent event loop)
   if (detail && detail.facade) {
@@ -64,6 +64,12 @@ export function inputHandler(event) {
   // since we will be emitting our own custom input event
   // we can stop propagation of this native event
   event.stopPropagation()
+
+  // Ignore input events related to composition, specific composition
+  // events will handle updating the input after text is composed
+  if (['insertCompositionText', 'insertFromComposition'].includes(inputType)) {
+    return false
+  }
 
   const originalValue = target.value
   const originalPosition = target.selectionEnd
@@ -91,12 +97,15 @@ export function updateCursor(event, originalValue, originalPosition) {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setSelectionRange
   const supportedInputType = ['text', 'tel', 'search', null].includes(target.getAttribute('type'))
   const config = target[CONFIG_KEY] && target[CONFIG_KEY].config
-  if (target !== document.activeElement || !supportedInputType || !config.mask) {
+  if (target !== document.activeElement || !supportedInputType || (!config.mask && !config.masked)) {
     return
   }
 
+  // if event.inputType is not supported, assume 'insertText'
+  const inputType = event.inputType || 'insertText'
+
   // get some information about the cursor based on the original value
-  const isInsertEvent = ['insertText', 'insertFromPaste'].includes(event.inputType)
+  const isInsertEvent = ['insertText', 'insertFromPaste'].includes(inputType)
   const wasCursorAtEnd = isInsertEvent && originalPosition == originalValue.length
   let lastInsertedChar = isInsertEvent && originalValue[originalPosition - 1]
 
@@ -135,8 +144,13 @@ export function updateCursor(event, originalValue, originalPosition) {
  * @param {Event} [event] The event that triggered this this update, null if not triggered by an input event
  */
 export function updateValue(el, vnode, { emit = true, force = false } = {}, event) {
-  let { config, oldValue } = el[CONFIG_KEY]
+  let { config, oldValue, isComposing } = el[CONFIG_KEY]
   let currentValue = vnode && vnode.data.model ? vnode.data.model.value : el.value
+
+  // manipulating input value while text is being composed can lead to inputs being duplicated
+  if (isComposing) {
+    return
+  }
 
   oldValue = oldValue || ''
   currentValue = currentValue || ''

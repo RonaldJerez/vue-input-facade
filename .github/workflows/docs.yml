@@ -1,0 +1,24 @@
+name: Publish demo page
+
+on:
+  release:
+    types: [ published ] # published, unpublished, created, edited, deleted, or prereleased
+
+jobs:
+  docs:
+    name: Generate Docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 12
+      - name: Install
+        run: npm ci
+      - name: Build Docs
+        run: npm run build:docs
+      - name: Deploy Github Pages
+        uses: peaceiris/actions-github-pages@v3.1.12
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: build

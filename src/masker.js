@@ -9,6 +9,7 @@ let tokenDefinitions = defaultTokens
  * @param {object} tokens the new token object
  */
 export function setTokens(tokens) {
+  /* istanbul ignore if */
   if (!tokens) return
   tokenDefinitions = tokens
 }
@@ -72,34 +73,63 @@ export function formatter(value, config) {
   let maskIndex = 0
   let accumulator = ''
 
+  // gets some information about the mask before formating
+  function getMetaData(masker) {
+    const nextMaskChar = mask[maskIndex + 1]
+    const nextMasker = tokens[nextMaskChar]
+
+    return {
+      escape: !!(masker && masker.escape),
+      optional: !!(nextMasker && nextMasker.optional),
+      repeat: !!(nextMasker && nextMasker.repeat)
+    }
+  }
+
   while (maskIndex < mask.length) {
     const maskChar = mask[maskIndex]
     const masker = tokens[maskChar]
     let char = value[valueIndex]
 
-    // no more input characters and next character is a masked one
-    if (!char && masker) break
-
     if (masker && !escaped) {
+      const meta = getMetaData(masker)
+
       // when is escape char, do not mask, just continue
-      if (masker.escape) {
+      if (meta.escape) {
         escaped = true
         maskIndex++
         continue
       }
 
-      if (masker.pattern.test(char)) {
+      // no more input characters and next character is a masked one
+      if (!char) break
+
+      if (masker.pattern && masker.pattern.test(char)) {
         char = masker.transform ? masker.transform(char) : char
         output.unmasked += char
         output.masked += accumulator + char
 
         accumulator = ''
-        maskIndex++
+
+        if (!meta.repeat) {
+          maskIndex += meta.optional ? 2 : 1
+        }
+      } else if (meta.optional || meta.repeat) {
+        maskIndex += 2
+        continue
       }
+
       valueIndex++
     } else {
       accumulator += maskChar
-      if (char === maskChar) valueIndex++ // user typed the same char
+      if ((char && char.toLocaleLowerCase()) === (maskChar && maskChar.toLocaleLowerCase())) {
+        // user typed the same char as static mask char
+        valueIndex++
+        if (!masker || escaped) {
+          // add it and reset
+          output.masked += accumulator
+          accumulator = ''
+        }
+      }
 
       escaped = false
       maskIndex++
