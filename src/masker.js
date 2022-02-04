@@ -79,9 +79,9 @@ export function formatter(value, config) {
     const nextMasker = tokens[nextMaskChar]
 
     return {
-      escape: !!(masker && masker.escape),
-      optional: !!(nextMasker && nextMasker.optional),
-      repeat: !!(nextMasker && nextMasker.repeat)
+      escape: !!masker?.escape,
+      optional: !!nextMasker?.optional,
+      repeat: !!nextMasker?.repeat
     }
   }
 
@@ -103,8 +103,8 @@ export function formatter(value, config) {
       // no more input characters and next character is a masked one
       if (!char) break
 
-      if (masker.pattern && masker.pattern.test(char)) {
-        char = masker.transform ? masker.transform(char) : char
+      if (masker.pattern?.test(char)) {
+        char = masker.transform?.(char) || char
         output.unmasked += char
         output.masked += accumulator + char
 
@@ -121,7 +121,7 @@ export function formatter(value, config) {
       valueIndex++
     } else {
       accumulator += maskChar
-      if ((char && char.toLocaleLowerCase()) === (maskChar && maskChar.toLocaleLowerCase())) {
+      if (char?.toLocaleLowerCase() === maskChar?.toLocaleLowerCase()) {
         // user typed the same char as static mask char
         valueIndex++
         output.masked += accumulator
