@@ -65,6 +65,7 @@ export default {
 + `\` = escape any of the above characters
 + `?` = mark the preceding character as optional [0 or 1]
 + `*` = mark the preceding character as optional & repeating [0 or more]
++ `+` = mark the preceding character as repeating [1 or more]
 
 See the [token source file](https://github.com/RonaldJerez/vue-input-facade/blob/master/src/tokens.js) for definition signature
 

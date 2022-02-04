@@ -190,7 +190,7 @@ describe('Directive', () => {
     })
 
     test('Should honor prefill modifier', async () => {
-      buildWrapper({ modifiers: 'prefill', mask: '+1 ###', value: '' })
+      buildWrapper({ modifiers: 'prefill', mask: '\\+1 ###', value: '' })
       expect(wrapper.element.value).toBe('+1 ')
 
       wrapper.element.value = '777'
