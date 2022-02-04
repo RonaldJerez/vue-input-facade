@@ -25,24 +25,24 @@
     "dist/*.js"
   ],
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.3.1",
-    "@vue/cli-plugin-eslint": "^4.3.1",
-    "@vue/cli-plugin-unit-jest": "^4.3.1",
-    "@vue/cli-service": "^4.3.1",
+    "@vue/cli-plugin-babel": "^4.5.15",
+    "@vue/cli-plugin-eslint": "^4.5.15",
+    "@vue/cli-plugin-unit-jest": "^4.5.15",
+    "@vue/cli-service": "^4.5.15",
     "@vue/eslint-config-prettier": "^5.0.0",
-    "@vue/test-utils": "^1.0.2",
+    "@vue/test-utils": "^1.3.0",
     "babel-eslint": "^10.1.0",
-    "core-js": "^3.6.5",
-    "cz-conventional-changelog": "^3.2.0",
+    "core-js": "^3.19.3",
+    "cz-conventional-changelog": "^3.3.0",
     "eslint": "^5.16.0",
-    "eslint-plugin-prettier": "^3.1.3",
+    "eslint-plugin-prettier": "^3.4.1",
     "eslint-plugin-vue": "^5.0.0",
-    "husky": "^4.2.5",
+    "husky": "^4.3.8",
     "prettier": "^1.18.2",
-    "semantic-release": "^17.0.7",
-    "vue": "^2.6.11",
-    "vue-cli-plugin-styleguidist": "^4.24.1",
-    "vue-template-compiler": "^2.6.11"
+    "semantic-release": "^17.4.7",
+    "vue": "^2.6.14",
+    "vue-cli-plugin-styleguidist": "^4.44.15",
+    "vue-template-compiler": "^2.6.14"
   },
   "config": {
     "commitizen": {
@@ -51,7 +51,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run lint && npm run test"
+      "pre-push": "npm run lint && git diff HEAD --quiet && npm run test"
     }
   },
   "keywords": [
@@ -67,5 +67,9 @@
     "front-end",
     "vue-input-facade",
     "web"
-  ]
+  ],
+  "dependencies": {
+    "install": "^0.13.0",
+    "npm": "^8.4.1"
+  }
 }
