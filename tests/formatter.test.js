@@ -51,19 +51,19 @@ test('12 -> ##(#)', () => {
 })
 
 test('12 -> +1 #', () => {
-  expect(formatter('12', { mask: '+1 #' })).toMatchObject({ masked: '+1 2', unmasked: '2' })
+  expect(formatter('12', { mask: '\\+1 #' })).toMatchObject({ masked: '+1 2', unmasked: '2' })
 })
 
 test('2 -> +1 #', () => {
-  expect(formatter('2', { mask: '+1 #' })).toMatchObject({ masked: '+1 2', unmasked: '2' })
+  expect(formatter('2', { mask: '\\+1 #' })).toMatchObject({ masked: '+1 2', unmasked: '2' })
 })
 
 test('2 -> +1 # 5', () => {
-  expect(formatter('2', { mask: '+1 # 5' })).toMatchObject({ masked: '+1 2 5', unmasked: '2' })
+  expect(formatter('2', { mask: '\\+1 # 5' })).toMatchObject({ masked: '+1 2 5', unmasked: '2' })
 })
 
 test('empty -> +1 # 5', () => {
-  expect(formatter('', { mask: '+1 # 5', prefill: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
+  expect(formatter('', { mask: '\\+1 # 5', prefill: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
 })
 
 test('12.345 -> ##?#?.###', () => {
@@ -128,11 +128,45 @@ test('abc1234xyz -> ##* AAA', () => {
 })
 
 test('escaped -> \\+1 # 5', () => {
-  expect(formatter('', { mask: '\\+1 # 5', prefill: true })).toMatchObject({ masked: '+1 ', unmasked: '' })
+  expect(formatter('', { mask: '\\+1 # 5', prefill: true })).toMatchObject({
+    masked: '+1 ',
+    unmasked: ''
+  })
 })
 
 test('2 -> \\A # 5 \\A\\A', () => {
-  expect(formatter('2', { mask: '\\A # 5 \\A\\A', prefill: true })).toMatchObject({ masked: 'A 2 5 AA', unmasked: '2' })
+  expect(formatter('2', { mask: '\\A # 5 \\A\\A', prefill: true })).toMatchObject({
+    masked: 'A 2 5 AA',
+    unmasked: '2'
+  })
+})
+
+test('123456 -> #+', () => {
+  expect(formatter('123456', { mask: '#+' })).toMatchObject({
+    masked: '123456',
+    unmasked: '123456'
+  })
+})
+
+test('1234HH -> #+ AA', () => {
+  expect(formatter('1234HH', { mask: '#+ AA' })).toMatchObject({
+    masked: '1234 HH',
+    unmasked: '1234HH'
+  })
+})
+
+test('abc1234xyz -> ##+ AAA', () => {
+  expect(formatter('abc1234xyz', { mask: '##+ AAA' })).toMatchObject({
+    masked: '1234 XYZ',
+    unmasked: '1234XYZ'
+  })
+})
+
+test('abc1234xyz -> a+##+ AAA', () => {
+  expect(formatter('abc1234xyz', { mask: 'a+##+ AAA' })).toMatchObject({
+    masked: 'abc1234 XYZ',
+    unmasked: 'abc1234XYZ'
+  })
 })
 
 test('France IBAN', () => {

@@ -71,6 +71,7 @@ export function formatter(value, config) {
 
   let valueIndex = 0
   let maskIndex = 0
+  let testIndex = 0
   let accumulator = ''
 
   // gets some information about the mask before formating
@@ -81,7 +82,8 @@ export function formatter(value, config) {
     return {
       escape: !!(masker && masker.escape),
       optional: !!(nextMasker && nextMasker.optional),
-      repeat: !!(nextMasker && nextMasker.repeat)
+      repeatZero: !!(nextMasker && nextMasker.repeatZero),
+      repeatOne: !!(nextMasker && nextMasker.repeatOne)
     }
   }
 
@@ -110,10 +112,15 @@ export function formatter(value, config) {
 
         accumulator = ''
 
-        if (!meta.repeat) {
+        if (!meta.repeatZero && !meta.repeatOne) {
           maskIndex += meta.optional ? 2 : 1
+        } else if (meta.repeatOne) {
+          testIndex++
         }
-      } else if (meta.optional || meta.repeat) {
+      } else if (meta.optional || meta.repeatZero) {
+        maskIndex += 2
+        continue
+      } else if (meta.repeatOne && testIndex > 0) {
         maskIndex += 2
         continue
       }
@@ -133,6 +140,7 @@ export function formatter(value, config) {
 
       escaped = false
       maskIndex++
+      testIndex = 0
     }
   }
 
