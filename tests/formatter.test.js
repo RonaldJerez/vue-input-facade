@@ -146,3 +146,21 @@ test('France IBAN', () => {
     unmasked: '7630006000011234567890189'
   })
 })
+
+describe('Alternations', () => {
+  test('When matching an alternation', () => {
+    expect(formatter('df1234', { mask: 'A|D###' })).toMatchObject({ masked: 'D123', unmasked: 'D123' })
+  })
+
+  test('When not matching an alternation', () => {
+    expect(formatter('1234', { mask: 'A|D###' })).toMatchObject({ masked: '', unmasked: '' })
+  })
+
+  test('When having multiple alternations', () => {
+    expect(formatter('D123455F', { mask: 'A|D###D|F|G' })).toMatchObject({ masked: 'D123F', unmasked: 'D123F' })
+  })
+
+  test('When having characters with accents or different casing', () => {
+    expect(formatter('é123455F', { mask: 'A|E###e|f' })).toMatchObject({ masked: 'E123f', unmasked: 'E123f' })
+  })
+})

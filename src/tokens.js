@@ -6,5 +6,6 @@ export default {
   a: { pattern: /[a-z]/i, transform: (v) => v.toLocaleLowerCase() },
   '\\': { escape: true },
   '?': { optional: true },
-  '*': { repeat: true }
+  '*': { repeat: true },
+  '|': { pipe: true }
 }

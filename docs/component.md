@@ -56,6 +56,23 @@ let masked = true
 <display :value="value" />
 ```
 
+### Alternation (Pipe)
+
+Use a pipe symbol to indicate altarnative **static** values that can be used in the mask. This is case insensitive and can match letters irregarless of accents. For example å = A. Android webview and Opera dont fully support that type of matching.
+> *Note that because this only works with static values there is no need to escape characters that are also used as tokens.*
+
+```js
+let value = ''
+let masked = true
+
+<example label="ID Code">
+  <input-facade mask="A|B|C-####" v-model="value" :masked="masked" />
+</example>
+
+<checkbox v-model="masked" />
+<display :value="value" />
+```
+
 ### Dynamic Masks
 
 Accepts an array of masking pattern and dynamically chooses the appropriate one based on the number of characters in the field.

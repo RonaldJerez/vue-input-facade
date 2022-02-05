@@ -3,6 +3,14 @@ import defaultTokens from './tokens'
 
 let tokenDefinitions = defaultTokens
 
+let isLocaleCompareSupported = false
+try {
+  // if supported this will throw a RangeError because 'i' is not a valid locale
+  'a'.localeCompare('b', 'i')
+} catch (e) {
+  isLocaleCompareSupported = e.name === 'RangeError'
+}
+
 /**
  * Overrides the default global token definitions
  *
@@ -81,7 +89,13 @@ export function formatter(value, config) {
     return {
       escape: !!masker?.escape,
       optional: !!nextMasker?.optional,
-      repeat: !!nextMasker?.repeat
+      repeat: !!nextMasker?.repeat,
+      ...(nextMasker?.pipe && {
+        pipe: mask
+          .substring(maskIndex)
+          .match(/^(.\|)+./g)[0]
+          .split('|')
+      })
     }
   }
 
@@ -90,9 +104,9 @@ export function formatter(value, config) {
     const masker = tokens[maskChar]
     let char = value[valueIndex]
 
-    if (masker && !escaped) {
-      const meta = getMetaData(masker)
+    const meta = getMetaData(masker)
 
+    if (masker && !escaped && !meta.pipe) {
       // when is escape char, do not mask, just continue
       if (meta.escape) {
         escaped = true
@@ -119,9 +133,23 @@ export function formatter(value, config) {
       }
 
       valueIndex++
+    } else if (meta.pipe) {
+      if (!char) break
+
+      const pipeMatch = meta.pipe.find(looselyStringMatch.bind(null, char))
+
+      if (pipeMatch) {
+        output.unmasked += pipeMatch
+        output.masked += accumulator + pipeMatch
+
+        maskIndex += meta.pipe.length * 2 - 1
+        accumulator = ''
+      }
+
+      valueIndex++
     } else {
       accumulator += maskChar
-      if (char?.toLocaleLowerCase() === maskChar?.toLocaleLowerCase()) {
+      if (looselyStringMatch(char, maskChar)) {
         // user typed the same char as static mask char
         valueIndex++
         output.masked += accumulator
@@ -140,6 +168,26 @@ export function formatter(value, config) {
   }
 
   return output
+}
+
+/**
+ * Loosely compare two strings and returns if they are equal ignoring case and locale
+ * specific accents. Some browsers do not fully support this (Android webview and opera)
+ * so we fallback to just ignoring casing in those cases.
+ *
+ * @see [MDM - LocaleCompare](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare)
+ *
+ * @param {String} str1 String one
+ * @param {String} str2 String two
+ * @returns Boolean
+ */
+export function looselyStringMatch(str1, str2) {
+  /* istanbul ignore else */
+  if (isLocaleCompareSupported) {
+    return str1?.localeCompare(str2, undefined, { sensitivity: 'base' }) === 0
+  } else {
+    return str1?.toLocaleLowerCase() === str2?.toLocaleLowerCase()
+  }
 }
 
 /**
