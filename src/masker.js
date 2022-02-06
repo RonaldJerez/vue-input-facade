@@ -148,16 +148,21 @@ export function formatter(value, config) {
 
       valueIndex++
     } else {
-      accumulator += maskChar
       if (looselyStringMatch(char, maskChar)) {
         // user typed the same char as static mask char
+        output.masked += accumulator + maskChar
         valueIndex++
-        output.masked += accumulator
         accumulator = ''
+
+        if (meta.optional) {
+          output.unmasked += maskChar
+        }
+      } else if (!meta.optional) {
+        accumulator += maskChar
       }
 
       escaped = false
-      maskIndex++
+      maskIndex += meta.optional ? 2 : 1
     }
   }
 
