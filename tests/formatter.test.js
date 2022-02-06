@@ -106,6 +106,17 @@ test('12.3456ac -> ##?#?.###.##?a?S', () => {
   })
 })
 
+test('Optional static characters', () => {
+  expect(formatter('C123', { mask: 'C?###' })).toMatchObject({
+    masked: 'C123',
+    unmasked: 'C123'
+  })
+  expect(formatter('123', { mask: 'C?###' })).toMatchObject({
+    masked: '123',
+    unmasked: '123'
+  })
+})
+
 test('123456 -> #*', () => {
   expect(formatter('123456', { mask: '#*' })).toMatchObject({
     masked: '123456',
