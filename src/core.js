@@ -128,8 +128,8 @@ export function updateCursor(event, originalValue, originalPosition) {
   }
 
   target.setSelectionRange(cursorPosition, cursorPosition)
+  /* istanbul ignore next */
   setTimeout(function() {
-    /* istanbul ignore next */
     target.setSelectionRange(cursorPosition, cursorPosition)
   }, 0)
 }

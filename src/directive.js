@@ -31,11 +31,11 @@ export default {
         return
       }
 
-      if (['compositionstart', 'compositionupdate'].includes(e.type)) {
-        el[CONFIG_KEY].isComposing = true
-      } else if (e.type === 'compositionend') {
+      if (e.type === 'compositionend') {
         el[CONFIG_KEY].isComposing = false
         core.inputHandler(e, el)
+      } else {
+        el[CONFIG_KEY].isComposing = true
       }
     }
 
