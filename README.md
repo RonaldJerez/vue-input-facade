@@ -71,6 +71,9 @@ See the [token source file](https://github.com/RonaldJerez/vue-input-facade/blob
 
 <div class="hide" markdown="1">
 
+## Note about special input types
+The masking library does not currently work on special input types such as number, email etc.  This is due to browsers treating these special inputs differently than text input and not supporting the same API.  As such, only use vue-input-facade with `<input type="text|tel|search">`.
+
 ## Usage
 
 ### As Component
@@ -110,6 +113,7 @@ const options = {
 
 Vue.use(InputFacade, options)
 ```
+
 
 See [demo page](https://ronaldjerez.github.io/vue-input-facade) for more usage examples
 

@@ -12,18 +12,6 @@ let masked = false
 <display :value="value" />
 ```
 
-```js
-let franceIBAN = 'FR7630006000011234567890189'
-let masked = true
-
-<example label="France IBAN">
-  <input-facade mask="FR## #### #### #### #### #### ###" v-model="franceIBAN" :masked="masked" />
-</example>
-
-<checkbox v-model="masked" />
-<display :value="franceIBAN" />
-```
-
 ### Optional character
 
 Use a question mark (?) to indicate that a character is optional. Similar to regular expression this means 0 or 1.
@@ -32,8 +20,18 @@ Use a question mark (?) to indicate that a character is optional. Similar to reg
 let value = '192.168.10.1'
 let masked = true
 
+const validateIP = (value, event) => {
+  const parts = value.masked.split('.')
+
+  if (parts.length < 4 && parts[parts.length - 1] > 25) {
+    return value.masked + '.'
+  }
+
+  return !parts.some(part => part > 255)
+}
+
 <example label="IP address">
-  <input-facade mask="##?#?.##?#?.##?#?.##?#?" v-model="value" :masked="masked" />
+  <input-facade name="ip" mask="##?#?.##?#?.##?#?.##?#?" v-model="value" :masked="masked" :formatter="validateIP" />
 </example>
 
 <checkbox v-model="masked" />

@@ -268,7 +268,7 @@ describe('Directive', () => {
 
     const cursorPos = element.value.indexOf('|')
     element.selectionEnd = cursorPos
-    
+
     jest.spyOn(element, 'setSelectionRange')
     wrapper.find('input').trigger('input', { inputType: 'insertText' })
     expect(wrapper.element.setSelectionRange).not.toBeCalled()
@@ -283,7 +283,7 @@ describe('Directive', () => {
 
     const cursorPos = element.value.indexOf('|')
     element.selectionEnd = cursorPos
-    
+
     jest.spyOn(element, 'setSelectionRange')
     wrapper.find('input').trigger('input', { inputType: 'deleteContent' })
     expect(wrapper.element.setSelectionRange).toBeCalledWith(cursorPos, cursorPos)

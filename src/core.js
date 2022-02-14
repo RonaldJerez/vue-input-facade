@@ -156,7 +156,6 @@ export function updateValue(el, vnode, { emit = true, force = false } = {}, even
   currentValue = currentValue || ''
 
   if (force || oldValue !== currentValue) {
-
     if (['deleteByCut', 'deleteContent', 'deleteContentBackward', 'deleteContentForward'].includes(event?.inputType)) {
       config = { ...config, short: true }
     }
