@@ -205,7 +205,7 @@ describe('Directive', () => {
     let element
 
     beforeEach(() => {
-      buildWrapper({ mask: 'AAA-###-', attachToDocument: true })
+      buildWrapper({ mask: 'AAA-###-', attachTo: document.body })
 
       element = wrapper.element
 
@@ -257,18 +257,36 @@ describe('Directive', () => {
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
+  })
 
-    test('should not reset cursor if no mask is given', async () => {
-      buildWrapper({ mask: '', attachToDocument: true })
-      element = wrapper.element
-      jest.spyOn(element, 'setSelectionRange')
-      element.focus()
-      element.value = 'ABC-1J|2'
-      const cursorPos = element.value.indexOf('|')
-      element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { inputType })
-      expect(wrapper.element.setSelectionRange).not.toBeCalled()
-    })
+  test('should not reset cursor if no mask is given', async () => {
+    buildWrapper({ mask: '', attachTo: document.body })
+
+    const element = wrapper.element
+    element.focus()
+    element.value = 'ABC-1J|2'
+
+    const cursorPos = element.value.indexOf('|')
+    element.selectionEnd = cursorPos
+
+    jest.spyOn(element, 'setSelectionRange')
+    wrapper.find('input').trigger('input', { inputType: 'insertText' })
+    expect(wrapper.element.setSelectionRange).not.toBeCalled()
+  })
+
+  test('should not reset cursor if not an insert event', async () => {
+    buildWrapper({ mask: '###', attachTo: document.body })
+
+    const element = wrapper.element
+    element.focus()
+    element.value = '1234|5'
+
+    const cursorPos = element.value.indexOf('|')
+    element.selectionEnd = cursorPos
+
+    jest.spyOn(element, 'setSelectionRange')
+    wrapper.find('input').trigger('input', { inputType: 'deleteContent' })
+    expect(wrapper.element.setSelectionRange).toBeCalledWith(cursorPos, cursorPos)
   })
 
   describe('multiple inputs, one facade', () => {
@@ -328,5 +346,20 @@ describe('Directive', () => {
 
       expect(facadeInput.element.unmaskedValue).toBe('1122')
     })
+  })
+
+  test('Should allow deleting static content at end of mask', () => {
+    buildWrapper({ mask: '##.##33' })
+    expect(wrapper.element.value).toBe('')
+
+    // normal input
+    wrapper.element.value = '7777'
+    wrapper.find('input').trigger('input')
+    expect(wrapper.element.value).toBe('77.7733')
+
+    // attempt to delete a static character
+    wrapper.element.value = '77.773'
+    wrapper.find('input').trigger('input', { inputType: 'deleteContentBackward' })
+    expect(wrapper.element.value).toBe('77.773')
   })
 })

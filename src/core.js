@@ -57,7 +57,7 @@ export function inputHandler(event) {
   const { target, detail, inputType } = event
 
   // We dont need to run this method on the event we emit (prevent event loop)
-  if (detail && detail.facade) {
+  if (detail?.facade) {
     return false
   }
 
@@ -128,8 +128,8 @@ export function updateCursor(event, originalValue, originalPosition) {
   }
 
   target.setSelectionRange(cursorPosition, cursorPosition)
+  /* istanbul ignore next */
   setTimeout(function() {
-    /* istanbul ignore next */
     target.setSelectionRange(cursorPosition, cursorPosition)
   }, 0)
 }
@@ -145,7 +145,7 @@ export function updateCursor(event, originalValue, originalPosition) {
  */
 export function updateValue(el, vnode, { emit = true, force = false } = {}, event) {
   let { config, oldValue, isComposing } = el[CONFIG_KEY]
-  let currentValue = vnode && vnode.data.model ? vnode.data.model.value : el.value
+  let currentValue = vnode?.data?.model?.value || el.value
 
   // manipulating input value while text is being composed can lead to inputs being duplicated
   if (isComposing) {
@@ -156,6 +156,10 @@ export function updateValue(el, vnode, { emit = true, force = false } = {}, even
   currentValue = currentValue || ''
 
   if (force || oldValue !== currentValue) {
+    if (['deleteByCut', 'deleteContent', 'deleteContentBackward', 'deleteContentForward'].includes(event?.inputType)) {
+      config = { ...config, short: true }
+    }
+
     let newValue = masker(currentValue, config)
 
     if (event && typeof config.formatter === 'function') {

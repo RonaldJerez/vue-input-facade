@@ -3,12 +3,21 @@ import defaultTokens from './tokens'
 
 let tokenDefinitions = defaultTokens
 
+let isLocaleCompareSupported = false
+try {
+  // if supported this will throw a RangeError because 'i' is not a valid locale
+  'a'.localeCompare('b', 'i')
+} catch (e) {
+  isLocaleCompareSupported = e.name === 'RangeError'
+}
+
 /**
  * Overrides the default global token definitions
  *
  * @param {object} tokens the new token object
  */
 export function setTokens(tokens) {
+  /* istanbul ignore if */
   if (!tokens) return
   tokenDefinitions = tokens
 }
@@ -72,14 +81,34 @@ export function formatter(value, config) {
   let maskIndex = 0
   let accumulator = ''
 
+  // gets some information about the mask before formating
+  function getMetaData(masker) {
+    const nextMaskChar = mask[maskIndex + 1]
+    const nextMasker = tokens[nextMaskChar]
+
+    return {
+      escape: !!masker?.escape,
+      optional: !!nextMasker?.optional,
+      repeat: !!nextMasker?.repeat,
+      ...(nextMasker?.pipe && {
+        pipe: mask
+          .substring(maskIndex)
+          .match(/^(.\|)+./g)[0]
+          .split('|')
+      })
+    }
+  }
+
   while (maskIndex < mask.length) {
     const maskChar = mask[maskIndex]
     const masker = tokens[maskChar]
     let char = value[valueIndex]
 
-    if (masker && !escaped) {
+    const meta = getMetaData(masker)
+
+    if (masker && !escaped && !meta.pipe) {
       // when is escape char, do not mask, just continue
-      if (masker.escape) {
+      if (meta.escape) {
         escaped = true
         maskIndex++
         continue
@@ -88,29 +117,52 @@ export function formatter(value, config) {
       // no more input characters and next character is a masked one
       if (!char) break
 
-      if (masker.pattern.test(char)) {
-        char = masker.transform ? masker.transform(char) : char
+      if (masker.pattern?.test(char)) {
+        char = masker.transform?.(char) || char
         output.unmasked += char
         output.masked += accumulator + char
 
         accumulator = ''
-        maskIndex++
+
+        if (!meta.repeat) {
+          maskIndex += meta.optional ? 2 : 1
+        }
+      } else if (meta.optional || meta.repeat) {
+        maskIndex += 2
+        continue
       }
+
+      valueIndex++
+    } else if (meta.pipe) {
+      if (!char) break
+
+      const pipeMatch = meta.pipe.find(looselyStringMatch.bind(null, char))
+
+      if (pipeMatch) {
+        output.unmasked += pipeMatch
+        output.masked += accumulator + pipeMatch
+
+        maskIndex += meta.pipe.length * 2 - 1
+        accumulator = ''
+      }
+
       valueIndex++
     } else {
-      accumulator += maskChar
-      if ((char && char.toLocaleLowerCase()) === (maskChar && maskChar.toLocaleLowerCase())) {
+      if (looselyStringMatch(char, maskChar)) {
         // user typed the same char as static mask char
+        output.masked += accumulator + maskChar
         valueIndex++
-        if (!masker || escaped) {
-          // add it and reset
-          output.masked += accumulator
-          accumulator = ''
+        accumulator = ''
+
+        if (meta.optional) {
+          output.unmasked += maskChar
         }
+      } else if (!meta.optional) {
+        accumulator += maskChar
       }
 
       escaped = false
-      maskIndex++
+      maskIndex += meta.optional ? 2 : 1
     }
   }
 
@@ -121,6 +173,26 @@ export function formatter(value, config) {
   }
 
   return output
+}
+
+/**
+ * Loosely compare two strings and returns if they are equal ignoring case and locale
+ * specific accents. Some browsers do not fully support this (Android webview and opera)
+ * so we fallback to just ignoring casing in those cases.
+ *
+ * @see [MDM - LocaleCompare](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare)
+ *
+ * @param {String} str1 String one
+ * @param {String} str2 String two
+ * @returns Boolean
+ */
+export function looselyStringMatch(str1, str2) {
+  /* istanbul ignore else */
+  if (isLocaleCompareSupported) {
+    return str1?.localeCompare(str2, undefined, { sensitivity: 'base' }) === 0
+  } else {
+    return str1?.toLocaleLowerCase() === str2?.toLocaleLowerCase()
+  }
 }
 
 /**

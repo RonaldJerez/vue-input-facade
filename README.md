@@ -63,10 +63,16 @@ export default {
 + `A` = alpha characters, transformed to uppercase
 + `a` = alpha characters, transformed to lowercase
 + `\` = escape any of the above characters
++ `?` = mark the preceding character as optional [0 or 1]
++ `*` = mark the preceding character as optional & repeating [0 or more]
++ `|` = used for alternative static characters: A|B|C will accept A or B or C
 
 See the [token source file](https://github.com/RonaldJerez/vue-input-facade/blob/master/src/tokens.js) for definition signature
 
 <div class="hide" markdown="1">
+
+## Note about special input types
+The masking library does not currently work on special input types such as number, email etc.  This is due to browsers treating these special inputs differently than text input and not supporting the same API.  As such, only use vue-input-facade with `<input type="text|tel|search">`.
 
 ## Usage
 
@@ -107,6 +113,7 @@ const options = {
 
 Vue.use(InputFacade, options)
 ```
+
 
 See [demo page](https://ronaldjerez.github.io/vue-input-facade) for more usage examples
 
