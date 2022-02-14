@@ -329,4 +329,19 @@ describe('Directive', () => {
       expect(facadeInput.element.unmaskedValue).toBe('1122')
     })
   })
+
+  test('Should allow deleting static content at end of mask', () => {
+    buildWrapper({ mask: '##.##33' })
+    expect(wrapper.element.value).toBe('')
+
+    // normal input
+    wrapper.element.value = '7777'
+    wrapper.find('input').trigger('input')
+    expect(wrapper.element.value).toBe('77.7733')
+
+    // attempt to delete a static character
+    wrapper.element.value = '77.773'
+    wrapper.find('input').trigger('input', { inputType: 'deleteContentBackward' })
+    expect(wrapper.element.value).toBe('77.773')
+  })
 })

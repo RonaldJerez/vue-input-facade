@@ -156,6 +156,11 @@ export function updateValue(el, vnode, { emit = true, force = false } = {}, even
   currentValue = currentValue || ''
 
   if (force || oldValue !== currentValue) {
+
+    if (['deleteByCut', 'deleteContent', 'deleteContentBackward', 'deleteContentForward'].includes(event?.inputType)) {
+      config = { ...config, short: true }
+    }
+
     let newValue = masker(currentValue, config)
 
     if (event && typeof config.formatter === 'function') {
