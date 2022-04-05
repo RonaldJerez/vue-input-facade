@@ -67,9 +67,5 @@
     "front-end",
     "vue-input-facade",
     "web"
-  ],
-  "dependencies": {
-    "install": "^0.13.0",
-    "npm": "^8.4.1"
-  }
+  ]
 }
