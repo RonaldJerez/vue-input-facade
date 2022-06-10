@@ -39,7 +39,7 @@
     "eslint-plugin-vue": "^5.0.0",
     "husky": "^4.3.8",
     "prettier": "^1.18.2",
-    "semantic-release": "^17.4.7",
+    "semantic-release": "^19.0.3",
     "vue": "^2.6.14",
     "vue-cli-plugin-styleguidist": "^4.44.15",
     "vue-template-compiler": "^2.6.14"
