@@ -14,8 +14,6 @@ export default {
     const slot = this.$slots.default[0]
     if (slot && slot.tag === 'input') {
       this.value = slot.elm.value
-    } else if (this.$children[0]) {
-      this.value = this.$children[0].value
     }
   },
   data() {

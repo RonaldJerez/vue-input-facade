@@ -2,14 +2,14 @@ import InputFacade from '../src/component'
 import { shallowMount } from '@vue/test-utils'
 
 describe('Component', () => {
-  const createWrapper = (props) => shallowMount(InputFacade, { propsData: props })
+  const createWrapper = ({ props, attributes }) => shallowMount(InputFacade, { props: props, attrs: attributes })
 
   afterEach(() => jest.clearAllMocks())
 
   test('Initial value', () => {
     const value = '1234'
     const mask = '###-#'
-    const wrapper = createWrapper({ value, mask })
+    const wrapper = createWrapper({ props: { value, mask } })
 
     expect(wrapper.vm.emittedValue).toBe('1234')
     expect(wrapper.vm.unmaskedValue).toBe('1234')
@@ -20,14 +20,14 @@ describe('Component', () => {
     const value = null
     const mask = '####'
 
-    const wrapper = createWrapper({ value, mask })
+    const wrapper = createWrapper({ props: { value, mask } })
     expect(wrapper.emitted().input).toBeFalsy()
   })
 
   test('Updating the value should update the values', async () => {
     const value = '1234'
     const mask = '###-#'
-    const wrapper = createWrapper({ value, mask })
+    const wrapper = createWrapper({ props: { value, mask } })
 
     expect(wrapper.vm.maskedValue).toBe('123-4')
     await wrapper.setProps({ value: '5555' })
@@ -37,7 +37,7 @@ describe('Component', () => {
   test('Changing the masked prop should re-evaluate the values', async () => {
     const value = '1234'
     const mask = '###-#'
-    const wrapper = createWrapper({ value, mask })
+    const wrapper = createWrapper({ props: { value, mask } })
 
     expect(wrapper.vm.emittedValue).toBe('1234')
     await wrapper.setProps({ masked: true })
@@ -48,7 +48,7 @@ describe('Component', () => {
     const value = '444555'
     const mask = '(###)###'
 
-    const wrapper = createWrapper({ value, mask })
+    const wrapper = createWrapper({ props: { value, mask } })
     expect(wrapper.vm.maskedValue).toBe('(444)555')
 
     await wrapper.setProps({ mask: null })
@@ -60,20 +60,28 @@ describe('Component', () => {
 
   test('When lazy is set to true, should only emit input onChange', async () => {
     // default settings
-    const wrapper = createWrapper({ lazy: true })
+    const wrapper = createWrapper({
+      props: { modelModifiers: { lazy: true } },
+      attributes: {
+        'update:modelValue'(value) {
+          wrapper.setProps({ modelValue: value })
+        }
+      }
+    })
+
     const input = wrapper.find('input')
 
     input.trigger('input')
-    expect(wrapper.emitted().input).toBeFalsy()
+    expect(wrapper.emitted().input.length).toBe(1)
 
     input.trigger('change')
-    expect(wrapper.emitted().input).toBeTruthy()
+    expect(wrapper.emitted().input.length).toBe(1)
     expect(wrapper.emitted().change).toBeTruthy()
   })
 
   test('When lazy is set to false, should not emit input on change', async () => {
     // default settings
-    const wrapper = createWrapper({ lazy: false })
+    const wrapper = createWrapper({ props: { modelModifiers: { lazy: true } } })
     const input = wrapper.find('input')
 
     input.trigger('change')
@@ -82,7 +90,7 @@ describe('Component', () => {
 
   test('Adding a format function should call that function on input', async () => {
     const formatter = jest.fn()
-    const wrapper = createWrapper({ formatter })
+    const wrapper = createWrapper({ props: { formatter } })
 
     wrapper.element.value = '5555'
     wrapper.find('input').trigger('input')
@@ -92,7 +100,7 @@ describe('Component', () => {
 
   test('When a formatter function returns false, do not change input value', async () => {
     const formatter = jest.fn().mockReturnValue(false)
-    const wrapper = createWrapper({ value: '1234', formatter })
+    const wrapper = createWrapper({ props: { value: '1234', formatter } })
 
     wrapper.element.value = '5555'
     wrapper.find('input').trigger('input')
@@ -102,7 +110,7 @@ describe('Component', () => {
 
   test('When a formatter function returns string, set value to masked string', async () => {
     const formatter = jest.fn().mockReturnValue('3344')
-    const wrapper = createWrapper({ mask: '##-##', formatter })
+    const wrapper = createWrapper({ props: { mask: '##-##', formatter } })
 
     wrapper.element.value = '5555'
     wrapper.find('input').trigger('input')

@@ -2,7 +2,7 @@ import * as core from './core'
 const CONFIG_KEY = core.CONFIG_KEY
 
 export default {
-  bind: (el, { value, modifiers }, vnode) => {
+  beforeMount: (el, { value, modifiers }, vnode) => {
     el = core.getInputElement(el)
     const config = core.normalizeConfig(value, modifiers)
     el[CONFIG_KEY] = { config }
@@ -11,7 +11,7 @@ export default {
     core.updateValue(el, vnode, { force: config.prefill })
   },
 
-  inserted: (el) => {
+  mounted: (el) => {
     el = core.getInputElement(el)
     const config = el[CONFIG_KEY]
     // prefer adding event listener to parent element to avoid Firefox bug which does not
@@ -52,7 +52,7 @@ export default {
     }
   },
 
-  update: (el, { value, oldValue, modifiers }, vnode) => {
+  updated: (el, { value, oldValue, modifiers }, vnode) => {
     el = core.getInputElement(el)
 
     if (value !== oldValue) {
@@ -63,7 +63,7 @@ export default {
     }
   },
 
-  unbind: (el) => {
+  unmounted: (el) => {
     core.getInputElement(el)[CONFIG_KEY].cleanup()
   }
 }

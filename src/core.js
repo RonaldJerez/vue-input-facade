@@ -156,6 +156,7 @@ export function updateValue(el, vnode, { emit = true, force = false } = {}, even
   currentValue = currentValue || ''
 
   if (force || oldValue !== currentValue) {
+    // to keep the string as short as possible (not append extra chars at the end)
     if (['deleteByCut', 'deleteContent', 'deleteContentBackward', 'deleteContentForward'].includes(event?.inputType)) {
       config = { ...config, short: true }
     }

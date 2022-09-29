@@ -15,9 +15,11 @@
     "build:plugin": "vue-cli-service build --target=lib src/plugin.js",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "semantic-release": "semantic-release",
+    "serve": "vue-cli-service serve",
     "dev": "vue-cli-service styleguidist --config styleguide/config.js --mode development",
     "build:docs": "vue-cli-service styleguidist:build --config styleguide/config.js",
     "test": "jest --coverage",
+    "test:filter": "func() { yarn test \"$1\" --coverage-reporters=\"lcov\" --coverageThreshold={} ${@:2}; }; func",
     "test:watch": "jest --coverage --watchAll"
   },
   "main": "dist/vue-input-facade.umd.min.js",
@@ -25,24 +27,29 @@
     "dist/*.js"
   ],
   "devDependencies": {
+    "@babel/core": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
     "@vue/cli-plugin-babel": "^4.5.15",
     "@vue/cli-plugin-eslint": "^4.5.15",
-    "@vue/cli-plugin-unit-jest": "^4.5.15",
     "@vue/cli-service": "^4.5.15",
+    "@vue/compiler-dom": "^3.2.40",
     "@vue/eslint-config-prettier": "^5.0.0",
-    "@vue/test-utils": "^1.3.0",
+    "@vue/test-utils": "^2.1.0",
+    "@vue/vue3-jest": "^28.1.0",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
+    "babel-jest": "^28.1.3",
     "core-js": "^3.19.3",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^5.16.0",
     "eslint-plugin-prettier": "^3.4.1",
     "eslint-plugin-vue": "^5.0.0",
     "husky": "^4.3.8",
+    "jest": "^28.1.3",
+    "jest-environment-jsdom": "^29.1.2",
     "prettier": "^1.18.2",
     "semantic-release": "^17.4.7",
-    "vue": "^2.6.14",
-    "vue-cli-plugin-styleguidist": "^4.44.15",
-    "vue-template-compiler": "^2.6.14"
+    "vue": "^3.2.40"
   },
   "config": {
     "commitizen": {

@@ -25,7 +25,7 @@ describe('Directive', () => {
   afterEach(() => {
     jest.restoreAllMocks()
     inputListener.mockReset()
-    wrapper && wrapper.destroy()
+    wrapper && wrapper.unmount()
   })
 
   test('Initial state on mount', () => {
@@ -141,7 +141,7 @@ describe('Directive', () => {
       wrapper.element.value = '1122'
       wrapper.find('input').trigger('compositionstart')
       wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
-      wrapper.setValue('4321')
+      wrapper.find('input').setValue('4321')
 
       expect(wrapper.element.value).toBe('4321')
       expect(wrapper.element.unmaskedValue).toBe('1234')

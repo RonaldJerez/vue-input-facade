@@ -4,7 +4,7 @@
       ref="checkbox"
       :id="name"
       :name="name"
-      :checked="value"
+      :checked="modelValue"
       class="checkbox__input"
       type="checkbox"
       @change="input"
@@ -19,7 +19,7 @@
 export default {
   name: 'Checkbox',
   props: {
-    value: Boolean
+    modelValue: Boolean
   },
   data() {
     return {
@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     input() {
-      this.$emit('input', !this.value)
+      this.$emit('update:modelValue', !this.modelValue)
     }
   }
 }

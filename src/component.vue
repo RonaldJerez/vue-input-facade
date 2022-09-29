@@ -36,16 +36,6 @@ export default {
      */
     formatter: Function,
     /**
-     * Vue's v-model .lazy modifier does not currently work with custom components. If you wish to have your v-model
-     * updated only during the change event instead of on input, enable this property. <b>Note: This works by supressing
-     * input events and only emitting a single input event at the same time as the change event.</b>
-     * @since v1.3
-     */
-    lazy: {
-      type: Boolean,
-      default: false
-    },
-    /**
      * The mask pattern for this input, it could be a single pattern or multiple patterns when its an array.
      */
     mask: [String, Array],
@@ -80,7 +70,10 @@ export default {
      * The input's value
      * @model
      */
-    value: [String, Number]
+    modelValue: [String, Number],
+    modelModifiers: {
+      default: () => ({})
+    }
   },
   directives: { facade: directive },
   data() {
@@ -90,18 +83,21 @@ export default {
     }
   },
   watch: {
-    value(newValue) {
+    modelValue(newValue) {
       // avoid trigering the directive's update hook when we emit
       // the unmasked value to the parent component
       if (newValue !== this.emittedValue) {
         this.maskedValue = newValue
       }
     },
-    mask(newMask) {
-      if (!newMask && !this.masked) {
-        // when removing the masking rule, set the displayed value to the unmasked
-        // to remove any unwanted masking characters from the input
-        this.maskedValue = this.unmaskedValue
+    mask: {
+      deep: true,
+      handler(newMask) {
+        if (!newMask && !this.masked) {
+          // when removing the masking rule, set the displayed value to the unmasked
+          // to remove any unwanted masking characters from the input
+          this.maskedValue = this.unmaskedValue
+        }
       }
     },
     masked() {
@@ -128,7 +124,7 @@ export default {
       this.maskedValue = target.value
       this.unmaskedValue = target.unmaskedValue
 
-      if (!this.lazy) {
+      if (!this.modelModifiers.lazy) {
         this.emitInput()
       }
     },
@@ -139,7 +135,7 @@ export default {
        */
       this.$emit('change', this.emittedValue)
 
-      if (this.lazy) {
+      if (this.modelModifiers.lazy) {
         this.emitInput()
       }
     },
@@ -148,7 +144,7 @@ export default {
        * Fires when the value of the input has been changed.
        * @param {String} value The input's current value, masked or unmasked.
        */
-      this.$emit('input', this.emittedValue)
+      this.$emit('update:modelValue', this.emittedValue)
     }
   }
 }
