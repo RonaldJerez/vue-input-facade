@@ -2,7 +2,7 @@
 
 # Vue Input Facade
 
-A lightweight and dependency free input masking library created specific for Vue
+A lightweight and dependency free input masking library created specific for Vue 3.x
 
 [![Build Status](https://travis-ci.org/RonaldJerez/vue-input-facade.svg?branch=master)](https://travis-ci.org/RonaldJerez/vue-input-facade)
 [![Coverage Status](https://coveralls.io/repos/github/RonaldJerez/vue-input-facade/badge.svg?branch=master&service=github)](https://coveralls.io/github/RonaldJerez/vue-input-facade?branch=master&service=github)
@@ -22,11 +22,11 @@ A lightweight and dependency free input masking library created specific for Vue
 ## Installing
 
 ```bash
-npm i vue-input-facade
+npm i vue-input-facade@beta
 ```
 
 ```bash
-yarn add vue-input-facade
+yarn add vue-input-facade@beta
 ```
 
 ## Importing
@@ -37,7 +37,7 @@ Installs the component, directive and filter for your entire application.
 
 ```javascript
 import InputFacade from 'vue-input-facade'
-Vue.use(InputFacade)
+app.use(InputFacade)
 ```
 
 ### Locally
