@@ -78,7 +78,7 @@ export default {
   directives: { facade: directive },
   data() {
     return {
-      maskedValue: this.value,
+      maskedValue: this.modelValue,
       unmaskedValue: null
     }
   },
