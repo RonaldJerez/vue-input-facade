@@ -148,7 +148,7 @@ export function updateValue(el, vnode, { emit = true, force = false } = {}, even
   let currentValue = vnode?.data?.model?.value || el.value
 
   // manipulating input value while text is being composed can lead to inputs being duplicated
-  if (isComposing) {
+  if (config.mask && isComposing) {
     return
   }
 
