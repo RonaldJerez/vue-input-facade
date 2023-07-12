@@ -1,6 +1,6 @@
 const path = require('path')
 const pkg = require('../package.json')
-const { execSync } = require('child_process');
+const { execSync } = require('child_process')
 
 const root = path.resolve(__dirname, '../')
 
@@ -35,8 +35,8 @@ module.exports = {
       content: `${root}/docs/directive.md`
     },
     {
-      name: 'Filter',
-      content: `${root}/docs/filter.md`
+      name: 'Masker',
+      content: `${root}/docs/masker.md`
     },
     {
       name: 'Advanced',

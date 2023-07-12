@@ -33,7 +33,7 @@ yarn add vue-input-facade@beta
 
 ### Globally
 
-Installs the component, directive and filter for your entire application.
+Installs the component and directive for your entire application.
 
 ```javascript
 import InputFacade from 'vue-input-facade'
@@ -45,12 +45,14 @@ app.use(InputFacade)
 Install per component as needed
 
 ```javascript
-import { InputFacade, facade, filter } from 'vue-input-facade'
+import { InputFacade, facade, masker } from 'vue-input-facade'
 
 export default {
   components: { InputFacade },
   directives: { facade },
-  filters: { facade: filter },
+  setup() {
+    return { masker }
+  }
   // ... rest of component config
 }
 ```
