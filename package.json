@@ -20,7 +20,8 @@
     "build:docs": "vue-cli-service styleguidist:build --config styleguide/config.js",
     "test": "jest --coverage",
     "test:filter": "func() { yarn test \"$1\" --coverage-reporters=\"lcov\" --coverageThreshold={} ${@:2}; }; func",
-    "test:watch": "jest --coverage --watchAll"
+    "test:watch": "jest --coverage --watchAll",
+    "preyalcpublish": "yarn build:plugin"
   },
   "main": "dist/vue-input-facade.umd.min.js",
   "files": [

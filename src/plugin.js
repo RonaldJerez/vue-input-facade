@@ -18,22 +18,10 @@ function install(Vue, options = {}) {
 
   Vue.component(InputFacade.name, InputFacade)
   Vue.directive(options.name || 'facade', facade)
-  Vue.filter(options.name || 'facade', filter)
-}
-
-/**
- * Utility function to be used as a vue filter
- *
- * @param {String} value the value to apply the filter to
- * @param {*} config the masking config
- * @returns {string} the masked value as returned by the masker function
- */
-function filter(value, config) {
-  return masker(value, config).masked
 }
 
 export default install
-export { InputFacade, facade, tokens, masker, filter }
+export { InputFacade, facade, tokens, masker }
 
 // Install by default if included from script tag
 if (typeof window !== 'undefined' && window.Vue) {
