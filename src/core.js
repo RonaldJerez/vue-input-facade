@@ -52,8 +52,9 @@ export function getInputElement(el) {
  * Input event handler
  *
  * @param {Event} event The event object
+ * @param {HTMLInputElement} el The input element
  */
-export function inputHandler(event) {
+export function inputHandler(event, el) {
   const { target, detail, inputType } = event
 
   // We dont need to run this method on the event we emit (prevent event loop)
@@ -67,7 +68,7 @@ export function inputHandler(event) {
 
   // Ignore input events related to composition, specific composition
   // events will handle updating the input after text is composed
-  if (['insertCompositionText', 'insertFromComposition'].includes(inputType)) {
+  if (['insertCompositionText', 'insertFromComposition'].includes(inputType) && el[CONFIG_KEY].config.mask) {
     return false
   }
 
