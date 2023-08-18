@@ -7,8 +7,8 @@
     @change="onChange"
     @blur="$emit('blur')"
     @focus="$emit('focus')"
-    @keyup="$emit('keyup')"
-    @keydown="$emit('keydown')"
+    @keyup="$emit('keyup', $event)"
+    @keydown="$emit('keydown', $event)"
   />
 </template>
 
