@@ -9,6 +9,7 @@
     @focus="$emit('focus')"
     @keyup="$emit('keyup', $event)"
     @keydown="$emit('keydown', $event)"
+    @paste="$emit('paste', $event)"
   />
 </template>
 
@@ -82,7 +83,7 @@ export default {
      * The input's value
      * @model
      */
-    value: [String, Number]
+    value: [String, Number],
   },
   directives: { facade: directive },
   data() {
