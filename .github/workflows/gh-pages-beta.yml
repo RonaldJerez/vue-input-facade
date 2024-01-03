@@ -2,18 +2,16 @@ name: Publish beta demo page
 
 on:
   push:
-    branches:
-      - beta
     tags:
-      - 'v*.*.*-beta.*'
+      - 'v[0-9]+.[0-9]+.[0-9]+-beta.[0-9]+'
 
 jobs:
   docs:
     name: Generate Docs
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 16
       - name: Install
@@ -21,9 +19,9 @@ jobs:
       - name: Build Docs
         run: npm run build:docs
       - name: Deploy Github Pages
-        uses: peaceiris/actions-github-pages@v3.1.12
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./storybook-static
           destination_dir: beta
 
