@@ -1,4 +1,4 @@
-name: Publish demo page
+name: Publish beta demo page
 
 on:
   push:
