@@ -1,8 +1,10 @@
 .DS_Store
 node_modules
 /dist
-/build
 /coverage
+.yalc
+yalc.lock
+*.timestamp-*
 
 # local env files
 .env.local
@@ -21,3 +23,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Storybook Build
+storybook-static/

@@ -1,4 +1,4 @@
-import masker, { setTokens } from '../src/masker'
+import masker, { setTokens } from '@/masker'
 
 const tokens = {
   F: { pattern: /[a-f0-9]/i }

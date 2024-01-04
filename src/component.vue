@@ -1,15 +1,3 @@
-<template>
-  <input
-    v-facade="config"
-    type="text"
-    :value="maskedValue"
-    @input="onInput"
-    @change="onChange"
-    @blur="$emit('blur')"
-    @focus="$emit('focus')"
-  />
-</template>
-
 <script>
 import directive from './directive'
 
@@ -19,10 +7,11 @@ import directive from './directive'
  *
  * However it provides a cleaner and more straight forward interface to the directive's features.
  *
- * @example ../docs/component.md
+ * @example file://./stories/docs/component/component.mdx
  */
 export default {
   name: 'InputFacade',
+  directives: { facade: directive },
   props: {
     /**
      * A function to format the value after applying the mask. The function will receive an
@@ -30,15 +19,21 @@ export default {
      * what happens with the value.
      * <br />
      * If a string is returned, then that string will pass through the masker function once more and its value
-     * will be set to the input.  If false (boolean) is returned, the input will be rejected and the
-     * previous value will be restored.  Otherwise the facade logic will continue as usual.
+     * will be set to the input. If false (boolean) is returned, the input will be rejected and the
+     * previous value will be restored. Otherwise the facade logic will continue as usual.
      * @since v1.3
      */
-    formatter: Function,
+    formatter: {
+      type: Function,
+      default: null
+    },
     /**
      * The mask pattern for this input, it could be a single pattern or multiple patterns when its an array.
      */
-    mask: [String, Array],
+    mask: {
+      type: [String, Array],
+      default: null
+    },
     /**
      * Whether to emit the value masked or unmasked
      */
@@ -65,27 +60,50 @@ export default {
     /**
      * Token object to override the defaults with
      */
-    tokens: Object,
+    tokens: {
+      type: Object,
+      default: () => ({})
+    },
     /**
      * The input's value
      * @model
      */
-    modelValue: [String, Number],
+    modelValue: {
+      type: [String, Number],
+      default: ''
+    },
     modelModifiers: {
+      type: Object,
       default: () => ({})
     }
   },
-  directives: { facade: directive },
+  emits: ['update:model-value', 'change', 'keydown', 'keyup', 'paste'],
   data() {
     return {
       maskedValue: this.modelValue,
       unmaskedValue: null
     }
   },
+  computed: {
+    config() {
+      return {
+        mask: this.mask,
+        masked: this.masked,
+        tokens: this.tokens,
+        formatter: this.formatter,
+        prefill: this.prefill,
+        short: this.short
+      }
+    },
+    emittedValue() {
+      return this.mask && this.masked ? this.maskedValue : this.unmaskedValue
+    }
+  },
   watch: {
     modelValue(newValue) {
       // avoid trigering the directive's update hook when we emit
       // the unmasked value to the parent component
+      /* istanbul ignore else */
       if (newValue !== this.emittedValue) {
         this.maskedValue = newValue
       }
@@ -102,21 +120,6 @@ export default {
     },
     masked() {
       this.emitInput()
-    }
-  },
-  computed: {
-    config() {
-      return {
-        mask: this.mask,
-        masked: this.masked,
-        tokens: this.tokens,
-        formatter: this.formatter,
-        prefill: this.prefill,
-        short: this.short
-      }
-    },
-    emittedValue() {
-      return this.mask && this.masked ? this.maskedValue : this.unmaskedValue
     }
   },
   methods: {
@@ -144,8 +147,21 @@ export default {
        * Fires when the value of the input has been changed.
        * @param {String} value The input's current value, masked or unmasked.
        */
-      this.$emit('update:modelValue', this.emittedValue)
+      this.$emit('update:model-value', this.emittedValue)
     }
   }
 }
 </script>
+
+<template>
+  <input
+    v-facade="config"
+    type="text"
+    :value="maskedValue"
+    @input="onInput"
+    @change="onChange"
+    @keyup="$emit('keyup', $event)"
+    @keydown="$emit('keydown', $event)"
+    @paste="$emit('paste', $event)"
+  />
+</template>

@@ -1,0 +1,24 @@
+import { Canvas, Meta } from '@storybook/blocks';
+import * as directiveStories from './directive.stories';
+
+<Meta of={directiveStories} />
+
+For times when you cannot use the component, you may use the directive instead. The directive has all the same features as the component, however the interface may not be as straight forward as using a component. The `prefill` and `short` features may passed in to the directive as modifiers.
+
+### Basic usage
+
+<Canvas of={directiveStories.BasicUsage} sourceState="shown" />
+
+### Accessing the unmasked value
+
+You have access to the unmasked value via the input event. The `unmaskedValue` property can be found as part of the `target` property of the input event.
+
+> Note: Some 3rd party components may not pass the `event` parameter when emitting input, such is the case with vuetify's v-text-input. In this case you can listen to the native event so you can still access the unmasked value. ex: `@input.native="handler"`.
+
+<Canvas of={directiveStories.UnmaskedValue} sourceState="shown" />
+
+### Attaching to parent elements
+
+When the the v-facade directive is attached to a non input element, it will attempt to find an input element within the children and attach it self to the first one it finds. This allows you add the directive on other 3rd party components that house an input element.
+
+<Canvas of={directiveStories.AttachToParentElements} sourceState="shown" />

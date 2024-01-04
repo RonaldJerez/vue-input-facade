@@ -16,6 +16,7 @@ export default {
     const config = el[CONFIG_KEY]
     // prefer adding event listener to parent element to avoid Firefox bug which does not
     // execute `useCapture: true` event handlers before non-capturing event handlers
+    /* istanbul ignore next */
     const handlerOwner = el.parentElement || el
 
     // use anonymous event handler to avoid inadvertently removing masking for all inputs within a container
