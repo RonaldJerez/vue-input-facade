@@ -1,0 +1,1 @@
+import{s,I as a,f as d}from"./component-3ebcc565.js";const i={install(n,e={}){e.tokens&&s(e.tokens),n.component(a.name,a),n.directive(e.name||"facade",d)}};typeof window<"u"&&window.Vue&&window.Vue.use(i);export{i as p};

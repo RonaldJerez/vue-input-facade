@@ -1,0 +1,4 @@
+import{j as t}from"./jsx-runtime-4dd40b89.js";import{M as n,C as r}from"./index-c354d0c8.js";import{m as i,M as m}from"./masker.stories-f0a3fc81.js";import{u as a}from"./index-eb4a03e2.js";import"./iframe-9424fa7f.js";import"../sb-preview/runtime.js";import"./index-f4dda215.js";import"./index-11d98b33.js";import"./index-356e4a49.js";import"./plugin-5acb77eb.js";import"./component-3ebcc565.js";import"./vue.esm-bundler-80178e97.js";import"./Field-a175bcc1.js";function o(s){const e=Object.assign({p:"p",h3:"h3"},a(),s.components);return t.jsxs(t.Fragment,{children:[t.jsx(n,{of:i}),`
+`,t.jsx(e.p,{children:"You may use the library to mask values in static text as well, taking advantage of the same mask tokens."}),`
+`,t.jsx(e.h3,{id:"basic-usage",children:"Basic usage"}),`
+`,t.jsx(r,{of:m,sourceState:"shown"})]})}function C(s={}){const{wrapper:e}=Object.assign({},a(),s.components);return e?t.jsx(e,Object.assign({},s,{children:t.jsx(o,s)})):o(s)}export{C as default};
