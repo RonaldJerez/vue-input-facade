@@ -11,7 +11,7 @@ A lightweight and dependency free input masking library created specific for Vue
 
 <div class="hide" markdown="1">
 
-### [Docs and Demo](https://ronaldjerez.github.io/vue-input-facade/latest/)
+### [Docs and Demo](https://ronaldjerez.github.io/vue-input-facade/beta/)
 
 </div>
 
