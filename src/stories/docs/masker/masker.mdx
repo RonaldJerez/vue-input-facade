@@ -1,0 +1,10 @@
+import { Canvas, Meta } from '@storybook/blocks';
+import * as maskerStories from './masker.stories';
+
+<Meta of={maskerStories} />
+
+You may use the library to mask values in static text as well, taking advantage of the same mask tokens.
+
+### Basic usage
+
+<Canvas of={maskerStories.MaskStaticText} sourceState="shown" />

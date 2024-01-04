@@ -130,7 +130,7 @@ export function updateCursor(event, originalValue, originalPosition) {
 
   target.setSelectionRange(cursorPosition, cursorPosition)
   /* istanbul ignore next */
-  setTimeout(function() {
+  setTimeout(function () {
     target.setSelectionRange(cursorPosition, cursorPosition)
   }, 0)
 }

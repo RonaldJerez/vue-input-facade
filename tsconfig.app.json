@@ -1,0 +1,13 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": [".storybook/**/*", "env.d.ts", "src/**/*", "src/**/*.ts", "types/**/*.ts"],
+  "exclude": ["**/*.test.js", "**/*.test.ts", "**/__tests__/**/*"],
+  "compilerOptions": {
+    "allowJs": true,
+    "composite": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "strict": true
+  }
+}

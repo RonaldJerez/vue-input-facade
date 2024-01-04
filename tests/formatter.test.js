@@ -1,4 +1,4 @@
-import { formatter } from '../src/masker'
+import { formatter } from '@/masker'
 
 test('when mask is undefined, should not throw error', () => {
   expect(formatter('12', { mask: undefined })).toMatchObject({ masked: '', unmasked: '' })

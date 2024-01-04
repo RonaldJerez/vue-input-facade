@@ -1,41 +1,39 @@
+<script setup>
+import { onMounted, ref } from 'vue'
+
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    required: true
+  }
+})
+const emit = defineEmits(['update:modelValue'])
+
+const name = ref('')
+
+onMounted(() => {
+  name.value = 'checkbox' + Math.floor(Math.random() * 500).toString(16)
+})
+
+function input() {
+  emit('update:modelValue', !props.modelValue)
+}
+</script>
+
 <template>
   <div class="checkbox">
     <input
-      ref="checkbox"
       :id="name"
+      ref="checkbox"
       :name="name"
       :checked="modelValue"
       class="checkbox__input"
       type="checkbox"
       @change="input"
     />
-    <label :for="name" class="checkbox__label" tabindex="0" @keyup.enter="input">
-      Get masked data
-    </label>
+    <label :for="name" class="checkbox__label" tabindex="0" @keyup.enter="input"> Get masked data </label>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Checkbox',
-  props: {
-    modelValue: Boolean
-  },
-  data() {
-    return {
-      name: ''
-    }
-  },
-  mounted() {
-    this.name = 'checkbox' + Math.floor(Math.random() * 500).toString(16)
-  },
-  methods: {
-    input() {
-      this.$emit('update:modelValue', !this.modelValue)
-    }
-  }
-}
-</script>
 
 <style>
 .checkbox {

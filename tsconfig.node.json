@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/node16/tsconfig.json",
+  "include": ["types/**/*.ts", "vite.config.ts", "cypress.config.ts"],
+  "exclude": ["tests/**/*"],
+  "compilerOptions": {
+    "allowJs": true,
+    "composite": true,
+    "noImplicitThis": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": true,
+    "types": ["node", "vite/client"],
+    "useDefineForClassFields": true
+  }
+}

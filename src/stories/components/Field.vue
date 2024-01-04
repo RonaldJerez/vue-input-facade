@@ -1,33 +1,34 @@
+<script setup>
+import { onMounted, ref } from 'vue'
+
+const props = defineProps({
+  initialValue: {
+    type: String,
+    default: ''
+  },
+  label: {
+    type: String,
+    default: ''
+  }
+})
+
+const inputValue = ref(null)
+
+onMounted(() => {
+  inputValue.value = props.initialValue
+})
+
+function input(event) {
+  inputValue.value = event.target.value
+}
+</script>
+
 <template>
-  <div :class="['field-wrapper', { hasValue: value }]" @input="input">
+  <div class="field-wrapper" :class="{ hasValue: inputValue }" @input="input">
     <slot />
     <label>{{ label }}</label>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Field',
-  props: ['label'],
-  mounted() {
-    // detect the initial value
-    const slot = this.$slots.default[0]
-    if (slot && slot.tag === 'input') {
-      this.value = slot.elm.value
-    }
-  },
-  data() {
-    return {
-      value: null
-    }
-  },
-  methods: {
-    input(event) {
-      this.value = event.target.value
-    }
-  }
-}
-</script>
 
 <style>
 .field-wrapper {

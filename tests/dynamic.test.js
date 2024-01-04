@@ -1,4 +1,4 @@
-import { dynamic } from '../src/masker'
+import { dynamic } from '@/masker'
 
 test('empty', () => {
   var masks = []

@@ -1,0 +1,9 @@
+/dist/
+/coverage
+.vscode
+.yalc
+yalc.lock
+*.timestamp-*
+
+# Storybook Build
+storybook-static/

@@ -1,10 +1,10 @@
-import facade from '../src/directive'
-import { CONFIG_KEY } from '../src/core'
+import facade from '@/directive'
+import { CONFIG_KEY } from '@/core'
 import { shallowMount } from '@vue/test-utils'
 
 describe('Directive', () => {
   let wrapper
-  const inputListener = jest.fn()
+  const inputListener = vi.fn()
 
   const buildWrapper = ({ template, mask = '##.##', modifiers, value = '', ...rest } = {}) => {
     const directive = modifiers ? `v-facade.${modifiers}` : 'v-facade'
@@ -23,7 +23,7 @@ describe('Directive', () => {
   }
 
   afterEach(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
     inputListener.mockReset()
     wrapper && wrapper.unmount()
   })
@@ -86,72 +86,72 @@ describe('Directive', () => {
     expect(wrapper.element.value).toBe('12.34')
 
     wrapper.element.value = '1122'
-    wrapper.find('input').trigger('input')
+    await wrapper.find('input').trigger('input')
 
     expect(wrapper.element.value).toBe('11.22')
     expect(wrapper.element.unmaskedValue).toBe('1122')
   })
 
   describe('Composition events', () => {
-    test('Should not update value when composing the input', () => {
+    test('Should not update value when composing the input', async () => {
       buildWrapper({ value: 1234 })
       expect(wrapper.element.value).toBe('12.34')
 
       wrapper.element.value = '1122'
-      wrapper.find('input').trigger('compositionstart')
-      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+      await wrapper.find('input').trigger('compositionstart')
+      await wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
 
       expect(wrapper.element.value).toBe('1122')
       expect(wrapper.element.unmaskedValue).toBe('1234')
     })
 
-    test('Should not update value when updating the composed input', () => {
+    test('Should not update value when updating the composed input', async () => {
       buildWrapper({ value: 1234 })
       expect(wrapper.element.value).toBe('12.34')
 
       wrapper.element.value = '1122'
-      wrapper.find('input').trigger('compositionupdate')
-      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+      await wrapper.find('input').trigger('compositionupdate')
+      await wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
 
       expect(wrapper.element.value).toBe('1122')
       expect(wrapper.element.unmaskedValue).toBe('1234')
     })
 
-    test('Should update value when composition ends', () => {
+    test('Should update value when composition ends', async () => {
       buildWrapper({ value: 1234 })
       expect(wrapper.element.value).toBe('12.34')
 
       wrapper.element.value = '1122'
-      wrapper.find('input').trigger('compositionstart')
-      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+      await wrapper.find('input').trigger('compositionstart')
+      await wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
 
       expect(wrapper.element.value).toBe('1122')
       expect(wrapper.element.unmaskedValue).toBe('1234')
 
-      wrapper.find('input').trigger('compositionend')
+      await wrapper.find('input').trigger('compositionend')
 
       expect(wrapper.element.value).toBe('11.22')
       expect(wrapper.element.unmaskedValue).toBe('1122')
     })
 
-    test('Should prevent all value updates while composing text', () => {
+    test('Should prevent all value updates while composing text', async () => {
       buildWrapper({ value: 1234 })
       expect(wrapper.element.value).toBe('12.34')
 
       wrapper.element.value = '1122'
-      wrapper.find('input').trigger('compositionstart')
-      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+      await wrapper.find('input').trigger('compositionstart')
+      await wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
       wrapper.find('input').setValue('4321')
 
       expect(wrapper.element.value).toBe('4321')
       expect(wrapper.element.unmaskedValue).toBe('1234')
     })
 
-    test('Should prevent composition input events from propagating', () => {
+    test('Should prevent composition input events from propagating', async () => {
       buildWrapper()
 
-      wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
-      wrapper.find('input').trigger('input', { inputType: 'insertFromComposition' })
+      await wrapper.find('input').trigger('input', { inputType: 'insertCompositionText' })
+      await wrapper.find('input').trigger('input', { inputType: 'insertFromComposition' })
 
       expect(inputListener).toHaveBeenCalledTimes(0)
     })
@@ -164,7 +164,7 @@ describe('Directive', () => {
     expect(wrapper.element.value).toBe('12')
 
     wrapper.element.value = '1234'
-    wrapper.find('input').trigger('input')
+    await wrapper.find('input').trigger('input')
 
     expect(wrapper.element.value).toBe('12.34')
     expect(wrapper.element.unmaskedValue).toBe('1234')
@@ -173,7 +173,7 @@ describe('Directive', () => {
   test('Should not update the cursor position if not the active element', () => {
     buildWrapper({ value: 'ABCDE' })
 
-    jest.spyOn(wrapper.element, 'setSelectionRange')
+    vi.spyOn(wrapper.element, 'setSelectionRange')
     expect(wrapper.element.setSelectionRange).not.toBeCalled()
   })
 
@@ -183,7 +183,7 @@ describe('Directive', () => {
       expect(wrapper.element.value).toBe('12')
 
       wrapper.element.value = '1234'
-      wrapper.find('input').trigger('input')
+      await wrapper.find('input').trigger('input')
 
       expect(wrapper.element.value).toBe('12.34')
       expect(wrapper.element.unmaskedValue).toBe('1234')
@@ -194,7 +194,7 @@ describe('Directive', () => {
       expect(wrapper.element.value).toBe('+1 ')
 
       wrapper.element.value = '777'
-      wrapper.find('input').trigger('input')
+      await wrapper.find('input').trigger('input')
 
       expect(wrapper.element.value).toBe('+1 777')
       expect(wrapper.element.unmaskedValue).toBe('777')
@@ -209,29 +209,18 @@ describe('Directive', () => {
 
       element = wrapper.element
 
-      jest.spyOn(element, 'setSelectionRange')
+      vi.spyOn(element, 'setSelectionRange')
       element.focus()
     })
 
     // We are using a pipe "|" to visualize where the cursor is
-    test('Should stay next to the char just inserted', () => {
+    test('Should stay next to the char just inserted', async () => {
       element.value = 'ABC1|23'
       const cursorPos = element.value.indexOf('|')
       const newCursorPos = cursorPos + 1 // one new char inserted before
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { inputType })
-
-      expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
-    })
-
-    test('Should stay next to the char just inserted', () => {
-      element.value = 'ABC1|23'
-      const cursorPos = element.value.indexOf('|')
-      const newCursorPos = cursorPos + 1 // one new char inserted before
-
-      element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { inputType })
+      await wrapper.find('input').trigger('input', { inputType })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -242,7 +231,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos + 2 // two new characters after masking
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { inputType })
+      await wrapper.find('input').trigger('input', { inputType })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -253,7 +242,7 @@ describe('Directive', () => {
       const newCursorPos = cursorPos - 1 // needs to move back as 'j' is not an allowed char
 
       element.selectionEnd = cursorPos
-      wrapper.find('input').trigger('input', { inputType })
+      await wrapper.find('input').trigger('input', { inputType })
 
       expect(wrapper.element.setSelectionRange).toBeCalledWith(newCursorPos, newCursorPos)
     })
@@ -269,8 +258,8 @@ describe('Directive', () => {
     const cursorPos = element.value.indexOf('|')
     element.selectionEnd = cursorPos
 
-    jest.spyOn(element, 'setSelectionRange')
-    wrapper.find('input').trigger('input', { inputType: 'insertText' })
+    vi.spyOn(element, 'setSelectionRange')
+    await wrapper.find('input').trigger('input', { inputType: 'insertText' })
     expect(wrapper.element.setSelectionRange).not.toBeCalled()
   })
 
@@ -284,8 +273,8 @@ describe('Directive', () => {
     const cursorPos = element.value.indexOf('|')
     element.selectionEnd = cursorPos
 
-    jest.spyOn(element, 'setSelectionRange')
-    wrapper.find('input').trigger('input', { inputType: 'deleteContent' })
+    vi.spyOn(element, 'setSelectionRange')
+    await wrapper.find('input').trigger('input', { inputType: 'deleteContent' })
     expect(wrapper.element.setSelectionRange).toBeCalledWith(cursorPos, cursorPos)
   })
 
@@ -348,18 +337,18 @@ describe('Directive', () => {
     })
   })
 
-  test('Should allow deleting static content at end of mask', () => {
+  test('Should allow deleting static content at end of mask', async () => {
     buildWrapper({ mask: '##.##33' })
     expect(wrapper.element.value).toBe('')
 
     // normal input
     wrapper.element.value = '7777'
-    wrapper.find('input').trigger('input')
+    await wrapper.find('input').trigger('input')
     expect(wrapper.element.value).toBe('77.7733')
 
     // attempt to delete a static character
     wrapper.element.value = '77.773'
-    wrapper.find('input').trigger('input', { inputType: 'deleteContentBackward' })
+    await wrapper.find('input').trigger('input', { inputType: 'deleteContentBackward' })
     expect(wrapper.element.value).toBe('77.773')
   })
 })

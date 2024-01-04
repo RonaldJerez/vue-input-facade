@@ -36,7 +36,7 @@ yarn add vue-input-facade@beta
 Installs the component and directive for your entire application.
 
 ```javascript
-import InputFacade from 'vue-input-facade'
+import { plugin as InputFacade } from 'vue-input-facade'
 app.use(InputFacade)
 ```
 
@@ -74,7 +74,7 @@ See the [token source file](https://github.com/RonaldJerez/vue-input-facade/blob
 <div class="hide" markdown="1">
 
 ## Note about special input types
-The masking library does not currently work on special input types such as number, email etc.  This is due to browsers treating these special inputs differently than text input and not supporting the same API.  As such, only use vue-input-facade with `<input type="text|tel|search">`.
+The masking library does not currently work on special input types such as number, email etc. This is due to browsers treating these special inputs differently than text input and not supporting the same API. As such, only use vue-input-facade with `<input type="text|tel|search">`.
 
 ## Usage
 
@@ -94,10 +94,10 @@ The masking library does not currently work on special input types such as numbe
 
 ### Migrating existing projects
 
-If you are migrating an existing project to vue-input-facade from another plugin and dont want to touch the whole codebase.  You may pass options during plugin installation to override the default tokens or directive name.
+If you are migrating an existing project to vue-input-facade from another plugin and dont want to touch the whole codebase. You may pass options during plugin installation to override the default tokens or directive name.
 
 ```javascript
-import InputFacade from 'vue-input-facade'
+import { plugin as InputFacade } from 'vue-input-facade'
 
 // migrating from v-mask
 const options = {
@@ -113,7 +113,7 @@ const options = {
   }
 }
 
-Vue.use(InputFacade, options)
+app.use(InputFacade, options)
 ```
 
 
@@ -121,7 +121,7 @@ See [demo page](https://ronaldjerez.github.io/vue-input-facade) for more usage e
 
 ## Contribution
 
-You're free to contribute to this project by submitting issues and/or pull requests. This project is test-driven, so keep in mind that every change and new feature should be covered by tests.  The project uses [semantic-release](https://github.com/semantic-release/semantic-release) to release new versions, therefore all commit messages should follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary), we are using [commitizen](https://github.com/commitizen/cz-cli) to facilitate writting the commit messages.
+You're free to contribute to this project by submitting issues and/or pull requests. This project is test-driven, so keep in mind that every change and new feature should be covered by tests. The project uses [semantic-release](https://github.com/semantic-release/semantic-release) to release new versions, therefore all commit messages should follow [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/#summary), we are using [commitizen](https://github.com/commitizen/cz-cli) to facilitate writting the commit messages.
 
 ## License
 
