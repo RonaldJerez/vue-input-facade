@@ -34,7 +34,8 @@ const preview: Preview = {
             value: commitHash,
             title: `Commit Hash: ${commitHash}`
           }
-        ]
+        ],
+        title: versionNum
       }
     }
   }
