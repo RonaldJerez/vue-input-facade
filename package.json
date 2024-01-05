@@ -9,7 +9,7 @@
     "type": "git",
     "url": "https://github.com/RonaldJerez/vue-input-facade.git"
   },
-  "main": "dist/vue-input-facade.umd.js",
+  "main": "dist/vue-input-facade.umd.cjs",
   "module": "dist/vue-input-facade.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -19,7 +19,7 @@
   "exports": {
     ".": {
       "import": "./dist/vue-input-facade.js",
-      "require": "./dist/vue-input-facade.umd.js"
+      "require": "./dist/vue-input-facade.umd.cjs"
     }
   },
   "scripts": {
