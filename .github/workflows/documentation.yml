@@ -1,0 +1,30 @@
+name: Publish docs pages
+
+on:
+  registry_package:
+    types: [published]
+
+jobs:
+  docs:
+    name: Publish docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 16
+      - name: Get branch name
+        id: find_branch
+        shell: bash
+        run: echo "branch=$(git branch --contains ${GITHUB_REF} | xargs)" >> $GITHUB_OUTPUT
+      - name: Install
+        run: npm ci
+      - name: Build docs
+        run: npm run build:docs
+      - name: Deploy github pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          destination_dir: ${{ steps.find_branch.outputs.branch == 'master' && 'latest' || steps.find_branch.outputs.branch }}
+

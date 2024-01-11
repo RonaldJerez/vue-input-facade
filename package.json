@@ -25,7 +25,7 @@
   "scripts": {
     "prebuild": "rm -rf ./dist",
     "build": "run-p type-check build:plugin build:docs",
-    "build:docs": "storybook build",
+    "build:docs": "storybook build -o build",
     "build:plugin": "vite build",
     "lint": "eslint . --ext .vue,.js,.cjs,.ts --fix && npm run prettier",
     "lint:ci": "eslint . --ext .vue,.js,.cjs,.ts && npm run prettier:ci",
