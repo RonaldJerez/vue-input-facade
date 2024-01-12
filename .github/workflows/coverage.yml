@@ -1,3 +1,4 @@
+# Collects coverage report using Coveralls
 name: Coverage
 
 on:
@@ -6,8 +7,7 @@ on:
     branches:
       - master
       - beta
-      - next
-      - v[0-9]+.**
+      - 2.x
 
 jobs:
   coverage:

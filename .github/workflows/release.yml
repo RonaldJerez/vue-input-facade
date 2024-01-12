@@ -1,14 +1,12 @@
-# This workflow will push a release to NPM and GITHUB packages when there
-# is a push to master, next and beta branches using semantic-release.
+# Push a release to NPM and Github packages from master, beta and maintenance branches
 name: Release
 
 on:
   push:
     branches:
       - master
-      - next
       - beta
-      - v[0-9]+.**
+      - 2.x
 
 jobs:
   release:
