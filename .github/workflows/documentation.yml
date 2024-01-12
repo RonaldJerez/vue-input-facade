@@ -1,3 +1,4 @@
+# Generate new doc pages after a release to gh-pages 
 name: Publish docs pages
 
 on:
