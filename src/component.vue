@@ -10,6 +10,7 @@
     @keyup="$emit('keyup', $event)"
     @keydown="$emit('keydown', $event)"
     @paste="$emit('paste', $event)"
+    @keypress="$emit('keypress', $event)"
   />
 </template>
 
